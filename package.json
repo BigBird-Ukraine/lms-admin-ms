@@ -1,12 +1,47 @@
 {
-  "name": "lms-admin-ms",
+  "name": "autorization-ms",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "app:start": "node ./dist/",
+    "start": "rimraf dist && npm run tslint && tsc-watch --outDir ./dist --onSuccess \"npm run app:start\" --onFailure \"'echo Compilation Failed'\"",
+    "build": "rimraf dist && tsc",
+    "tsc": "rimraf dist && npm run tslint && tsc --watch",
+    "tslint": "tslint -c tslint.json 'src/**/*.ts' --fix"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "cors": "latest",
+    "express": "latest",
+    "express-rate-limit": "latest",
+    "helmet": "latest",
+    "joi": "^14.3.1",
+    "bcrypt": "^3.0.7",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.7.13"
+  },
+  "devDependencies": {
+    "@types/node": "^12.12.7",
+    "@types/cors": "^2.8.6",
+    "@types/express": "^4.17.2",
+    "@types/helmet": "^0.0.45",
+    "@types/morgan": "^1.7.37",
+    "@types/express-rate-limit": "^3.3.3",
+    "@types/joi": "^14.3.4",
+    "@types/bcrypt": "^3.0.0",
+    "@types/jsonwebtoken": "^8.3.5",
+    "@types/mongoose": "^5.5.32",
+    "eslint": "^6.1.0",
+    "morgan": "^1.9.1",
+    "rimraf": "^3.0.0",
+    "tsc-watch": "^2.2.1",
+    "tslint": "^5.18.0",
+    "tslint-config-security": "^1.16.0",
+    "tslint-eslint-rules": "^5.4.0",
+    "typescript": "^3.7.2"
+  }
 }

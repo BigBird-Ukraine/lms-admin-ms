@@ -1,11 +1,11 @@
-import {NextFunction, Request, Response} from 'express';
+import { NextFunction, Request, Response } from 'express';
 import * as Joi from 'joi';
 
-import {ResponseStatusCodesEnum} from '../../constants';
-import {ErrorHandler} from '../../errors';
-import {HASH_PASSWORD} from '../../helpers';
-import {userService} from '../../services';
-import {registerDataValidator} from '../../validators';
+import { ResponseStatusCodesEnum } from '../../constants';
+import { ErrorHandler } from '../../errors';
+import { HASH_PASSWORD } from '../../helpers';
+import { userService } from '../../services';
+import { registerDataValidator } from '../../validators';
 
 class UserController {
 
@@ -16,7 +16,7 @@ class UserController {
             const userValidity = Joi.validate(user, registerDataValidator);
 
             if (userValidity.error) {
-                throw new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, userValidity.error.details[0].message);
+                return next( new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, userValidity.error.details[0].message));
             }
 
             user.password = await HASH_PASSWORD(user.password);
@@ -31,7 +31,7 @@ class UserController {
 
     async blockUser(req: Request, res: Response, next: NextFunction) {
         try {
-            res.end()
+            res.end();
         } catch (e) {
             next(e);
         }

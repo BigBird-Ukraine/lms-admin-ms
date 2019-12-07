@@ -2,10 +2,10 @@ export const config = {
     PORT: process.env.PORT || 3002,
     HOST: 'http://localhost',
 
-    JWT_SECRET: process.env.JWT_SECRET || 'uf7e^Wai8efj32-&&620O10fm-32jfdj',
+    JWT_SECRET: process.env.JWT_SECRET || '82!10-ac1906@d8f3-fca28d61d9e-99b60db',
     ACCESS_TOKEN_LIFETIME: process.env.ACCESS_TOKEN_LIFETIME || '10m',
 
-    JWT_REFRESH_SECRET: process.env.PORT || '3f7e^fdf(*kjsd-&&620O10fm-333222fsd',
+    JWT_REFRESH_SECRET: process.env.PORT || '250!940-61a2fef-d1cdc687ae-65474@c367',
     REFRESH_TOKEN_LIFETIME: process.env.REFRESH_TOKEN_LIFETIME || '1h',
 
     serverRateLimits: {

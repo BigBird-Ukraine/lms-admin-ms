@@ -13,7 +13,7 @@ export const config = {
         maxRequests: 10000
     },
 
-    DATABASE_NAME: 'QuestionDB',
+    DATABASE_NAME: 'lmsDB',
     DATABASE_USER: 'root',
     DATABASE_PASS: 'root',
     DATABASE_IP: '127.0.0.1',

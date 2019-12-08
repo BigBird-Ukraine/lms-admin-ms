@@ -46,7 +46,7 @@ class App {
     }
 
     private mountRoutes(): void {
-        this.app.use('/api/admin', apiRouter);
+        this.app.use('/api/', apiRouter);
         this.app.use('*', notFoundRouter);
     }
 

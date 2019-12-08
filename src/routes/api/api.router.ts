@@ -6,6 +6,6 @@ import { userRouter } from '../user';
 const router = Router();
 
 router.use('/users', userRouter);
-router.use('/login', authRouter);
+router.use('/auth', authRouter);
 
 export const apiRouter = router;

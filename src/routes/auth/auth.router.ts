@@ -1,11 +1,12 @@
 import { Router } from 'express';
-import { authController } from '../../controllers/';
+
+import { authController } from '../../controllers';
 import {
     checkIsAdmin,
     checkIsPasswordCorrect,
     checkIsUserRegistered,
     checkRefreshTokenMiddleware
-} from '../../middleware/auth';
+} from '../../middleware';
 
 const router = Router();
 

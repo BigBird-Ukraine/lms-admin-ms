@@ -1,6 +1,6 @@
 export interface ICourse {
+    _id?: string;
     label: string;
     description: string;
-    level: string | number;
     modules_list: [string];
 }

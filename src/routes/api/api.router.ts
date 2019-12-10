@@ -2,8 +2,8 @@ import { Router } from 'express';
 
 import { authRouter } from '../auth';
 import { courseRouter } from '../course';
-import { userRouter } from '../user';
 import { groupRouter } from '../group';
+import { userRouter } from '../user';
 
 const router = Router();
 

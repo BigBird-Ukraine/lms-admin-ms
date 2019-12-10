@@ -1,4 +1,5 @@
-import {IGroup} from "../../Interfaces";
+import { Group } from '../../database';
+import { IGroup } from '../../Interfaces';
 
 class GroupService {
 
@@ -6,8 +7,10 @@ class GroupService {
 
     }
 
-    async createGroup(group: IGroup) {
+    createGroup(group: IGroup): Promise<void> {
+        const newGroup = new Group(group);
 
+        return newGroup.save() as any;
     }
 }
 

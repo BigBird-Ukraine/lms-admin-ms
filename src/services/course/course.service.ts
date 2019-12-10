@@ -2,31 +2,34 @@ import { model } from 'mongoose';
 
 import { config } from '../../configs';
 import { Course, CourseSchema, CourseType } from '../../database';
-import { ICourse } from '../../Interfaces';
+import { ICourse, IModuleFromCourseModel } from '../../Interfaces';
 
 class CourseService {
 
-    createCourse(createObject: ICourse) {
+    createCourse(createObject: ICourse): Promise<void> {
         const newCourse = new Course(createObject);
-        return newCourse.save();
+        return newCourse.save() as any;
     }
 
-    deleteCourseByID(course_id: string) {
+    deleteCourseByID(course_id: string): Promise<void> {
         const CourseModel = model<CourseType>(config.COURSE_COLLECTION_NAME, CourseSchema);
 
-        return CourseModel.deleteOne({ _id: course_id });
+        return CourseModel.deleteOne({ _id: course_id }) as any;
     }
 
-    getCourseByID(course_id: string) {
+    getCourseByID(course_id: string): Promise<IModuleFromCourseModel> {
         const CourseModel = model<CourseType>(config.COURSE_COLLECTION_NAME, CourseSchema);
 
         // TODO test this
-        return CourseModel.findOne({ _id: course_id }).populate('modules_list').select({ modules_list: 1, _id: 0 });
+        return CourseModel
+            .findOne({ _id: course_id })
+            .populate('modules_list')
+            .select({ modules_list: 1, _id: 0 }) as any;
     }
 
-    async getAllCourses() {
+    getAllCourses(): Promise<ICourse[]> {
         const CourseModel = model<CourseType>(config.COURSE_COLLECTION_NAME, CourseSchema);
-        return CourseModel.find()
+        return CourseModel.find() as any;
     }
 }
 

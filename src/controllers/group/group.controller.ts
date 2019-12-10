@@ -3,9 +3,9 @@ import * as Joi from 'joi';
 
 import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler } from '../../errors';
+import { groupService } from '../../services';
 import { groupValidator } from '../../validators';
 import { IRequestExtended } from '../../Interfaces';
-import { groupService } from "../../services";
 
 class GroupController {
 
@@ -15,7 +15,7 @@ class GroupController {
 
             res.json({
                 data: courses
-            })
+            });
         } catch (e) {
             next(e);
         }

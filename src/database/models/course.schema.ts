@@ -13,7 +13,9 @@ CourseSchema = new Schema({
         required: true
     },
     level: {
-        type: Number
+        type: Number,
+        required: false
+
     },
     description: {
         type: String,

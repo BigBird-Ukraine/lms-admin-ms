@@ -19,7 +19,7 @@ ModuleSchema = new Schema({
     tags: [{
         type: String
     }],
-    courses: [{
+    courses_id: [{
         type: String,
         ref: config.COURSE_COLLECTION_NAME
     }],

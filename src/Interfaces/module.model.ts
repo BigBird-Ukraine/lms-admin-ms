@@ -2,6 +2,6 @@ export interface IModule {
     label: string;
     description: string;
     tags: [string];
-    courses: [string];
+    courses_id: [string];
     lessons: [string];
 }

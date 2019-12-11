@@ -35,12 +35,12 @@ GroupSchema = new Schema({
         required: false
     }],
     created_at: {
-        type: String,
+        type: Date,
+        default: Date.now(),
         required: true
     },
     updated_at: {
-        type: String,
-        required: true
+        type: Date
     }
 });
 

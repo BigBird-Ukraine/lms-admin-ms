@@ -1,4 +1,4 @@
-import {IGroup} from "../../Interfaces";
+import { IGroup } from '../../Interfaces';
 
 class GroupService {
 

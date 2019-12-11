@@ -28,7 +28,7 @@ export const checkAccessTokenMiddleware = async (req: IRequestExtended, res: Res
             return next(new ErrorHandler(ResponseStatusCodesEnum.NOT_FOUND, errors.NOT_FOUND_USER_NOT_PRESENT.message));
         }
 
-        req.user = user;
+        req.user = user.user_id;
 
         next();
 

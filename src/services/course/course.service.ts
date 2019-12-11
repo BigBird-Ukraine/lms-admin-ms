@@ -2,7 +2,7 @@ import { model } from 'mongoose';
 
 import { config } from '../../configs';
 import { Course, CourseSchema, CourseType } from '../../database';
-import {ICourse, IModuleFromCourseModel} from '../../Interfaces';
+import { ICourse, IModuleFromCourseModel } from '../../Interfaces';
 
 class CourseService {
 
@@ -29,7 +29,7 @@ class CourseService {
 
     getAllCourses(): Promise<ICourse[]> {
         const CourseModel = model<CourseType>(config.COURSE_COLLECTION_NAME, CourseSchema);
-        return CourseModel.find() as any
+        return CourseModel.find() as any;
     }
 }
 

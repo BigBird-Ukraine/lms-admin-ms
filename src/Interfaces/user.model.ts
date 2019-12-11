@@ -5,7 +5,7 @@ export interface IUser {
     phone_number: string;
     email: string;
     password: string;
-    status: string | number;
+    status_id: string | number;
     role_id: string | number;
     photo_path: string;
     created_at: string;

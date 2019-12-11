@@ -6,7 +6,7 @@ import { ErrorHandler } from '../../errors';
 import { HASH_PASSWORD } from '../../helpers';
 import { userService } from '../../services';
 import { registerDataValidator } from '../../validators';
-import { IRequestExtended } from '../../Interfaces';
+import { IRequestExtended, IUser } from '../../Interfaces';
 
 class UserController {
 
@@ -39,16 +39,16 @@ class UserController {
     }
     async getInfo(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
-            const { user_id: { _id, name, group, photo_path, role, status, surname, email } } = req.user;
+            const  { _id, name, group_id, photo_path, role_id, status_id, surname, email }  = req.user as IUser;
             const user = {
                 _id,
                 email,
                 name,
                 surname,
-                group,
+                group_id,
                 photo_path,
-                role_id: role,
-                status_id: status
+                role_id,
+                status_id
             };
             res.json(user);
         } catch (e) {

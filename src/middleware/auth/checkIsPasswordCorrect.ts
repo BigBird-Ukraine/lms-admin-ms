@@ -11,6 +11,7 @@ export const checkIsPasswordCorrect = async (req: IRequestExtended, res: Respons
         const { password } = req.body as IUser;
 
         const isPasswordCorrect = await CHECK_HASH(password, hashPassword);
+
         if (!isPasswordCorrect) {
             return next(
                 new ErrorHandler(

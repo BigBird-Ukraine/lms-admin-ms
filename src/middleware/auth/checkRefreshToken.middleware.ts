@@ -10,15 +10,15 @@ import { IRequestExtended } from '../../Interfaces';
 
 export const checkRefreshTokenMiddleware = async (req: IRequestExtended, res: Response, next: NextFunction) => {
     try {
-        const token = req.get('Authorization') as string;
-
+        const { Authorization } = req.body;
+        const token = Authorization;
         if (!token) {
-            return next( new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, 'No token'));
+            return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, 'No token'));
         }
 
         jwt.verify(token, config.JWT_REFRESH_SECRET, (err: VerifyErrors) => {
             if (err) {
-                return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, 'Bad_tokens'));
+                return next(new ErrorHandler(ResponseStatusCodesEnum.FORBIDDEN, 'Bad_tokens'));
             }
         });
 

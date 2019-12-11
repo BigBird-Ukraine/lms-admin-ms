@@ -6,6 +6,7 @@ import { ErrorHandler } from '../../errors';
 import { HASH_PASSWORD } from '../../helpers';
 import { userService } from '../../services';
 import { registerDataValidator } from '../../validators';
+import { IRequestExtended } from '../../Interfaces';
 
 class UserController {
 
@@ -32,6 +33,24 @@ class UserController {
     async blockUser(req: Request, res: Response, next: NextFunction) {
         try {
             res.end();
+        } catch (e) {
+            next(e);
+        }
+    }
+    async getInfo(req: IRequestExtended, res: Response, next: NextFunction) {
+        try {
+            const { user_id: { _id, name, group, photo_path, role, status, surname, email } } = req.user;
+            const user = {
+                _id,
+                email,
+                name,
+                surname,
+                group,
+                photo_path,
+                role_id: role,
+                status_id: status
+            };
+            res.json(user);
         } catch (e) {
             next(e);
         }

@@ -33,7 +33,7 @@ UserSchema = new Schema({
         required: true,
         default: UserStatusEnum.ACTIVE
     },
-    role: {
+    role_id: {
         type: Number,
         required: true,
         default: UserRoleEnum.STUDENT

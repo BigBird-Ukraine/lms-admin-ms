@@ -1,5 +1,5 @@
-import {IModule} from "./module.model";
+import { IModule } from './module.model';
 
 export interface IModuleFromCourseModel {
-    modules_list: IModule[]
+    modules_list: IModule[];
 }

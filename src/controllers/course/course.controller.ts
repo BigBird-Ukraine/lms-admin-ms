@@ -15,7 +15,7 @@ class CourseController {
 
             res.json({
                 data: courses
-            })
+            });
         } catch (e) {
             next(e);
         }

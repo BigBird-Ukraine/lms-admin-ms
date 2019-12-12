@@ -1,6 +1,6 @@
 import { Document, Model, model, Schema } from 'mongoose';
 
-import { config } from '../../configs';
+import { DatabaseTablesEnum } from '../../constants/enums';
 import { IModule } from '../../Interfaces';
 
 export type ModuleType = IModule & Document;
@@ -22,11 +22,16 @@ ModuleSchema = new Schema({
     }],
     courses_id: [{
         type: String,
-        ref: config.COURSE_COLLECTION_NAME
+        ref: DatabaseTablesEnum.COURSE_COLLECTION_NAME
     }],
     lessons: [{
         type: String
     }]
 });
 
-export const Module: Model<ModuleType> = model<ModuleType>(config.MODULE_COLLECTION_NAME, ModuleSchema, config.MODULE_COLLECTION_NAME);
+export const Module: Model<ModuleType> = model<ModuleType>
+(
+  DatabaseTablesEnum.MODULE_COLLECTION_NAME,
+  ModuleSchema,
+  DatabaseTablesEnum.MODULE_COLLECTION_NAME
+);

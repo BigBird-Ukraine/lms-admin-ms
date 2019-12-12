@@ -1,4 +1,3 @@
-
 import { model } from 'mongoose';
 import { User, UserSchema, UserType } from '../../database';
 import { IUser } from '../../Interfaces';

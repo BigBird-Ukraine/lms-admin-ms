@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 import { groupController } from '../../controllers';
-import {checkAccessTokenMiddleware, checkIsAdmin} from '../../middleware';
+import { checkAccessTokenMiddleware, checkIsAdmin } from '../../middleware';
 
 const router = Router();
 

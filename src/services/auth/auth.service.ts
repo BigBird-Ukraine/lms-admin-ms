@@ -1,7 +1,7 @@
 import { model } from 'mongoose';
 
 import { OauthToken, OauthTokenScheme, OauthTokenType } from '../../database';
-import { IOauthTokenModel } from '../../Interfaces';
+import { IOauthTokenModel, IUserByToken } from '../../Interfaces';
 
 class AuthService {
 
@@ -22,16 +22,16 @@ class AuthService {
         return OauthTokenModel.deleteOne({ refresh_token });
     }
 
-    async getUserFromAccessToken(access_token: string) {
+    async getUserFromAccessToken(access_token: string): Promise<IUserByToken> {
         const OauthTokenModel = model<OauthTokenType>('Oauth_token', OauthTokenScheme);
 
-        return OauthTokenModel.findOne({ access_token }).populate('user_id').select({ user_id: 1, _id: 0 });
+        return OauthTokenModel.findOne({ access_token }).populate('user_id').select({ user_id: 1, _id: 0 }) as any;
     }
 
-    async getUserFromRefreshToken(refresh_token: string) {
+    async getUserFromRefreshToken(refresh_token: string): Promise<IUserByToken> {
         const OauthTokenModel = model<OauthTokenType>('Oauth_token', OauthTokenScheme);
 
-        return OauthTokenModel.findOne({ refresh_token }).populate('user_id').select({ _id: 0 });
+        return  OauthTokenModel.findOne({ refresh_token }).populate('user_id').select({ user_id: 1, _id: 0 }) as any;
     }
 }
 

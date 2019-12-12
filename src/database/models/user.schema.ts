@@ -28,12 +28,12 @@ UserSchema = new Schema({
         type: String,
         required: true
     },
-    status: {
+    status_id: {
         type: Number,
         required: true,
         default: UserStatusEnum.ACTIVE
     },
-    role: {
+    role_id: {
         type: Number,
         required: true,
         default: UserRoleEnum.STUDENT

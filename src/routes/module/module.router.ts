@@ -1,11 +1,11 @@
 import { Router } from 'express';
 
 import { moduleController } from '../../controllers';
-import { checkAccessTokenMiddleware, checkIsAdmin } from '../../middleware';
+import {  checkIsAdmin } from '../../middleware';
 
 const router = Router();
 
-router.use( checkAccessTokenMiddleware, checkIsAdmin );
+router.use(  checkIsAdmin );
 
 router.post('/', moduleController.createModule);
 

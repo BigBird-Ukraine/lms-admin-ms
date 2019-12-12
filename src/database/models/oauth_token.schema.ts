@@ -1,7 +1,7 @@
 import { Document, Model, model, Schema, Types } from 'mongoose';
 
 import { DatabaseTablesEnum } from '../../constants/enums';
-import { IOauthTokenModel } from '../../Interfaces';
+import { IOauthTokenModel } from '../../interfaces';
 
 export type OauthTokenType = IOauthTokenModel & Document;
 

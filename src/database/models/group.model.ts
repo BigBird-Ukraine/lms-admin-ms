@@ -1,7 +1,7 @@
 import { Document, Model, model, Schema } from 'mongoose';
 
 import { DatabaseTablesEnum } from '../../constants/enums';
-import { IGroup } from '../../Interfaces';
+import { IGroup } from '../../interfaces';
 
 export type GroupType = IGroup & Document;
 

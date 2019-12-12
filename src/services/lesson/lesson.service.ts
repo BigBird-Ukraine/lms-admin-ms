@@ -1,5 +1,5 @@
 import { Lesson } from '../../database';
-import { ILesson } from '../../Interfaces';
+import { ILesson } from '../../interfaces';
 
 class LessonService {
 

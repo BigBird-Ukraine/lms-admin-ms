@@ -3,7 +3,7 @@ import { NextFunction, Response } from 'express';
 import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler, errors } from '../../errors';
 import { CHECK_HASH } from '../../helpers';
-import { IRequestExtended, IUser } from '../../Interfaces';
+import { IRequestExtended, IUser } from '../../interfaces';
 
 export const checkIsPasswordCorrect = async (req: IRequestExtended, res: Response, next: NextFunction) => {
     try {

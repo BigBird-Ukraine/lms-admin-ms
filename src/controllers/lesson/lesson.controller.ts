@@ -3,9 +3,9 @@ import * as Joi from 'joi';
 
 import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler } from '../../errors';
+import { IRequestExtended } from '../../interfaces';
 import { lessonService } from '../../services';
 import { lessonValidator } from '../../validators';
-import { IRequestExtended } from '../../Interfaces';
 
 class LessonController {
 

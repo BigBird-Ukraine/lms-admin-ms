@@ -1,7 +1,7 @@
 import { Document, Model, model, Schema, Types } from 'mongoose';
 
 import { DatabaseTablesEnum } from '../../constants';
-import { ILesson } from '../../Interfaces';
+import { ILesson } from '../../interfaces';
 
 export type LessonType = ILesson & Document;
 

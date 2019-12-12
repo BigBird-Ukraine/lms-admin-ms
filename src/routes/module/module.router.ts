@@ -5,7 +5,7 @@ import { checkAccessTokenMiddleware, checkIsAdmin } from '../../middleware';
 
 const router = Router();
 
-router.use(checkIsAdmin, checkAccessTokenMiddleware);
+router.use( checkAccessTokenMiddleware, checkIsAdmin );
 
 router.post('/', moduleController.createModule);
 

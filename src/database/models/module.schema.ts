@@ -17,7 +17,8 @@ ModuleSchema = new Schema({
         required: false
     },
     tags: [{
-        type: String
+        type: String,
+        required: false
     }],
     courses_id: [{
         type: String,

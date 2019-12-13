@@ -2,7 +2,7 @@ import { NextFunction, Response } from 'express';
 import * as Joi from 'joi';
 
 import { ResponseStatusCodesEnum } from '../../constants';
-import { ErrorHandler } from '../../errors';
+import { ErrorHandler, errors } from '../../errors';
 import { IRequestExtended } from '../../interfaces';
 import { courseService } from '../../services';
 import { courseValidator } from '../../validators';
@@ -45,10 +45,14 @@ class CourseController {
       const gettingCourse = await courseService.getCourseByID(course_id);
 
       if (!gettingCourse) {
-          return next(new ErrorHandler(ResponseStatusCodesEnum.NOT_FOUND, 'Course is not found', 404));
+        return next(new ErrorHandler(
+          ResponseStatusCodesEnum.NOT_FOUND,
+          errors.NOT_FOUND_COURSE_NOT_PRESENT.message,
+          errors.NOT_FOUND_COURSE_NOT_PRESENT.code
+        ));
       }
       res.json({
-          data: gettingCourse
+        data: gettingCourse
       });
 
     } catch (e) {
@@ -72,7 +76,7 @@ class CourseController {
 
       await courseService.deleteCourseByID(course_id);
 
-      res.status(ResponseStatusCodesEnum.CREATED).json(`course ${course_id} has been deleted`);
+      res.status(ResponseStatusCodesEnum.OK).json(`course ${course_id} has been deleted`);
     } catch (e) {
       next(e);
     }

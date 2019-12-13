@@ -19,5 +19,10 @@ export const errors = {
     NOT_FOUND_USER_NOT_PRESENT: { // When user wants login, but email not found in DB
         message: 'User is not found',
         code: 4041
+    },
+
+    NOT_FOUND_MODULE_PRESENT: { // When user wants get module witch not found in DB
+        message: 'Module is not found',
+        code: 4043
     }
 };

@@ -1,17 +1,35 @@
-
-import { model } from 'mongoose';
-import { User, UserSchema, UserType } from '../../database';
-import { IUser } from '../../Interfaces';
+import {model} from 'mongoose';
+import {UserStatusEnum} from '../../constants/enums';
+import {User, UserSchema, UserType} from '../../database';
+import {IUser} from '../../Interfaces';
 
 class UserService {
-    createUser(userValue: IUser): Promise<any> {
+    async createUser(userValue: IUser): Promise<any> {
         const newUser = new User(userValue);
         return newUser.save();
     }
-    getUserByParams(params: Partial<IUser>) {
+
+    async getUserByParams(params: Partial<IUser>) {
         const UserModel = model<UserType>('User', UserSchema);
 
         return UserModel.findOne(params);
+    }
+
+    async blockUnLockUser(id: string) {
+        const UserModel = model<UserType>('User', UserSchema);
+        return UserModel.findById(id, (err: any, doc: UserType) => {
+            if (!err) {
+               if (doc.status_id === UserStatusEnum.ACTIVE){
+                   doc.status_id = UserStatusEnum.BLOCKED;
+               }
+
+                if (doc.status_id === UserStatusEnum.BLOCKED){
+                    doc.status_id = UserStatusEnum.ACTIVE;
+                }
+
+                doc.save();
+            }
+        });
     }
 }
 

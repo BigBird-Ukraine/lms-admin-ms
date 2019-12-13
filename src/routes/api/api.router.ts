@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { checkAccessTokenMiddleware } from '../../middleware/auth/checkAccessToken.middleware';
+import { checkAccessTokenMiddleware } from '../../middleware/auth';
 import { authRouter } from '../auth';
 import { courseRouter } from '../course';
 import { groupRouter } from '../group';

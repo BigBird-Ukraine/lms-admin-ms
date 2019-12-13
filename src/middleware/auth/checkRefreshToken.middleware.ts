@@ -28,7 +28,7 @@ export const checkRefreshTokenMiddleware = async (req: IRequestExtended, res: Re
             return next(new ErrorHandler(ResponseStatusCodesEnum.NOT_FOUND, errors.NOT_FOUND_USER_NOT_PRESENT.message));
         }
 
-        req.user = user.user_id;
+        req.user = user;
 
         next();
     } catch (e) {

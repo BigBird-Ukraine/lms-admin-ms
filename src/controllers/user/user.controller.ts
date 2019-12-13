@@ -1,10 +1,10 @@
-import {NextFunction, Request, Response} from 'express';
+import { NextFunction, Request, Response } from 'express';
 import * as Joi from 'joi';
 
 import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler } from '../../errors';
 import { HASH_PASSWORD } from '../../helpers';
-import { IRequestExtended, IUser } from '../../interfaces';
+import { IRequestExtended, IUser, IUserSubjectModel } from '../../interfaces';
 import { userService } from '../../services';
 import { registerDataValidator } from '../../validators';
 
@@ -32,7 +32,7 @@ class UserController {
 
     async getUserInfoByToken(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
-            const {_id, email, name, surname, role_id, status_id, photo_path, groups_id} = req.user as IUser;
+            const { _id, email, name, surname, role_id, status_id, photo_path, groups_id } = req.user as IUser;
             const user: IUserSubjectModel = {
                 _id,
                 email,
@@ -51,14 +51,23 @@ class UserController {
 
     async blockUnBlockUser(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
-            const {user_id} = req.params;
-            await userService.blockUnLockUser(user_id);
+            const { user_id } = req.params;
+            await userService.blockUnBlockUser(user_id);
             res.end();
         } catch (e) {
             next(e);
         }
     }
-
+    async changeRole(req: IRequestExtended, res: Response, next: NextFunction) {
+        try {
+            const { user_id } = req.params;
+            const { role_id } = req.body;
+            await userService.changeRole(user_id, role_id);
+            res.end();
+        } catch (e) {
+            next(e);
+        }
+    }
 }
 
 export const userController = new UserController();

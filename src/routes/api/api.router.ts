@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { checkAccessTokenMiddleware , checkIsAdmin } from '../../middleware/auth';
+import { checkAccessTokenMiddleware , checkIsAdmin } from '../../middleware';
 import { authRouter } from '../auth';
 import { courseRouter } from '../course';
 import { groupRouter } from '../group';
@@ -16,6 +16,6 @@ router.use('/users', userRouter);
 router.use('/groups', groupRouter);
 router.use('/courses', courseRouter);
 router.use('/modules', moduleRouter);
-router.use('./lessons', lessonRouter);
+router.use('/lessons', lessonRouter);
 
 export const apiRouter = router;

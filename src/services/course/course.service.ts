@@ -1,6 +1,6 @@
 import { model } from 'mongoose';
 
-import { DatabaseTablesEnum } from '../../constants/enums';
+import { DatabaseTablesEnum } from '../../constants';
 import { Course, CourseSchema, CourseType } from '../../database';
 import { ICourse, IModuleFromCourseModel } from '../../interfaces';
 

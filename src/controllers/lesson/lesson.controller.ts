@@ -21,7 +21,7 @@ class LessonController {
 
       await lessonService.createLesson(lesson);
 
-      res.status(ResponseStatusCodesEnum.CREATED);
+      res.status(ResponseStatusCodesEnum.CREATED).end();
     } catch (e) {
       next(e);
     }

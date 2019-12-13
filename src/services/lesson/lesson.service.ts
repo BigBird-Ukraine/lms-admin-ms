@@ -3,10 +3,10 @@ import { ILesson } from '../../interfaces';
 
 class LessonService {
 
-  createLesson(lessonValue: ILesson): Promise<any> {
+  createLesson(lessonValue: ILesson): Promise<void> {
     const newLesson = new Lesson(lessonValue);
 
-    return newLesson.save();
+    return newLesson.save() as any;
   }
 }
 

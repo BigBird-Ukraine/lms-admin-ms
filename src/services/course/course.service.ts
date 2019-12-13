@@ -1,6 +1,6 @@
 import { model } from 'mongoose';
 
-import { config } from '../../configs';
+import { DatabaseTablesEnum } from '../../constants/enums';
 import { Course, CourseSchema, CourseType } from '../../database';
 import { ICourse, IModuleFromCourseModel } from '../../Interfaces';
 
@@ -12,13 +12,13 @@ class CourseService {
     }
 
     deleteCourseByID(course_id: string): Promise<void> {
-        const CourseModel = model<CourseType>(config.COURSE_COLLECTION_NAME, CourseSchema);
+        const CourseModel = model<CourseType>(DatabaseTablesEnum.COURSE_COLLECTION_NAME, CourseSchema);
 
         return CourseModel.deleteOne({ _id: course_id }) as any;
     }
 
     getCourseByID(course_id: string): Promise<IModuleFromCourseModel> {
-        const CourseModel = model<CourseType>(config.COURSE_COLLECTION_NAME, CourseSchema);
+        const CourseModel = model<CourseType>(DatabaseTablesEnum.COURSE_COLLECTION_NAME, CourseSchema);
 
         // TODO test this
         return CourseModel
@@ -28,7 +28,7 @@ class CourseService {
     }
 
     getAllCourses(): Promise<ICourse[]> {
-        const CourseModel = model<CourseType>(config.COURSE_COLLECTION_NAME, CourseSchema);
+        const CourseModel = model<CourseType>(DatabaseTablesEnum.COURSE_COLLECTION_NAME, CourseSchema);
         return CourseModel.find() as any;
     }
 }

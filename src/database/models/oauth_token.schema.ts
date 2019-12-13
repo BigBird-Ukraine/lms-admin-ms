@@ -1,6 +1,6 @@
 import { Document, Model, model, Schema, Types } from 'mongoose';
 
-import { config } from '../../configs';
+import { DatabaseTablesEnum } from '../../constants/enums';
 import { IOauthTokenModel } from '../../Interfaces';
 
 export type OauthTokenType = IOauthTokenModel & Document;
@@ -10,7 +10,7 @@ export let OauthTokenScheme: Schema;
 OauthTokenScheme = new Schema({
     user_id: {
         type: Types.ObjectId,
-        ref: config.USER_COLLECTION_NAME,
+        ref: DatabaseTablesEnum.USER_COLLECTION_NAME,
         required: true
     },
     access_token: {
@@ -23,8 +23,9 @@ OauthTokenScheme = new Schema({
     }
 });
 
-export const OauthToken: Model<OauthTokenType> = model<OauthTokenType>(
-    config.OAUTH_TOKEN_COLLECTION_NAME,
+export const OauthToken: Model<OauthTokenType> = model<OauthTokenType>
+(
+    DatabaseTablesEnum.OAUTH_TOKEN_COLLECTION_NAME,
     OauthTokenScheme,
-    config.OAUTH_TOKEN_COLLECTION_NAME
+    DatabaseTablesEnum.OAUTH_TOKEN_COLLECTION_NAME
 );

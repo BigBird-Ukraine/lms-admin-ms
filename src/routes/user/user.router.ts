@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 import { userController } from '../../controllers';
-import {checkAccessTokenMiddleware} from "../../middleware";
+import { checkAccessTokenMiddleware } from '../../middleware';
 
 const router = Router();
 

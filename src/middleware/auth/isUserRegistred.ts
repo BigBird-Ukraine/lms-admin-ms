@@ -3,9 +3,9 @@ import * as Joi from 'joi';
 
 import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler, errors } from '../../errors';
+import { IRequestExtended } from '../../interfaces';
 import { userService } from '../../services/user';
 import { emailValidator } from '../../validators';
-import { IRequestExtended } from '../../Interfaces';
 
 export const checkIsUserRegistered = async (req: IRequestExtended, res: Response, next: NextFunction) => {
 

@@ -1,7 +1,7 @@
-import { Document, Model, model, Schema } from 'mongoose';
+import { Document, Model, model, Schema, Types } from 'mongoose';
 
-import { config } from '../../configs';
-import { ICourse } from '../../Interfaces';
+import { DatabaseTablesEnum } from '../../constants';
+import { ICourse } from '../../interfaces';
 
 export type CourseType = ICourse & Document;
 
@@ -22,8 +22,14 @@ CourseSchema = new Schema({
         required: false
     },
     modules_list: [{
-        type: String
+        type: Types.ObjectId,
+        ref: DatabaseTablesEnum.MODULE_COLLECTION_NAME
+
     }]
 });
 
-export const Course: Model<CourseType> = model<CourseType>(config.COURSE_COLLECTION_NAME, CourseSchema, config.COURSE_COLLECTION_NAME);
+export const Course: Model<CourseType> = model<CourseType>(
+  DatabaseTablesEnum.COURSE_COLLECTION_NAME,
+  CourseSchema,
+  DatabaseTablesEnum.COURSE_COLLECTION_NAME
+);

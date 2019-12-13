@@ -2,10 +2,10 @@ import { NextFunction, Response } from 'express';
 import { verify, VerifyErrors } from 'jsonwebtoken';
 
 import { config } from '../../configs';
-import { ResponseStatusCodesEnum } from '../../constants/enums';
+import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler, errors } from '../../errors';
+import { IRequestExtended, IUser } from '../../interfaces';
 import { authService } from '../../services/auth';
-import { IRequestExtended } from '../../Interfaces';
 
 export const checkAccessTokenMiddleware = async (req: IRequestExtended, res: Response, next: NextFunction) => {
 
@@ -24,11 +24,11 @@ export const checkAccessTokenMiddleware = async (req: IRequestExtended, res: Res
 
         const user = await authService.getUserFromAccessToken(authToken); // todo think how create with IUser
 
-        if (!user) {
+        if (!user || !user.user_id) {
             return next(new ErrorHandler(ResponseStatusCodesEnum.NOT_FOUND, errors.NOT_FOUND_USER_NOT_PRESENT.message));
         }
 
-        req.user = user.user_id;
+        req.user = user.user_id as IUser;
 
         next();
 

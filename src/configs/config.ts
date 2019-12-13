@@ -17,12 +17,8 @@ export const config = {
     DATABASE_USER: 'root',
     DATABASE_PASS: 'root',
     DATABASE_IP: '127.0.0.1',
-    DATABASE_PORT: '27017',
+    DATABASE_PORT: '27017'
 
     /*Mongo Collections*/
-    USER_COLLECTION_NAME: 'User',
-    GROUP_COLLECTION_NAME: 'Group',
-    OAUTH_TOKEN_COLLECTION_NAME: 'Oauth_token',
-    COURSE_COLLECTION_NAME: 'Course',
-    MODULE_COLLECTION_NAME: 'Module'
+
 };

@@ -1,12 +1,12 @@
 import {NextFunction, Request, Response} from 'express';
 import * as Joi from 'joi';
 
-import {ResponseStatusCodesEnum} from '../../constants';
-import {ErrorHandler} from '../../errors';
-import {HASH_PASSWORD} from '../../helpers';
-import {userService} from '../../services';
-import {registerDataValidator} from '../../validators';
-import {IRequestExtended, IUser, IUserSubjectModel} from '../../Interfaces';
+import { ResponseStatusCodesEnum } from '../../constants';
+import { ErrorHandler } from '../../errors';
+import { HASH_PASSWORD } from '../../helpers';
+import { IRequestExtended, IUser } from '../../interfaces';
+import { userService } from '../../services';
+import { registerDataValidator } from '../../validators';
 
 class UserController {
 
@@ -49,7 +49,7 @@ class UserController {
         }
     }
 
-    async blockUnLockUser(req: IRequestExtended, res: Response, next: NextFunction) {
+    async blockUnBlockUser(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
             const {user_id} = req.params;
             await userService.blockUnLockUser(user_id);

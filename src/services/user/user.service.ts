@@ -1,7 +1,6 @@
-import {model} from 'mongoose';
-import {UserStatusEnum} from '../../constants/enums';
-import {User, UserSchema, UserType} from '../../database';
-import {IUser} from '../../Interfaces';
+import { model } from 'mongoose';
+import { User, UserSchema, UserType } from '../../database';
+import { IUser } from '../../interfaces';
 
 class UserService {
     async createUser(userValue: IUser): Promise<any> {
@@ -15,7 +14,7 @@ class UserService {
         return UserModel.findOne(params);
     }
 
-    async blockUnLockUser(id: string) {
+    async blockUnBlockUser(id: string) {
         const UserModel = model<UserType>('User', UserSchema);
         return UserModel.findById(id, (err: any, doc: UserType) => {
             if (!err) {

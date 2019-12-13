@@ -9,44 +9,74 @@ import { courseValidator } from '../../validators';
 
 class CourseController {
 
-    async getAllCourses(req: IRequestExtended, res: Response, next: NextFunction) {
-        try {
-            const courses = await courseService.getAllCourses();
+  async createCourse(req: IRequestExtended, res: Response, next: NextFunction) {
+    try {
+      const course = req.body;
+      const courseValidity = Joi.validate(course, courseValidator);
 
-            res.json({
-                data: courses
-            });
-        } catch (e) {
-            next(e);
-        }
+      if (courseValidity.error) {
+        return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, courseValidity.error.details[0].message));
+      }
+
+      await courseService.createCourse(course);
+
+      res.status(ResponseStatusCodesEnum.CREATED).end();
+    } catch (e) {
+      next(e);
     }
+  }
 
-    async createCourse(req: IRequestExtended, res: Response, next: NextFunction) {
-        try {
-            const course = req.body;
-            const courseValidity = Joi.validate(course, courseValidator);
+  async getAllCourses(req: IRequestExtended, res: Response, next: NextFunction) {
+    try {
+      const courses = await courseService.getAllCourses();
 
-            if (courseValidity.error) {
-                return next( new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, courseValidity.error.details[0].message));
-            }
-
-            await courseService.createCourse(course);
-
-            res.status(ResponseStatusCodesEnum.CREATED).end();
-        } catch (e) {
-            next(e);
-        }
+      res.json({
+        data: courses
+      });
+    } catch (e) {
+      next(e);
     }
+  }
 
-    editCourse(req: IRequestExtended, res: Response, next: NextFunction) {
-        try {
-            const { course_id } = req.params;
+  async getCourseById(req: IRequestExtended, res: Response, next: NextFunction) {
+    try {
+      const { course_id } = req.params;
 
-            res.json(`${course_id} edited (NO)`);
-        } catch (e) {
-            next(e);
-        }
+      const gettingCourse = await courseService.getCourseByID(course_id);
+
+      if (!gettingCourse) {
+          return next(new ErrorHandler(ResponseStatusCodesEnum.NOT_FOUND, 'Course is not found', 404));
+      }
+      res.json({
+          data: gettingCourse
+      });
+
+    } catch (e) {
+      next(e);
     }
+  }
+
+  editCourse(req: IRequestExtended, res: Response, next: NextFunction) {
+    try {
+      const { course_id } = req.params;
+
+      res.json(`${course_id} edited (NO)`);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async deleteCourseById(req: IRequestExtended, res: Response, next: NextFunction) {
+    try {
+      const { course_id } = req.params;
+
+      await courseService.deleteCourseByID(course_id);
+
+      res.status(ResponseStatusCodesEnum.CREATED).json(`course ${course_id} has been deleted`);
+    } catch (e) {
+      next(e);
+    }
+  }
 }
 
 export const courseController = new CourseController();

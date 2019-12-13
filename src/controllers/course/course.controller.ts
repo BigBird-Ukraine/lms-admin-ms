@@ -76,7 +76,7 @@ class CourseController {
 
       await courseService.deleteCourseByID(course_id);
 
-      res.status(ResponseStatusCodesEnum.OK).json(`course ${course_id} has been deleted`);
+      res.json(`course ${course_id} has been deleted`);
     } catch (e) {
       next(e);
     }

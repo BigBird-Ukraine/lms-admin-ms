@@ -4,9 +4,9 @@ import * as Joi from 'joi';
 import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler } from '../../errors';
 import { HASH_PASSWORD } from '../../helpers';
+import { IRequestExtended, IUser } from '../../interfaces';
 import { userService } from '../../services';
 import { registerDataValidator } from '../../validators';
-import { IRequestExtended, IUser } from '../../Interfaces';
 
 class UserController {
 

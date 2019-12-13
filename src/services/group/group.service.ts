@@ -1,5 +1,5 @@
 import { Group } from '../../database';
-import { IGroup } from '../../Interfaces';
+import { IGroup } from '../../interfaces';
 
 class GroupService {
 

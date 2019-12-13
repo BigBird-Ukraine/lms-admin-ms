@@ -2,10 +2,10 @@ import { NextFunction, Response } from 'express';
 import { verify, VerifyErrors } from 'jsonwebtoken';
 
 import { config } from '../../configs';
-import { ResponseStatusCodesEnum } from '../../constants/enums';
+import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler, errors } from '../../errors';
+import { IRequestExtended, IUser } from '../../interfaces';
 import { authService } from '../../services/auth';
-import { IRequestExtended, IUser } from '../../Interfaces';
 
 export const checkAccessTokenMiddleware = async (req: IRequestExtended, res: Response, next: NextFunction) => {
 

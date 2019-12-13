@@ -1,7 +1,7 @@
 import { Document, Model, model, Schema } from 'mongoose';
 
-import { DatabaseTablesEnum } from '../../constants/enums';
-import { IModule } from '../../Interfaces';
+import { DatabaseTablesEnum } from '../../constants';
+import { IModule } from '../../interfaces';
 
 export type ModuleType = IModule & Document;
 

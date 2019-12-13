@@ -1,6 +1,6 @@
 import { model } from 'mongoose';
 import { User, UserSchema, UserType } from '../../database';
-import { IUser } from '../../Interfaces';
+import { IUser } from '../../interfaces';
 
 class UserService {
     createUser(userValue: IUser): Promise<any> {

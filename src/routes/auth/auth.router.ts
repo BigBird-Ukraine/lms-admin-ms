@@ -11,7 +11,7 @@ import {
 
 const router = Router();
 
-router.post('/', checkIsUserRegistered, checkIsPasswordCorrect, checkIsAdmin, authController.loginUser);
+router.post('/', checkIsUserRegistered, checkIsAdmin, checkIsPasswordCorrect, authController.loginUser);
 router.post('/logout', checkAccessTokenMiddleware, authController.logoutUser);
 router.post('/refresh', checkRefreshTokenMiddleware , authController.refreshToken);
 

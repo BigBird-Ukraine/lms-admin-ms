@@ -1,5 +1,5 @@
 import { Module } from '../../database';
-import { IModule } from '../../Interfaces';
+import { IModule } from '../../interfaces';
 
 class ModuleService {
 

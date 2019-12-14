@@ -21,6 +21,11 @@ export const errors = {
         code: 4041
     },
 
+    NOT_FOUND_COURSE_NOT_PRESENT: { // When user wants get course witch not found in DB
+        message: 'Course is not found',
+        code: 4042
+    },
+
     NOT_FOUND_MODULE_PRESENT: { // When user wants get module witch not found in DB
         message: 'Module is not found',
         code: 4043

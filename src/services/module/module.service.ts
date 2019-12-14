@@ -1,6 +1,6 @@
 import { model } from 'mongoose';
 
-import { DatabaseTablesEnum } from '../../constants/enums';
+import { DatabaseTablesEnum } from '../../constants';
 import { Module, ModuleType } from '../../database';
 import { IModule } from '../../interfaces';
 

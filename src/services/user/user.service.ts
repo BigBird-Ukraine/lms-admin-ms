@@ -1,6 +1,6 @@
 import { model } from 'mongoose';
 
-import { DatabaseTablesEnum, UserStatusEnum } from '../../constants/enums';
+import { DatabaseTablesEnum } from '../../constants/enums';
 import { User, UserSchema, UserType } from '../../database';
 import { IUser } from '../../interfaces';
 
@@ -15,26 +15,14 @@ class UserService {
         return UserModel.findOne(params);
     }
 
-    async blockUnBlockUser(user_id: string): Promise<any> {
+    async changeStatus(user_id: string, status: number): Promise<any> {
         const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
-        return UserModel.findById(user_id, (err: any, doc: UserType) => {
-            if (!err) {
-                if (doc.status_id === UserStatusEnum.ACTIVE || doc.status_id === UserStatusEnum.BLOCKED) {
-                    doc.status_id = (doc.status_id === UserStatusEnum.ACTIVE) ? UserStatusEnum.BLOCKED : UserStatusEnum.ACTIVE;
-                doc.save();
-                }
-            }
-        });
+        return UserModel.findByIdAndUpdate(user_id, { status_id: status });
     }
 
     async changeRole(user_id: string, role: number): Promise<any> {
         const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
-        return UserModel.findById(user_id, (err, doc: UserType) => {
-            if (!err) {
-                doc.role_id = role;
-                doc.save();
-            }
-        });
+        return UserModel.findByIdAndUpdate(user_id, { role_id: role });
     }
 
     async delete(user_id: string): Promise<any> {
@@ -42,14 +30,19 @@ class UserService {
         return UserModel.findByIdAndDelete(user_id);
     }
 
-    async getAll(_id: string): Promise<any> {
+    async getAll(myId: string): Promise<any> {
         const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
-        return UserModel.find({ _id: { $ne: _id } });
+        return UserModel.find({ _id: { $ne: myId } });
     }
 
     async getByID(user_id: string): Promise<any> {
         const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
         return UserModel.findById(user_id);
+    }
+
+    async getAllByRole(status: number, myId?: string): Promise<any> {
+        const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
+        return UserModel.find({ role_id: status, _id: { $ne: myId } });
     }
 }
 

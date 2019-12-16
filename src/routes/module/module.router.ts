@@ -8,7 +8,7 @@ const router = Router();
 router.post('/', moduleController.createModule);
 
 router.get('/', moduleController.getAllModules);
-router.get('/:module_id', isModulePresent, moduleController.getModuleById);
+router.get('/:module_id', moduleController.getModuleById);
 
 router.patch('/:module_id', isModulePresent, moduleController.editModule);
 

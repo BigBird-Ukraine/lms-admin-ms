@@ -41,10 +41,10 @@ class ModuleController {
   async getModuleById(req: IRequestExtended, res: Response, next: NextFunction) {
     try {
       const { module_id } = req.params;
-      console.log(module_id);
-      const gettingModule = await moduleService.getModuleByID(module_id);
 
-      if (!gettingModule) {
+      const module = await moduleService.getModuleByID(module_id);
+
+      if (!module) {
         return next (new ErrorHandler(
           ResponseStatusCodesEnum.NOT_FOUND,
           errors.NOT_FOUND_MODULE_PRESENT.message,
@@ -52,7 +52,7 @@ class ModuleController {
       }
 
       res.json({
-        data: gettingModule
+        data: module
       });
     } catch (e) {
       next(e);

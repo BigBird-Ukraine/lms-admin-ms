@@ -42,9 +42,9 @@ class CourseController {
     try {
       const { course_id } = req.params;
 
-      const gettingCourse = await courseService.getCourseByID(course_id);
+      const course = await courseService.getCourseByID(course_id);
 
-      if (!gettingCourse) {
+      if (!course) {
         return next(new ErrorHandler(
           ResponseStatusCodesEnum.NOT_FOUND,
           errors.NOT_FOUND_COURSE_NOT_PRESENT.message,
@@ -52,7 +52,7 @@ class CourseController {
         ));
       }
       res.json({
-        data: gettingCourse
+        data: course
       });
 
     } catch (e) {

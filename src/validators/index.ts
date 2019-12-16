@@ -4,3 +4,4 @@ export * from './registerDataValidator';
 export * from './emailValidator';
 export * from './moduleValidator';
 export * from './lessonValidator';
+export * from './courseFilterParametresValidator';

@@ -5,7 +5,7 @@ import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler, errors } from '../../errors';
 import { ICourse, IRequestExtended } from '../../interfaces';
 import { courseService } from '../../services';
-import { courseValidator } from '../../validators';
+import { courseValidator, filterParametresValidator } from '../../validators';
 
 const courseSortingAttributes: Array<keyof ICourse> = ['_id', 'label', 'level', 'modules_list'];
 
@@ -39,7 +39,11 @@ class CourseController {
         ...filter
       } = req.query;
 
-      // TODO create filter parameters validator
+      const filterValidity = Joi.validate(filter, filterParametresValidator);
+
+      if (filterValidity.error) {
+        return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, filterValidity.error.details[0].message));
+      }
 
       if (!courseSortingAttributes.includes(sort)) {
         return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, 'You can\'t sort by this parameter'));

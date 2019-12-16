@@ -1,12 +1,12 @@
-import {NextFunction, Request, Response} from 'express';
+import { NextFunction, Request, Response } from 'express';
 import * as Joi from 'joi';
 
-import {ResponseStatusCodesEnum, UserRoleEnum, UserStatusEnum} from '../../constants';
-import {ErrorHandler, errors} from '../../errors';
-import {HASH_PASSWORD} from '../../helpers';
-import {IRequestExtended, IUser, IUserSubjectModel} from '../../interfaces';
-import {userService} from '../../services';
-import {registerDataValidator} from '../../validators';
+import { ResponseStatusCodesEnum, UserStatusEnum } from '../../constants';
+import { ErrorHandler } from '../../errors';
+import { HASH_PASSWORD } from '../../helpers';
+import { IRequestExtended, IUser, IUserSubjectModel } from '../../interfaces';
+import { userService } from '../../services';
+import { registerDataValidator } from '../../validators';
 
 class UserController {
 
@@ -21,7 +21,9 @@ class UserController {
 
             user.password = await HASH_PASSWORD(user.password);
             await userService.createUser(user);
+
             res.status(ResponseStatusCodesEnum.CREATED).end();
+
         } catch (e) {
             next(e);
         }
@@ -30,7 +32,7 @@ class UserController {
     async getUserInfoByToken(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
             const {_id, email, name, surname, role_id, status_id, photo_path, groups_id} = req.user as IUser;
-            const result: IUserSubjectModel = {
+            const userSubjectModel: IUserSubjectModel = {
                 _id,
                 email,
                 name,
@@ -40,7 +42,9 @@ class UserController {
                 photo_path,
                 groups_id
             };
-            res.json(result);
+
+            res.json({data: userSubjectModel});
+
         } catch (e) {
             next(e);
         }
@@ -50,7 +54,9 @@ class UserController {
         try {
             const {user_id} = req.params;
             await userService.changeStatus(user_id, UserStatusEnum.BLOCKED);
-            res.end();
+
+            res.json(`user ${user_id} has been blocked`);
+
         } catch (e) {
             next(e);
         }
@@ -60,37 +66,22 @@ class UserController {
         try {
             const {user_id} = req.params;
             await userService.changeStatus(user_id, UserStatusEnum.ACTIVE);
-            res.end();
+
+            res.json(`user ${user_id} has been unBlocked`);
+
         } catch (e) {
             next(e);
         }
     }
 
-    async changeRoleToAdmin(req: IRequestExtended, res: Response, next: NextFunction) {
+    async changeRole(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
             const {user_id} = req.params;
-            await userService.changeRole(user_id, UserRoleEnum.ADMIN);
-            res.end();
-        } catch (e) {
-            next(e);
-        }
-    }
+            const role_id = req.query.role;
+            await userService.changeRole(user_id, role_id);
 
-    async changeRoleToTeacher(req: IRequestExtended, res: Response, next: NextFunction) {
-        try {
-            const {user_id} = req.params;
-            await userService.changeRole(user_id, UserRoleEnum.TEACHER);
-            res.end();
-        } catch (e) {
-            next(e);
-        }
-    }
+            res.json(`user ${user_id} has been changed role`);
 
-    async changeRoleToStudent(req: IRequestExtended, res: Response, next: NextFunction) {
-        try {
-            const {user_id} = req.params;
-            await userService.changeRole(user_id, UserRoleEnum.STUDENT);
-            res.end();
         } catch (e) {
             next(e);
         }
@@ -100,7 +91,9 @@ class UserController {
         try {
             const {user_id} = req.params;
             await userService.delete(user_id);
-            res.end();
+
+            res.json(`user ${user_id} has been deleted`);
+
         } catch (e) {
             next(e);
         }
@@ -109,17 +102,10 @@ class UserController {
     async getAll(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
             const {_id} = req.user as IUser;
-            const result = await userService.getAll(_id) as [IUser];
+            const users = await userService.getAll(_id) as [IUser];
 
-            if (!result) {
-                return next(new ErrorHandler(
-                    ResponseStatusCodesEnum.NOT_FOUND,
-                    errors.NOT_FOUND_USER_NOT_PRESENT.message,
-                    errors.NOT_FOUND_USER_NOT_PRESENT.code
-                ));
-            }
+            res.json({data: users});
 
-            res.json(result);
         } catch (e) {
             next(e);
         }
@@ -128,73 +114,22 @@ class UserController {
     async getByID(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
             const {user_id} = req.params;
-            const result = await userService.getByID(user_id) as IUser;
+            const user = await userService.getByID(user_id) as IUser;
 
-            if (!result) {
-                return next(new ErrorHandler(
-                    ResponseStatusCodesEnum.NOT_FOUND,
-                    errors.NOT_FOUND_USER_NOT_PRESENT.message,
-                    errors.NOT_FOUND_USER_NOT_PRESENT.code
-                ));
-            }
-
-            res.json(result);
+            res.json({data: user});
 
         } catch (e) {
             next(e);
         }
     }
 
-    async getAllAdmins(req: IRequestExtended, res: Response, next: NextFunction) {
+    async getAllByRole(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
-            const {_id} = req.user as IUser;
-            const result = await userService.getAllByRole(UserRoleEnum.ADMIN, _id);
+            const role_id = req.query.role;
+            const users = await userService.getAllByRole(role_id);
 
-            if (!result) {
-                return next(new ErrorHandler(
-                    ResponseStatusCodesEnum.NOT_FOUND,
-                    errors.NOT_FOUND_USER_NOT_PRESENT.message,
-                    errors.NOT_FOUND_USER_NOT_PRESENT.code
-                ));
-            }
+            res.json({data: users});
 
-            res.json(result);
-        } catch (e) {
-            next(e);
-        }
-    }
-
-    async getAllTeachers(req: IRequestExtended, res: Response, next: NextFunction) {
-        try {
-            const result = await userService.getAllByRole(UserRoleEnum.TEACHER);
-
-            if (!result) {
-                return next(new ErrorHandler(
-                    ResponseStatusCodesEnum.NOT_FOUND,
-                    errors.NOT_FOUND_USER_NOT_PRESENT.message,
-                    errors.NOT_FOUND_USER_NOT_PRESENT.code
-                ));
-            }
-
-            res.json(result);
-        } catch (e) {
-            next(e);
-        }
-    }
-
-    async getAllStudents(req: IRequestExtended, res: Response, next: NextFunction) {
-        try {
-            const result = await userService.getAllByRole(UserRoleEnum.STUDENT);
-
-            if (!result) {
-                return next(new ErrorHandler(
-                    ResponseStatusCodesEnum.NOT_FOUND,
-                    errors.NOT_FOUND_USER_NOT_PRESENT.message,
-                    errors.NOT_FOUND_USER_NOT_PRESENT.code
-                ));
-            }
-
-            res.json(result);
         } catch (e) {
             next(e);
         }

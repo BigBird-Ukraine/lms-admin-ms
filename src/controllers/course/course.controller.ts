@@ -2,8 +2,8 @@ import { NextFunction, Response } from 'express';
 import * as Joi from 'joi';
 
 import { ResponseStatusCodesEnum } from '../../constants';
-import { ErrorHandler, errors } from '../../errors';
-import { ICourse, IRequestExtended } from '../../interfaces';
+import { ErrorHandler } from '../../errors';
+import { IRequestExtended } from '../../interfaces';
 import { courseService } from '../../services';
 import { courseValidator, filterParametresValidator } from '../../validators';
 
@@ -71,13 +71,6 @@ class CourseController {
 
       const course = await courseService.getCourseByID(course_id);
 
-      if (!course) {
-        return next(new ErrorHandler(
-          ResponseStatusCodesEnum.NOT_FOUND,
-          errors.NOT_FOUND_COURSE_NOT_PRESENT.message,
-          errors.NOT_FOUND_COURSE_NOT_PRESENT.code
-        ));
-      }
       res.json({
         data: course
       });

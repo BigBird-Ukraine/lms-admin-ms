@@ -1,4 +1,4 @@
-import { Document, Model, model, Schema } from 'mongoose';
+import { Document, Model, model, Schema, Types } from 'mongoose';
 
 import { DatabaseTablesEnum } from '../../constants';
 import { IModule } from '../../interfaces';
@@ -24,8 +24,9 @@ ModuleSchema = new Schema({
         type: String,
         ref: DatabaseTablesEnum.COURSE_COLLECTION_NAME
     }],
-    lessons: [{
-        type: String
+    lessons_list: [{
+        type: Types.ObjectId,
+        ref: DatabaseTablesEnum.LESSON_COLLECTION_NAME
     }]
 });
 

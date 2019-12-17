@@ -12,7 +12,6 @@ class ModuleController {
   async createModule(req: IRequestExtended, res: Response, next: NextFunction) {
     try {
       const module = req.body;
-
       const moduleValidity = Joi.validate(module, moduleValidator);
 
       if (moduleValidity.error) {
@@ -26,6 +25,55 @@ class ModuleController {
       next(e);
     }
   }
+
+  async getAllModules(req: IRequestExtended, res: Response, next: NextFunction) {
+    try {
+      const modules = await moduleService.getAllModules();
+
+      res.json({
+        data: modules
+      });
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async getModuleById(req: IRequestExtended, res: Response, next: NextFunction) {
+    try {
+      const { module_id } = req.params;
+
+      const module = await moduleService.getModuleByID(module_id);
+
+      res.json({
+        data: module
+      });
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async editModule(req: IRequestExtended, res: Response, next: NextFunction) {
+    try {
+      const { module_id } = req.params;
+
+      res.json( `${module_id} has been edited`);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async deleteModule(req: IRequestExtended, res: Response, next: NextFunction) {
+    try {
+      const { module_id } = req.params;
+
+      await moduleService.deleteModuleByID(module_id);
+
+      res.json(`module ${module_id} has been deleted`);
+    } catch (e) {
+      next(e);
+    }
+  }
+
 }
 
 export const moduleController = new ModuleController();

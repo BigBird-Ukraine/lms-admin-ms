@@ -37,9 +37,15 @@ class CourseService {
           .select({ label: 1, module_list: 1, _id: 0 }) as any;
     }
 
-    getAllCourses(): Promise<ICourse[]> {
+    getAllCourses(limit: number, offset: number, sort: string, order?: string, filter?: any): Promise<ICourse[]> {
         const CourseModel = model<CourseType>(DatabaseTablesEnum.COURSE_COLLECTION_NAME, CourseSchema);
-        return CourseModel.find() as any;
+        return CourseModel
+          .find(filter)
+          .limit(limit)
+          .skip(offset)
+          .sort({
+              [sort]: order
+          }) as any;
     }
 }
 

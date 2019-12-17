@@ -2,7 +2,7 @@ import { NextFunction, Response } from 'express';
 import * as Joi from 'joi';
 
 import { ResponseStatusCodesEnum } from '../../constants';
-import { ErrorHandler, errors } from '../../errors';
+import { ErrorHandler } from '../../errors';
 import { IRequestExtended } from '../../interfaces';
 import { moduleService } from '../../services';
 import { moduleValidator } from '../../validators';
@@ -41,18 +41,11 @@ class ModuleController {
   async getModuleById(req: IRequestExtended, res: Response, next: NextFunction) {
     try {
       const { module_id } = req.params;
-      console.log(module_id);
-      const gettingModule = await moduleService.getModuleByID(module_id);
 
-      if (!gettingModule) {
-        return next (new ErrorHandler(
-          ResponseStatusCodesEnum.NOT_FOUND,
-          errors.NOT_FOUND_MODULE_PRESENT.message,
-          errors.NOT_FOUND_MODULE_PRESENT.code));
-      }
+      const module = await moduleService.getModuleByID(module_id);
 
       res.json({
-        data: gettingModule
+        data: module
       });
     } catch (e) {
       next(e);

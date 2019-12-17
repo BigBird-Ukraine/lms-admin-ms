@@ -31,7 +31,7 @@ class AuthService {
     async getUserFromRefreshToken(refresh_token: string): Promise<IUserByToken> {
         const OauthTokenModel = model<OauthTokenType>('Oauth_token', OauthTokenScheme);
 
-        return  OauthTokenModel.findOne({ refresh_token }).populate('user_id').select({ user_id: 1, _id: 0 }) as any;
+        return OauthTokenModel.findOne({ refresh_token }).populate('user_id').select({ user_id: 1, _id: 0 }) as any;
     }
 }
 

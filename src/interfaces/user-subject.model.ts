@@ -4,8 +4,7 @@ export interface IUserSubjectModel {
     surname: string;
     role_id: number;
     status_id: number;
+    email?: string;
     photo_path?: string;
-    group?: {
-        label: string
-    };
+    groups_id?: [string];
 }

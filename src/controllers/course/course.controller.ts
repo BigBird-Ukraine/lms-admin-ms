@@ -3,7 +3,7 @@ import * as Joi from 'joi';
 
 import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler } from '../../errors';
-import { IRequestExtended } from '../../interfaces';
+import { ICourse, IRequestExtended } from '../../interfaces';
 import { courseService } from '../../services';
 import { courseValidator, filterParametresValidator } from '../../validators';
 

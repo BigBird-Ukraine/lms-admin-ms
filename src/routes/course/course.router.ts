@@ -6,9 +6,6 @@ import { isCoursePresent } from '../../middleware';
 const router = Router();
 
 router.get('/', courseController.getCourses);
-router.get('/:course_id', courseController.getCourseById);
-
-router.get('/', courseController.getAllCourses);
 router.post('/', courseController.createCourse);
 
 router.use('/:course_id', isCoursePresent);

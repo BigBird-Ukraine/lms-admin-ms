@@ -49,7 +49,7 @@ class CourseController {
         return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, 'You can\'t sort by this parameter'));
       }
 
-      const courses = await courseService.getAllCourses(+limit, +offset, sort, order, filter);
+      const courses = await courseService.getCourses(+limit, +offset, sort, order, filter);
       const count = courses.length;
       const pageCount = Math.ceil(count / limit);
 

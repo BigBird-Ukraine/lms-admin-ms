@@ -12,10 +12,16 @@ class ModuleService {
     return newModule.save();
   }
 
-  getAllModules(): Promise<IModule[]> {
+  getModulesByParams(limit: number, offset: number, sort: string, order?: string, filter?: any): Promise<IModule[]> {
     const ModuleModel = model<ModuleType>(DatabaseTablesEnum.MODULE_COLLECTION_NAME);
 
-    return ModuleModel.find() as any;
+    return ModuleModel
+      .find(filter)
+      .limit(limit)
+      .skip(offset)
+      .sort({
+        [sort]: order
+      }) as any;
   }
 
   getModuleByID(module_id: string): Promise<IModule> {

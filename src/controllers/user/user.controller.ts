@@ -31,7 +31,7 @@ class UserController {
 
     async getUserInfoByToken(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
-            const {_id, email, name, surname, role_id, status_id, photo_path, groups_id} = req.user as IUser;
+            const { _id, email, name, surname, role_id, status_id, photo_path, groups_id } = req.user as IUser;
             const userSubjectModel: IUserSubjectModel = {
                 _id,
                 email,
@@ -43,7 +43,7 @@ class UserController {
                 groups_id
             };
 
-            res.json({data: userSubjectModel});
+            res.json({ data: userSubjectModel });
 
         } catch (e) {
             next(e);
@@ -52,7 +52,7 @@ class UserController {
 
     async blockUser(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
-            const {user_id} = req.params;
+            const { user_id } = req.params;
             await userService.changeStatus(user_id, UserStatusEnum.BLOCKED);
 
             res.json(`user ${user_id} has been blocked`);
@@ -64,7 +64,7 @@ class UserController {
 
     async unBlockUser(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
-            const {user_id} = req.params;
+            const { user_id } = req.params;
             await userService.changeStatus(user_id, UserStatusEnum.ACTIVE);
 
             res.json(`user ${user_id} has been unBlocked`);
@@ -76,7 +76,7 @@ class UserController {
 
     async changeRole(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
-            const {user_id} = req.params;
+            const { user_id } = req.params;
             const role_id = req.query.role;
             await userService.changeRole(user_id, role_id);
 
@@ -89,7 +89,7 @@ class UserController {
 
     async delete(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
-            const {user_id} = req.params;
+            const { user_id } = req.params;
             await userService.delete(user_id);
 
             res.json(`user ${user_id} has been deleted`);
@@ -101,10 +101,10 @@ class UserController {
 
     async getAll(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
-            const {_id} = req.user as IUser;
+            const { _id } = req.user as IUser;
             const users = await userService.getAll(_id) as [IUser];
 
-            res.json({data: users});
+            res.json({ data: users });
 
         } catch (e) {
             next(e);
@@ -113,10 +113,10 @@ class UserController {
 
     async getByID(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
-            const {user_id} = req.params;
+            const { user_id } = req.params;
             const user = await userService.getByID(user_id) as IUser;
 
-            res.json({data: user});
+            res.json({ data: user });
 
         } catch (e) {
             next(e);
@@ -128,7 +128,7 @@ class UserController {
             const role_id = req.query.role;
             const users = await userService.getAllByRole(role_id);
 
-            res.json({data: users});
+            res.json({ data: users });
 
         } catch (e) {
             next(e);

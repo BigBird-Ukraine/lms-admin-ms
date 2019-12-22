@@ -20,9 +20,9 @@ class UserService {
         return UserModel.findByIdAndUpdate(user_id, { status_id: status }) as any;
     }
 
-    changeRole(user_id: string, role: number): Promise<any> {
+    updateUser(user_id: string, patchObject: Partial<IUser>): Promise<any> {
         const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
-        return UserModel.findByIdAndUpdate(user_id, { role_id: role }) as any;
+        return UserModel.findByIdAndUpdate(user_id, patchObject) as any;
     }
 
     delete(user_id: string): Promise<void> {
@@ -30,19 +30,18 @@ class UserService {
         return UserModel.findByIdAndDelete(user_id) as any;
     }
 
-    getAll(myId: string): Promise<any> {
+    getAll(myId: string, filterParams: Partial<IUser>): Promise<any> {
         const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
-        return UserModel.find({ _id: { $ne: myId } }) as any;
+        return UserModel
+          .find({ ...filterParams, _id: { $ne: myId } })
+          .select({ password: 0 }) as any;
     }
 
     getByID(user_id: string): Promise<any> {
         const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
-        return UserModel.findById(user_id) as any;
-    }
-
-    getAllByRole(role: number, myId?: string): Promise<any> {
-        const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
-        return UserModel.find({ role_id: role, _id: { $ne: myId } }) as any;
+        return UserModel
+          .findById(user_id)
+          .select({ password: 0 }) as any;
     }
 }
 

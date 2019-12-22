@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
 import * as Joi from 'joi';
 
-import { ResponseStatusCodesEnum, UserStatusEnum } from '../../constants';
+import { ResponseStatusCodesEnum, UserRoleEnum, UserStatusEnum } from '../../constants';
 import { ErrorHandler } from '../../errors';
 import { HASH_PASSWORD } from '../../helpers';
 import { IRequestExtended, IUser, IUserSubjectModel } from '../../interfaces';
 import { userService } from '../../services';
-import { registerDataValidator } from '../../validators';
+import { adminPatchUserValidator, registerDataValidator, userFilterValidator } from '../../validators';
 
 class UserController {
 
@@ -20,10 +20,11 @@ class UserController {
             }
 
             user.password = await HASH_PASSWORD(user.password);
+            user.role_id = UserRoleEnum.STUDENT;
+
             await userService.createUser(user);
 
             res.status(ResponseStatusCodesEnum.CREATED).end();
-
         } catch (e) {
             next(e);
         }
@@ -55,8 +56,7 @@ class UserController {
             const { user_id } = req.params;
             await userService.changeStatus(user_id, UserStatusEnum.BLOCKED);
 
-            res.json(`user ${user_id} has been blocked`);
-
+            res.end();
         } catch (e) {
             next(e);
         }
@@ -67,21 +67,25 @@ class UserController {
             const { user_id } = req.params;
             await userService.changeStatus(user_id, UserStatusEnum.ACTIVE);
 
-            res.json(`user ${user_id} has been unBlocked`);
-
+            res.end();
         } catch (e) {
             next(e);
         }
     }
 
-    async changeRole(req: IRequestExtended, res: Response, next: NextFunction) {
+    async updateUserByID(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
             const { user_id } = req.params;
-            const role_id = req.query.role;
-            await userService.changeRole(user_id, role_id);
+            const updateInfo = req.body;
+            const updateValidity = Joi.validate(updateInfo, adminPatchUserValidator);
 
-            res.json(`user ${user_id} has been changed role`);
+            if (updateValidity.error) {
+                return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, updateValidity.error.details[0].message));
+            }
 
+            await userService.updateUser(user_id, updateInfo);
+
+            res.end();
         } catch (e) {
             next(e);
         }
@@ -92,8 +96,7 @@ class UserController {
             const { user_id } = req.params;
             await userService.delete(user_id);
 
-            res.json(`user ${user_id} has been deleted`);
-
+            res.end();
         } catch (e) {
             next(e);
         }
@@ -102,7 +105,15 @@ class UserController {
     async getAll(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
             const { _id } = req.user as IUser;
-            const users = await userService.getAll(_id) as [IUser];
+            const filterParams = req.query;
+
+            const filterValidity = Joi.validate(filterParams, userFilterValidator);
+
+            if (filterValidity.error) {
+                return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, filterValidity.error.details[0].message));
+            }
+
+            const users = await userService.getAll(_id, filterParams) as [IUser];
 
             res.json({ data: users });
 
@@ -123,13 +134,34 @@ class UserController {
         }
     }
 
-    async getAllByRole(req: IRequestExtended, res: Response, next: NextFunction) {
+    async makeUserTeacher(req: IRequestExtended, res: Response, next: NextFunction) {
+          try {
+              const { user_id } = req.params;
+              await userService.updateUser(user_id, { role_id: UserRoleEnum.TEACHER });
+
+              res.end();
+          } catch (e) {
+              next(e);
+          }
+    }
+
+    async makeUserAdmin(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
-            const role_id = req.query.role;
-            const users = await userService.getAllByRole(role_id);
+            const { user_id } = req.params;
+            await userService.updateUser(user_id, { role_id: UserRoleEnum.ADMIN });
 
-            res.json({ data: users });
+            res.end();
+        } catch (e) {
+            next(e);
+        }
+    }
 
+    async makeUserStudent(req: IRequestExtended, res: Response, next: NextFunction) {
+        try {
+            const { user_id } = req.params;
+            await userService.updateUser(user_id, { role_id: UserRoleEnum.STUDENT });
+
+            res.end();
         } catch (e) {
             next(e);
         }

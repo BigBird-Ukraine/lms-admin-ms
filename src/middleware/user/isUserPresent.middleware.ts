@@ -1,10 +1,11 @@
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Response } from 'express';
 
-import { ResponseStatusCodesEnum } from '../../constants/enums';
+import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler, errors } from '../../errors';
-import { userService } from '../../services/user';
+import { IRequestExtended } from '../../interfaces';
+import { userService } from '../../services';
 
-export const isUserPresent = async (req: Request, res: Response, next: NextFunction) => {
+export const isUserPresent = async (req: IRequestExtended, res: Response, next: NextFunction) => {
     try {
         const { user_id } = req.params;
         const user = await userService.getByID( user_id );
@@ -16,6 +17,8 @@ export const isUserPresent = async (req: Request, res: Response, next: NextFunct
                 errors.NOT_FOUND_USER_NOT_PRESENT.code
             ));
         }
+
+        req.user = user;
         next();
     } catch (e) {
         next(e);

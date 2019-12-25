@@ -1,6 +1,6 @@
-import { Router } from 'express';
+import {Router} from 'express';
 
-import { userController } from '../../controllers';
+import {userController} from '../../controllers';
 import {checkIsEmailPresent, isUserBlocked, isUserPresent, updateDate} from '../../middleware';
 
 const router = Router();

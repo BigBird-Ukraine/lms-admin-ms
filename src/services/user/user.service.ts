@@ -1,8 +1,8 @@
-import { model } from 'mongoose';
+import {model} from 'mongoose';
 
-import { DatabaseTablesEnum } from '../../constants/enums';
-import { User, UserSchema, UserType } from '../../database';
-import { IUser } from '../../interfaces';
+import {DatabaseTablesEnum} from '../../constants/enums';
+import {User, UserSchema, UserType} from '../../database';
+import {IUser} from '../../interfaces';
 
 class UserService {
     async createUser(userValue: IUser): Promise<any> {
@@ -17,7 +17,7 @@ class UserService {
 
     changeStatus(user_id: string, status: number): Promise<any> {
         const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
-        return UserModel.findByIdAndUpdate(user_id, { status_id: status }) as any;
+        return UserModel.findByIdAndUpdate(user_id, {status_id: status}) as any;
     }
 
     updateUser(user_id: string, patchObject: Partial<IUser>): Promise<any> {
@@ -30,18 +30,26 @@ class UserService {
         return UserModel.findByIdAndDelete(user_id) as any;
     }
 
-    getAll(myId: string, filterParams: Partial<IUser>): Promise<any> {
+    getAll(myId: string, filterParams: Partial<IUser>, limit: number, skip: number): Promise<any> {
         const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
         return UserModel
-          .find({ ...filterParams, _id: { $ne: myId } })
-          .select({ password: 0 }) as any;
+            .find({...filterParams, _id: {$ne: myId}})
+            .limit(limit)
+            .skip(skip)
+            .select({password: 0}) as any;
+    }
+
+    getSizeOfAll(myId: string, filterParams: Partial<IUser>): Promise<number> {
+        const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
+        return UserModel
+            .countDocuments({...filterParams, _id: {$ne: myId}}) as any;
     }
 
     getByID(user_id: string): Promise<any> {
         const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
         return UserModel
-          .findById(user_id)
-          .select({ password: 0 }) as any;
+            .findById(user_id)
+            .select({password: 0}) as any;
     }
 }
 

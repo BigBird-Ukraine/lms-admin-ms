@@ -1,6 +1,6 @@
 import * as Joi from 'joi';
 
-import {RegExpEnum} from "../../constants/enums";
+import {RegExpEnum} from '../../constants/enums';
 
 export const adminPatchUserValidator = Joi.object().keys({
     name: Joi.string().min(2).max(255).trim(),

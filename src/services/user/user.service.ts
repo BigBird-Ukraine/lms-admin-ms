@@ -30,12 +30,13 @@ class UserService {
         return UserModel.findByIdAndDelete(user_id) as any;
     }
 
-    getAll(myId: string, filterParams: Partial<IUser>, limit: number, skip: number): Promise<any> {
+    getAll(myId: string, filterParams: Partial<IUser>, limit: number, skip: number, order: string): Promise<any> {
         const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
         return UserModel
             .find({...filterParams, _id: {$ne: myId}})
             .limit(limit)
             .skip(skip)
+            .sort(order)
             .select({password: 0}) as any;
     }
 

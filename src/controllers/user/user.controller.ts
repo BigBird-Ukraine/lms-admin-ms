@@ -98,6 +98,8 @@ class UserController {
             const {
                 pageSize,
                 pageIndex,
+                offset = pageSize * pageIndex,
+                order = 'surname',
                 ...filterParams
             } = req.query;
 
@@ -112,7 +114,7 @@ class UserController {
                 }
             }
 
-            const users = await userService.getAll(_id, filterParams, +pageSize, +pageIndex * pageSize) as [IUser];
+            const users = await userService.getAll(_id, filterParams, +pageSize, offset, order) as [IUser];
             const count = await userService.getSizeOfAll(_id, filterParams) as number;
             res.json({
                 data: {

@@ -12,7 +12,7 @@ class UserController {
 
     async createUser(req: Request, res: Response, next: NextFunction) {
         try {
-            const user = req.body;
+            const user = req.body as IUser;
             const userValidity = Joi.validate(user, registerDataValidator);
 
             if (userValidity.error) {
@@ -95,7 +95,13 @@ class UserController {
     async getAll(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
             const {_id} = req.user as IUser;
-            const filterParams = req.query;
+            const {
+                pageSize,
+                pageIndex,
+                offset = pageSize * pageIndex,
+                order = 'surname',
+                ...filterParams
+            } = req.query;
 
             const filterValidity = Joi.validate(filterParams, userFilterValidator);
 
@@ -103,9 +109,20 @@ class UserController {
                 return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, filterValidity.error.details[0].message));
             }
 
-            const users = await userService.getAll(_id, filterParams) as [IUser];
+            for (const filterParamsKey in filterParams) {  //TODO Victor
+                if (filterParamsKey !== 'role_id') {
+                    filterParams[filterParamsKey] = {$regex: '^' + filterParams[filterParamsKey], $options: 'i'};
+                }
+            }
 
-            res.json({data: users});
+            const users = await userService.getAll(_id, filterParams, +pageSize, offset, order) as [IUser];
+            const count = await userService.getSizeOfAll(_id, filterParams) as number;
+            res.json({
+                data: {
+                    users,
+                    count
+                }
+            });
 
         } catch (e) {
             next(e);

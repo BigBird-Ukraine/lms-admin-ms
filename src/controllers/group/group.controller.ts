@@ -41,6 +41,15 @@ class GroupController {
         }
     }
 
+    async getGroupById(req: IRequestExtended, res: Response, next: NextFunction) {
+        try {
+            const group = req.group as IGroup;
+            res.json({data: group});
+        } catch (e) {
+            next(e)
+        }
+    }
+
     async createGroup(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
             const group = req.body;

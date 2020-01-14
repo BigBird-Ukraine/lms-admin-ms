@@ -29,7 +29,7 @@ class GroupService {
         return newGroup.save() as any;
     }
 
-    update(group_id: string, patchObject: Partial<IGroupSubject>): Promise<any> {
+    update(group_id: string, patchObject: Partial<IGroupSubject>): Promise<IGroupSubject> {
         const GroupModel = model<GroupType>(DatabaseTablesEnum.GROUP_COLLECTION_NAME, GroupSchema);
         return GroupModel
             .findByIdAndUpdate(group_id, patchObject) as any;

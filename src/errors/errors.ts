@@ -29,5 +29,10 @@ export const errors = {
     NOT_FOUND_MODULE_PRESENT: { // When user wants get module witch not found in DB
         message: 'Module is not found',
         code: 4043
+    },
+
+    NOT_FOUND_GROUP_NOT_PRESENT: {
+        message: 'Group is not found',
+        code: 4043
     }
 };

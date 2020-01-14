@@ -1,20 +1,40 @@
-import { NextFunction, Response } from 'express';
+import {NextFunction, Response} from 'express';
 import * as Joi from 'joi';
 
-import { ResponseStatusCodesEnum } from '../../constants';
-import { ErrorHandler } from '../../errors';
-import { IRequestExtended } from '../../interfaces';
-import { groupService } from '../../services';
-import { groupValidator } from '../../validators';
+import {ResponseStatusCodesEnum} from '../../constants';
+import {ErrorHandler} from '../../errors';
+import {IGroup, IGroupSubject, IRequestExtended} from '../../interfaces';
+import {groupService} from '../../services';
+import {groupFilterValidator, groupUpdateValidator, groupValidator} from '../../validators';
 
 class GroupController {
-
     async getAllGroups(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
-            const courses = await groupService.getAllGroups(); // TODO
+            const {
+                pageSize,
+                pageIndex,
+                offset = pageSize * pageIndex,
+                order = '_id',
+                ...filterParams
+            } = req.query;
+            const filterValidity = Joi.validate(filterParams, groupFilterValidator);
 
+            if (filterValidity.error) {
+                return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, filterValidity.error.details[0].message));
+            }
+
+            for (const filterParamsKey in filterParams) {  // TODO Victor
+                if (filterParamsKey) {
+                    filterParams[filterParamsKey] = {$regex: '^' + filterParams[filterParamsKey], $options: 'i'};
+                }
+            }
+            const groups = await groupService.getAllGroups(filterParams, +pageSize, offset, order);
+            const count = await groupService.getSizeOfAll(filterParams) as number;
             res.json({
-                data: courses
+                data: {
+                    groups,
+                    count
+                }
             });
         } catch (e) {
             next(e);
@@ -24,14 +44,14 @@ class GroupController {
     async createGroup(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
             const group = req.body;
-            // TODO normally validator
+
             const groupValidity = Joi.validate(group, groupValidator);
 
             if (groupValidity.error) {
-                return next( new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, groupValidity.error.details[0].message));
+                return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, groupValidity.error.details[0].message));
             }
 
-            await groupService.createGroup(group); // TODO
+            await groupService.createGroup(group);
 
             res.status(ResponseStatusCodesEnum.CREATED).end();
         } catch (e) {
@@ -39,11 +59,51 @@ class GroupController {
         }
     }
 
-    editGroupById(req: IRequestExtended, res: Response, next: NextFunction) {
+    async editGroupById(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
-            const { group_id } = req.params;
+            const {group_id} = req.params;
+            const group = req.body as IGroupSubject;
 
-            res.json(`${group_id} edited (NO)`);
+            const groupValidity = Joi.validate(group, groupValidator);
+
+            if (groupValidity.error) {
+                return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, groupValidity.error.details[0].message));
+            }
+
+            await groupService.update(group_id, group);
+            res.end();
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    async changeUserListById(req: IRequestExtended, res: Response, next: NextFunction) {
+        try {
+            const {_id} = req.group as IGroup;
+            const list = req.body as Partial<IGroupSubject>;
+            console.log(list.users_list);
+            const groupValidity = Joi.validate(list, groupUpdateValidator);
+
+            if (groupValidity.error) {
+                return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, groupValidity.error.details[0].message));
+            }
+            console.log(list);
+            await groupService.update(_id, list);
+
+            res.end();
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    async delete(req: IRequestExtended, res: Response, next: NextFunction) {
+        try {
+            const {_id} = req.group as Partial<IGroup>;
+
+            if (_id) {
+                await groupService.delete(_id);
+            }
+            res.end();
         } catch (e) {
             next(e);
         }

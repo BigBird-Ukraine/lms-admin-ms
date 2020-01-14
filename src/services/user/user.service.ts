@@ -12,7 +12,7 @@ class UserService {
 
     getUserByParams(params: Partial<IUser>): Promise<any> {
         const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
-        return UserModel.findOne(params) as any;
+        return UserModel.findOne(params).select('+password') as any;
     }
 
     changeStatus(user_id: string, status: number): Promise<any> {

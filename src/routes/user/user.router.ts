@@ -1,7 +1,7 @@
-import { Router } from 'express';
+import {Router} from 'express';
 
-import { userController } from '../../controllers';
-import { checkIsEmailPresent, isUserBlocked, isUserPresent, updateDate } from '../../middleware';
+import {userController} from '../../controllers';
+import {checkIsEmailPresent, isUserBlocked, isUserPresent, updateDate} from '../../middleware';
 
 const router = Router();
 
@@ -13,8 +13,9 @@ router.post('/', checkIsEmailPresent, userController.createUser);
 router.use('/:user_id', isUserPresent);
 router.delete('/:user_id', userController.delete);
 
-router.use(updateDate);
 router.get('/:user_id', userController.getByID);
+
+router.use(updateDate);
 router.post('/:user_id/block', userController.blockUser);
 router.post('/:user_id/unblock', userController.unBlockUser);
 router.post('/:user_id/teacher', isUserBlocked, userController.makeUserTeacher);

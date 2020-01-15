@@ -109,7 +109,7 @@ class UserController {
                 return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, filterValidity.error.details[0].message));
             }
 
-            for (const filterParamsKey in filterParams) {  //TODO Victor
+            for (const filterParamsKey in filterParams) {
                 if (filterParamsKey !== 'role_id') {
                     filterParams[filterParamsKey] = {$regex: '^' + filterParams[filterParamsKey], $options: 'i'};
                 }

@@ -23,7 +23,7 @@ class GroupController {
                 return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, filterValidity.error.details[0].message));
             }
 
-            for (const filterParamsKey in filterParams) {  // TODO Victor
+            for (const filterParamsKey in filterParams) {
                 if (filterParamsKey) {
                     filterParams[filterParamsKey] = {$regex: '^' + filterParams[filterParamsKey], $options: 'i'};
                 }
@@ -46,7 +46,7 @@ class GroupController {
             const group = req.group as IGroup;
             res.json({data: group});
         } catch (e) {
-            next(e)
+            next(e);
         }
     }
 

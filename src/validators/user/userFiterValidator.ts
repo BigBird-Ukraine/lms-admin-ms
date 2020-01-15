@@ -9,6 +9,7 @@ export const userFilterValidator = Joi.object().keys({
     status_id: Joi.number().integer().min(1),
     role_id: Joi.number().integer().min(1),
     created_at: Joi.string().max(255).trim(),
+    updated_at: Joi.string().max(255).trim(),
     groups_id: Joi.array().items(Joi.string().max(255).trim()),
     passed_tests: Joi.array().items(Joi.string().max(255).trim()),
     __v: Joi.number()

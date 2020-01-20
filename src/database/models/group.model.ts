@@ -1,7 +1,7 @@
-import { Document, Model, model, Schema, Types } from 'mongoose';
+import {Document, Model, model, Schema, Types} from 'mongoose';
 
-import { DatabaseTablesEnum } from '../../constants/enums';
-import { IGroup } from '../../interfaces';
+import {DatabaseTablesEnum} from '../../constants/enums';
+import {IGroup} from '../../interfaces';
 
 export type GroupType = IGroup & Document;
 
@@ -15,7 +15,7 @@ GroupSchema = new Schema({
     course_id: {
         type: String,
         ref: DatabaseTablesEnum.COURSE_COLLECTION_NAME,
-        required: true
+        required: false
     },
     city: {
         type: String,

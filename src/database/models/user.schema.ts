@@ -1,7 +1,7 @@
-import { Document, Model, model, Schema, Types } from 'mongoose';
+import {Document, Model, model, Schema, Types} from 'mongoose';
 
-import { DatabaseTablesEnum, UserRoleEnum, UserStatusEnum } from '../../constants';
-import { IUser } from '../../interfaces';
+import {DatabaseTablesEnum, UserRoleEnum, UserStatusEnum} from '../../constants';
+import {IUser} from '../../interfaces';
 
 export type UserType = IUser & Document;
 
@@ -47,10 +47,6 @@ UserSchema = new Schema({
     updated_at: {
         type: Date
     },
-    groups_id: [{
-        type: Types.ObjectId,
-        ref: DatabaseTablesEnum.GROUP_COLLECTION_NAME
-    }],
     passed_tests: [{
         lesson_id: {
             type: Types.ObjectId,

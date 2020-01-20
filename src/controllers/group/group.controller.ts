@@ -90,13 +90,11 @@ class GroupController {
         try {
             const {_id} = req.group as IGroup;
             const list = req.body as Partial<IGroupSubject>;
-            console.log(list.users_list);
             const groupValidity = Joi.validate(list, groupUpdateValidator);
 
             if (groupValidity.error) {
                 return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, groupValidity.error.details[0].message));
             }
-            console.log(list);
             await groupService.update(_id, list);
 
             res.end();

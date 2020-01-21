@@ -37,7 +37,7 @@ class CourseService {
       .select({label: 1, module_list: 1, _id: 0}) as any;
   }
 
-  getCourses(filterParams: Partial<ICourse>, limit: number, skip: number, order: string): Promise<any> {
+  getCourses(filterParams: Partial<ICourse>, limit: number, skip: number, order: string): Promise<ICourse[]> {
     const CourseModel = model<CourseType>(DatabaseTablesEnum.COURSE_COLLECTION_NAME, CourseSchema);
     return CourseModel
       .find({...filterParams})
@@ -47,13 +47,13 @@ class CourseService {
       .sort(order) as any;
   }
 
-  getSizeOfAll(filterParams: Partial<ICourse>): Promise<any> {
+  getSizeOfAll(filterParams: Partial<ICourse>): Promise<number> {
     const GroupModel = model<CourseType>(DatabaseTablesEnum.COURSE_COLLECTION_NAME, CourseSchema);
     return GroupModel
       .countDocuments({...filterParams}) as any;
   }
 
-  updateCourse(course_id: string, patchObject: Partial<ICourseSubject>): Promise<any> {
+  updateCourse(course_id: string, patchObject: Partial<ICourseSubject>): Promise<void> {
     patchObject.updated_at = new Date().toString();
     const CourseModel = model<CourseType>(DatabaseTablesEnum.COURSE_COLLECTION_NAME, CourseSchema);
     return CourseModel

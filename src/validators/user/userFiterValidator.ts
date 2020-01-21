@@ -10,5 +10,5 @@ export const userFilterValidator = Joi.object().keys({
   created_at: Joi.string().max(255).trim(),
   updated_at: Joi.string().max(255).trim(),
   groups_id: Joi.array().items(Joi.string().max(255).trim()),
-  passed_tests: Joi.array().items(Joi.string().max(255).trim()),
+  passed_tests: Joi.array().items(Joi.string().max(255).trim())
 });

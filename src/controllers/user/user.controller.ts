@@ -34,7 +34,7 @@ class UserController {
     try {
       const user = req.user as IUser;
 
-      res.json({data: user});
+      res.json({ data: user });
 
     } catch (e) {
       next(e);
@@ -43,7 +43,7 @@ class UserController {
 
   async blockUser(req: IRequestExtended, res: Response, next: NextFunction) {
     try {
-      const {user_id} = req.params;
+      const { user_id } = req.params;
       await userService.changeStatus(user_id, UserStatusEnum.BLOCKED);
 
       res.end();
@@ -54,7 +54,7 @@ class UserController {
 
   async unBlockUser(req: IRequestExtended, res: Response, next: NextFunction) {
     try {
-      const {user_id} = req.params;
+      const { user_id } = req.params;
       await userService.changeStatus(user_id, UserStatusEnum.ACTIVE);
 
       res.end();
@@ -65,7 +65,7 @@ class UserController {
 
   async updateUserByID(req: IRequestExtended, res: Response, next: NextFunction) {
     try {
-      const {user_id} = req.params;
+      const { user_id } = req.params;
       const updateInfo = req.body as IUser;
       const updateValidity = Joi.validate(updateInfo, adminPatchUserValidator);
 
@@ -73,8 +73,7 @@ class UserController {
         return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, updateValidity.error.details[0].message));
       }
 
-      await userService.updateUser(user_id, updateInfo);
-      const user = await userService.getByID(user_id);
+      const user = await userService.updateUser(user_id, updateInfo);
       res.json(user);
     } catch (e) {
       next(e);
@@ -83,7 +82,7 @@ class UserController {
 
   async delete(req: IRequestExtended, res: Response, next: NextFunction) {
     try {
-      const {user_id} = req.params;
+      const { user_id } = req.params;
       await userService.delete(user_id);
 
       res.end();
@@ -94,7 +93,7 @@ class UserController {
 
   async getAll(req: IRequestExtended, res: Response, next: NextFunction) {
     try {
-      const {_id} = req.user as IUser;
+      const { _id } = req.user as IUser;
       const {
         pageSize,
         pageIndex,
@@ -111,7 +110,7 @@ class UserController {
 
       for (const filterParamsKey in filterParams) {
         if (filterParamsKey !== 'role_id') {
-          filterParams[filterParamsKey] = {$regex: '^' + filterParams[filterParamsKey], $options: 'i'};
+          filterParams[filterParamsKey] = { $regex: '^' + filterParams[filterParamsKey], $options: 'i' };
         }
       }
 
@@ -131,10 +130,10 @@ class UserController {
 
   async getByID(req: IRequestExtended, res: Response, next: NextFunction) {
     try {
-      const {user_id} = req.params;
+      const { user_id } = req.params;
       const user = await userService.getByID(user_id) as IUser;
 
-      res.json({data: user});
+      res.json({ data: user });
 
     } catch (e) {
       next(e);
@@ -143,8 +142,8 @@ class UserController {
 
   async makeUserTeacher(req: IRequestExtended, res: Response, next: NextFunction) {
     try {
-      const {user_id} = req.params;
-      await userService.updateUser(user_id, {role_id: UserRoleEnum.TEACHER});
+      const { user_id } = req.params;
+      await userService.updateUser(user_id, { role_id: UserRoleEnum.TEACHER });
 
       res.end();
     } catch (e) {
@@ -154,8 +153,8 @@ class UserController {
 
   async makeUserAdmin(req: IRequestExtended, res: Response, next: NextFunction) {
     try {
-      const {user_id} = req.params;
-      await userService.updateUser(user_id, {role_id: UserRoleEnum.ADMIN});
+      const { user_id } = req.params;
+      await userService.updateUser(user_id, { role_id: UserRoleEnum.ADMIN });
 
       res.end();
     } catch (e) {
@@ -165,8 +164,8 @@ class UserController {
 
   async makeUserStudent(req: IRequestExtended, res: Response, next: NextFunction) {
     try {
-      const {user_id} = req.params;
-      await userService.updateUser(user_id, {role_id: UserRoleEnum.STUDENT});
+      const { user_id } = req.params;
+      await userService.updateUser(user_id, { role_id: UserRoleEnum.STUDENT });
 
       res.end();
     } catch (e) {

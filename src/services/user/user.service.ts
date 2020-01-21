@@ -10,19 +10,19 @@ class UserService {
     return newUser.save();
   }
 
-  getUserByParams(params: Partial<IUser>): Promise<any> {
+  getUserByParams(params: Partial<IUser>): Promise<IUser> {
     const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
     return UserModel.findOne(params).select('+password') as any;
   }
 
-  changeStatus(user_id: string, status: number): Promise<any> {
+  changeStatus(user_id: string, status_id: number): Promise<void> {
     const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
-    return UserModel.findByIdAndUpdate(user_id, {status_id: status}) as any;
+    return UserModel.findByIdAndUpdate(user_id, {status_id}) as any;
   }
 
-  updateUser(user_id: string, patchObject: Partial<IUser>): Promise<any> {
+  updateUser(user_id: string, patchObject: Partial<IUser>): Promise<void> {
     const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
-    return UserModel.findByIdAndUpdate(user_id, patchObject) as any;
+    return UserModel.findByIdAndUpdate(user_id, patchObject, {new: true}) as any;
   }
 
   delete(user_id: string): Promise<void> {
@@ -30,7 +30,7 @@ class UserService {
     return UserModel.findByIdAndDelete(user_id) as any;
   }
 
-  getAll(myId: string, filterParams: Partial<IUser>, limit: number, skip: number, order: string): Promise<any> {
+  getAll(myId: string, filterParams: Partial<IUser>, limit: number, skip: number, order: string): Promise<IUser[]> {
     const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
     return UserModel
       .find({...filterParams, _id: {$ne: myId}})
@@ -46,7 +46,7 @@ class UserService {
       .countDocuments({...filterParams, _id: {$ne: myId}}) as any;
   }
 
-  getByID(user_id: string): Promise<any> {
+  getByID(user_id: string): Promise<IUser> {
     const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
     return UserModel
       .findById(user_id)

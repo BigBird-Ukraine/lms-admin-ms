@@ -2,11 +2,11 @@ import { model } from 'mongoose';
 
 import { DatabaseTablesEnum } from '../../constants/enums';
 import { Group, GroupSchema, GroupType } from '../../database';
-import { IGroup } from '../../interfaces';
+import { IGroup, IGroupSubject } from '../../interfaces';
 
 class GroupService {
 
-  getAllGroups(filterParams: Partial<IGroup>, limit: number, skip: number, order: string): Promise<any> {
+  getAllGroups(filterParams: Partial<IGroup>, limit: number, skip: number, order: string): Promise<IGroupSubject[]> {
     const GroupModel = model<GroupType>(DatabaseTablesEnum.GROUP_COLLECTION_NAME, GroupSchema);
     return GroupModel
       .find(filterParams)
@@ -17,7 +17,7 @@ class GroupService {
       .sort(order) as any;
   }
 
-  getSizeOfAll(filterParams: Partial<IGroup>): Promise<any> {
+  getSizeOfAll(filterParams: Partial<IGroup>): Promise<number> {
     const GroupModel = model<GroupType>(DatabaseTablesEnum.GROUP_COLLECTION_NAME, GroupSchema);
     return GroupModel
       .countDocuments(filterParams) as any;
@@ -29,7 +29,7 @@ class GroupService {
     return newGroup.save() as any;
   }
 
-  update(group_id: string, patchObject: Partial<IGroup>): Promise<any> {
+  update(group_id: string, patchObject: Partial<IGroup>): Promise<void> {
     patchObject.updated_at = new Date().toString();
     const GroupModel = model<GroupType>(DatabaseTablesEnum.GROUP_COLLECTION_NAME, GroupSchema);
     return GroupModel
@@ -41,7 +41,7 @@ class GroupService {
     return GroupModel.findByIdAndDelete(_id) as any;
   }
 
-  async getById(group_id: string): Promise<any> {
+  getById(group_id: string): Promise<IGroup> {
     const GroupModel = model<GroupType>(DatabaseTablesEnum.GROUP_COLLECTION_NAME, GroupSchema);
     return GroupModel.findById(group_id) as any;
   }

@@ -1,7 +1,7 @@
-import {Router} from 'express';
+import { Router } from 'express';
 
-import {courseController} from '../../controllers';
-import {isCoursePresent} from '../../middleware';
+import { courseController } from '../../controllers';
+import { isCoursePresent } from '../../middleware';
 
 const router = Router();
 

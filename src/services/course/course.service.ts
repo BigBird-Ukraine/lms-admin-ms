@@ -40,7 +40,7 @@ class CourseService {
   getCourses(filterParams: Partial<ICourse>, limit: number, skip: number, order: string): Promise<ICourse[]> {
     const CourseModel = model<CourseType>(DatabaseTablesEnum.COURSE_COLLECTION_NAME, CourseSchema);
     return CourseModel
-      .find({...filterParams})
+      .find(filterParams)
       .populate('modules_list')
       .limit(limit)
       .skip(skip)
@@ -50,7 +50,7 @@ class CourseService {
   getSizeOfAll(filterParams: Partial<ICourse>): Promise<number> {
     const GroupModel = model<CourseType>(DatabaseTablesEnum.COURSE_COLLECTION_NAME, CourseSchema);
     return GroupModel
-      .countDocuments({...filterParams}) as any;
+      .countDocuments(filterParams) as any;
   }
 
   updateCourse(course_id: string, patchObject: Partial<ICourseSubject>): Promise<void> {

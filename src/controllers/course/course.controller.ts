@@ -3,11 +3,9 @@ import * as Joi from 'joi';
 
 import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler } from '../../errors';
-import { ICourse, IRequestExtended } from '../../interfaces';
+import { ICourseSubject, IRequestExtended } from '../../interfaces';
 import { courseService } from '../../services';
-import { courseValidator, filterParametresValidator } from '../../validators';
-
-const courseSortingAttributes: Array<keyof ICourse> = ['_id', 'label', 'level', 'modules_list'];
+import { courseValidator, filterParametresValidator, modulesListValidator } from '../../validators';
 
 class CourseController {
 
@@ -32,32 +30,31 @@ class CourseController {
     try {
 
       const {
-        limit = 20,
-        offset = 0,
-        sort = '_id',
-        order,
-        ...filter
+        pageSize,
+        pageIndex,
+        offset = pageSize * pageIndex,
+        order = '_id',
+        ...filterParams
       } = req.query;
 
-      const filterValidity = Joi.validate(filter, filterParametresValidator);
+      const filterValidity = Joi.validate(filterParams, filterParametresValidator);
 
       if (filterValidity.error) {
         return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, filterValidity.error.details[0].message));
       }
 
-      if (!courseSortingAttributes.includes(sort)) {
-        return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, 'You can\'t sort by this parameter'));
+      for (const filterParamsKey in filterParams) {
+        if (filterParamsKey) {
+          filterParams[filterParamsKey] = {$regex: '^' + filterParams[filterParamsKey], $options: 'i'};
+        }
       }
 
-      const courses = await courseService.getCourses(+limit, +offset, sort, order, filter);
-      const count = courses.length;
-      const pageCount = Math.ceil(count / limit);
-
+      const courses = await courseService.getCourses(filterParams, +pageSize, offset, order);
+      const count = await courseService.getSizeOfAll(filterParams) as number;
       res.json({
         data: {
           courses,
-          count,
-          pageCount
+          count
         }
       });
     } catch (e) {
@@ -67,7 +64,7 @@ class CourseController {
 
   async getCourseById(req: IRequestExtended, res: Response, next: NextFunction) {
     try {
-      const { course_id } = req.params;
+      const {course_id} = req.params;
 
       const course = await courseService.getCourseByID(course_id);
 
@@ -80,11 +77,36 @@ class CourseController {
     }
   }
 
-  editCourse(req: IRequestExtended, res: Response, next: NextFunction) {
+  async updateById(req: IRequestExtended, res: Response, next: NextFunction) {
     try {
-      const { course_id } = req.params;
+      const {course_id} = req.params;
+      const course = req.body as ICourseSubject;
 
-      res.json(`${course_id} edited (NO)`);
+      const filterValidity = Joi.validate(course, courseValidator);
+
+      if (filterValidity.error) {
+        return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, filterValidity.error.details[0].message));
+      }
+      await courseService.updateCourse(course_id, course);
+
+      res.end();
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async updateModulesList(req: IRequestExtended, res: Response, next: NextFunction) {
+    try {
+      const {course_id} = req.params;
+      const modules_list = req.body as Partial<ICourseSubject>;
+      const filterValidity = Joi.validate(modules_list, modulesListValidator);
+
+      if (filterValidity.error) {
+        return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, filterValidity.error.details[0].message));
+      }
+      await courseService.updateCourse(course_id, modules_list);
+
+      res.end();
     } catch (e) {
       next(e);
     }
@@ -92,7 +114,7 @@ class CourseController {
 
   async deleteCourseById(req: IRequestExtended, res: Response, next: NextFunction) {
     try {
-      const { course_id } = req.params;
+      const {course_id} = req.params;
 
       await courseService.deleteCourseByID(course_id);
 

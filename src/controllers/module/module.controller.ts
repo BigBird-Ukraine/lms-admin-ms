@@ -17,7 +17,7 @@ class ModuleController {
       const moduleValidity = Joi.validate(module, moduleValidator);
 
       if (moduleValidity.error) {
-        return next( new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, moduleValidity.error.details[0].message));
+        return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, moduleValidity.error.details[0].message));
       }
 
       await moduleService.createModule(module);
@@ -32,32 +32,35 @@ class ModuleController {
     try {
 
       const {
-        limit = 20,
-        offset = 0,
-        sort = '_id',
-        order,
-        ...filter
+        pageSize,
+        pageIndex,
+        offset = pageSize * pageIndex,
+        order = '_id',
+        ...filterParams
       } = req.query;
 
-      const filterValidity = Joi.validate(filter, moduleFilterValitator);
+      const filterValidity = Joi.validate(filterParams, moduleFilterValitator);
 
       if (filterValidity.error) {
         return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, filterValidity.error.details[0].message));
       }
 
-      if (!moduleSortingAttributes.includes(sort)) {
+      if (!moduleSortingAttributes.includes(order)) {
         return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, 'You can\'t sort by this parameter'));
       }
 
-      const modules = await moduleService.getModulesByParams(+limit, +offset, sort, order, filter);
-      const count = modules.length;
-      const pageCount = Math.ceil(count / limit);
+      for (const filterParamsKey in filterParams) {
+        if (filterParamsKey) {
+          filterParams[filterParamsKey] = {$regex: '^' + filterParams[filterParamsKey], $options: 'i'};
+        }
+      }
 
+      const modules = await moduleService.getModulesByParams(filterParams, +pageSize, offset, order);
+      const count = await moduleService.getSizeOfAll(filterParams) as number;
       res.json({
         data: {
           modules,
-          count,
-          pageCount
+          count
         }
       });
     } catch (e) {
@@ -67,7 +70,7 @@ class ModuleController {
 
   async getModuleById(req: IRequestExtended, res: Response, next: NextFunction) {
     try {
-      const { module_id } = req.params;
+      const {module_id} = req.params;
 
       const module = await moduleService.getModuleByID(module_id);
 
@@ -81,9 +84,9 @@ class ModuleController {
 
   async editModule(req: IRequestExtended, res: Response, next: NextFunction) {
     try {
-      const { module_id } = req.params;
+      const {module_id} = req.params;
 
-      res.json( `${module_id} has been edited`);
+      res.json(`${module_id} has been edited`);
     } catch (e) {
       next(e);
     }
@@ -91,7 +94,7 @@ class ModuleController {
 
   async deleteModule(req: IRequestExtended, res: Response, next: NextFunction) {
     try {
-      const { module_id } = req.params;
+      const {module_id} = req.params;
 
       await moduleService.deleteModuleByID(module_id);
 

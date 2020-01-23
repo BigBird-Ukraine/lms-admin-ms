@@ -17,6 +17,14 @@ class GroupService {
       .sort(order) as any;
   }
 
+  getAllGroupsByUserId(user_id: string): Promise<IGroupSubject[]> {
+    const GroupModel = model<GroupType>(DatabaseTablesEnum.GROUP_COLLECTION_NAME, GroupSchema);
+    return GroupModel
+      .find({users_list: {$in: user_id}})
+      .populate('course_id') as any;
+
+  }
+
   getSizeOfAll(filterParams: Partial<IGroup>): Promise<number> {
     const GroupModel = model<GroupType>(DatabaseTablesEnum.GROUP_COLLECTION_NAME, GroupSchema);
     return GroupModel

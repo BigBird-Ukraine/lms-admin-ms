@@ -16,7 +16,7 @@ export interface IGroup {
 export interface IGroupSubject {
   _id: string;
   label: string;
-  course: ICourse;
+  course_id: ICourse;
   city: string;
   started_at: string;
   finished_at: string;

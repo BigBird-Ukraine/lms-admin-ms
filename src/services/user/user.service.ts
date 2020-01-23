@@ -2,7 +2,7 @@ import { model } from 'mongoose';
 
 import { DatabaseTablesEnum } from '../../constants/enums';
 import { User, UserSchema, UserType } from '../../database';
-import { IUser } from '../../interfaces';
+import { IUser, IUserSubject } from '../../interfaces';
 
 class UserService {
   async createUser(userValue: IUser): Promise<any> {
@@ -30,7 +30,7 @@ class UserService {
     return UserModel.findByIdAndDelete(user_id) as any;
   }
 
-  getAll(myId: string, filterParams: Partial<IUser>, limit: number, skip: number, order: string): Promise<IUser[]> {
+  getAll(myId: string, filterParams: Partial<IUser>, limit: number, skip: number, order: string): Promise<IUserSubject[]> {
     const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
     return UserModel
       .find({...filterParams, _id: {$ne: myId}})

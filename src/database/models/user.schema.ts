@@ -47,6 +47,11 @@ UserSchema = new Schema({
   updated_at: {
     type: Date
   },
+  groups_id: [{
+    type: Types.ObjectId,
+    ref: DatabaseTablesEnum.GROUP_COLLECTION_NAME
+
+  }],
   passed_tests: [{
     lesson_id: {
       type: Types.ObjectId,
@@ -60,6 +65,7 @@ UserSchema = new Schema({
       ref: DatabaseTablesEnum.QUESTION_COLLECTION_NAME
     }]
   }]
+
 });
 
 export const User: Model<UserType> = model<UserType>(

@@ -24,6 +24,7 @@ class ModuleService {
 
   getSizeOfAll(filterParams: Partial<IModule>): Promise<any> {
     const ModuleModel = model<CourseType>(DatabaseTablesEnum.MODULE_COLLECTION_NAME, ModuleSchema);
+
     return ModuleModel
       .countDocuments(filterParams) as any;
   }

@@ -10,21 +10,18 @@ import { lessonValidator } from '../../validators';
 class LessonController {
 
   async createLesson(req: IRequestExtended, res: Response, next: NextFunction) {
-    try {
-      const lesson = req.body;
 
-      const lessonValidity = Joi.validate(lesson, lessonValidator);
+    const lesson = req.body;
 
-      if (lessonValidity.error) {
-        return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, lessonValidity.error.details[0].message));
-      }
+    const lessonValidity = Joi.validate(lesson, lessonValidator);
 
-      await lessonService.createLesson(lesson);
-
-      res.status(ResponseStatusCodesEnum.CREATED).end();
-    } catch (e) {
-      next(e);
+    if (lessonValidity.error) {
+      return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, lessonValidity.error.details[0].message));
     }
+
+    await lessonService.createLesson(lesson);
+
+    res.status(ResponseStatusCodesEnum.CREATED).end();
   }
 }
 

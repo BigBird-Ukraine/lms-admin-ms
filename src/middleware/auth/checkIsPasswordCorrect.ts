@@ -6,25 +6,20 @@ import { CHECK_HASH } from '../../helpers';
 import { IRequestExtended, IUser } from '../../interfaces';
 
 export const checkIsPasswordCorrect = async (req: IRequestExtended, res: Response, next: NextFunction) => {
-    try {
-        const { password: hashPassword } = req.user as IUser;
-        const { password } = req.body as IUser;
 
-        const isPasswordCorrect = await CHECK_HASH(password, hashPassword);
+  const {password: hashPassword} = req.user as IUser;
+  const {password} = req.body as IUser;
 
-        if (!isPasswordCorrect) {
-            return next(
-                new ErrorHandler(
-                    ResponseStatusCodesEnum.NOT_FOUND,
-                    errors.NOT_FOUND_USER_NOT_PRESENT.message,
-                    errors.NOT_FOUND_USER_NOT_PRESENT.code
-                ));
-        }
+  const isPasswordCorrect = await CHECK_HASH(password, hashPassword);
 
-        next();
+  if (!isPasswordCorrect) {
+    return next(
+      new ErrorHandler(
+        ResponseStatusCodesEnum.NOT_FOUND,
+        errors.NOT_FOUND_USER_NOT_PRESENT.message,
+        errors.NOT_FOUND_USER_NOT_PRESENT.code
+      ));
+  }
 
-    } catch (e) {
-        next(e);
-    }
-
+  next();
 };

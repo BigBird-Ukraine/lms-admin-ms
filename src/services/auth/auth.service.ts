@@ -5,34 +5,35 @@ import { IOauthTokenModel, IUserByToken } from '../../interfaces';
 
 class AuthService {
 
-    createOauthToken(createObject: IOauthTokenModel) {
-        const newOauthToken = new OauthToken(createObject);
-        return newOauthToken.save();
-    }
+  createOauthToken(createObject: IOauthTokenModel) {
+    const newOauthToken = new OauthToken(createObject);
 
-    deleteOauthTokenByAccessToken(access_token: string) {
-        const OauthTokenModel = model<OauthTokenType>('Oauth_token', OauthTokenScheme);
+    return newOauthToken.save();
+  }
 
-        return OauthTokenModel.deleteOne({ access_token });
-    }
+  deleteOauthTokenByAccessToken(access_token: string) {
+    const OauthTokenModel = model<OauthTokenType>('Oauth_token', OauthTokenScheme);
 
-    deleteOauthTokenByRefreshToken(refresh_token: string) {
-        const OauthTokenModel = model<OauthTokenType>('Oauth_token', OauthTokenScheme);
+    return OauthTokenModel.deleteOne({access_token});
+  }
 
-        return OauthTokenModel.deleteOne({ refresh_token });
-    }
+  deleteOauthTokenByRefreshToken(refresh_token: string) {
+    const OauthTokenModel = model<OauthTokenType>('Oauth_token', OauthTokenScheme);
 
-    async getUserFromAccessToken(access_token: string): Promise<IUserByToken> {
-        const OauthTokenModel = model<OauthTokenType>('Oauth_token', OauthTokenScheme);
+    return OauthTokenModel.deleteOne({refresh_token});
+  }
 
-        return OauthTokenModel.findOne({ access_token }).populate('user_id').select({ user_id: 1, _id: 0 }) as any;
-    }
+  getUserFromAccessToken(access_token: string): Promise<IUserByToken> {
+    const OauthTokenModel = model<OauthTokenType>('Oauth_token', OauthTokenScheme);
 
-    async getUserFromRefreshToken(refresh_token: string): Promise<IUserByToken> {
-        const OauthTokenModel = model<OauthTokenType>('Oauth_token', OauthTokenScheme);
+    return OauthTokenModel.findOne({access_token}).populate('user_id').select({user_id: 1, _id: 0}) as any;
+  }
 
-        return OauthTokenModel.findOne({ refresh_token }).populate('user_id').select({ user_id: 1, _id: 0 }) as any;
-    }
+  getUserFromRefreshToken(refresh_token: string): Promise<IUserByToken> {
+    const OauthTokenModel = model<OauthTokenType>('Oauth_token', OauthTokenScheme);
+
+    return OauthTokenModel.findOne({refresh_token}).populate('user_id').select({user_id: 1, _id: 0}) as any;
+  }
 }
 
 export const authService = new AuthService();

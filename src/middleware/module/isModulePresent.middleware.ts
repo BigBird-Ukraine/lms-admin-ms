@@ -6,7 +6,7 @@ import { moduleService } from '../../services';
 
 export const isModulePresent = async (req: Request, res: Response, next: NextFunction) => {
 
-  const { module_id } = req.params;
+  const {module_id} = req.params;
 
   const module = await moduleService.getModuleByID(module_id);
 

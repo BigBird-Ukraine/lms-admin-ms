@@ -9,25 +9,25 @@ import { emailValidator } from '../../validators';
 
 export const checkIsUserRegistered = async (req: IRequestExtended, res: Response, next: NextFunction) => {
 
-    const { email } = req.body;
+  const {email} = req.body;
 
-    const isEmailValid = Joi.validate({ email }, emailValidator);
+  const isEmailValid = Joi.validate({email}, emailValidator);
 
-    if (isEmailValid.error) {
-        throw new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, isEmailValid.error.details[0].message);
-    }
+  if (isEmailValid.error) {
+    throw new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, isEmailValid.error.details[0].message);
+  }
 
-    const user = await userService.getUserByParams({ email });
+  const user = await userService.getUserByParams({email});
 
-    if (!user) {
-        return next(
-            new ErrorHandler(
-                ResponseStatusCodesEnum.NOT_FOUND,
-                errors.NOT_FOUND_USER_NOT_PRESENT.message,
-                errors.NOT_FOUND_USER_NOT_PRESENT.code
-            ));
-    }
+  if (!user) {
+    return next(
+      new ErrorHandler(
+        ResponseStatusCodesEnum.NOT_FOUND,
+        errors.NOT_FOUND_USER_NOT_PRESENT.message,
+        errors.NOT_FOUND_USER_NOT_PRESENT.code
+      ));
+  }
 
-    req.user = user;
-    next();
+  req.user = user;
+  next();
 };

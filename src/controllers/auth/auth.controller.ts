@@ -7,67 +7,57 @@ import { authService } from '../../services';
 
 class AuthController {
 
-    // todo needs transaction here to inster token pair into DB
-    async loginUser(req: IRequestExtended, res: Response, next: NextFunction) {
-        try {
-            const { _id } = req.user;
+  // todo needs transaction here to inster token pair into DB
+  async loginUser(req: IRequestExtended, res: Response, next: NextFunction) {
 
-            const { accessToken, refreshToken } = tokenizer(UserActionEnum.AUTH);
+    const {_id} = req.user;
 
-            await authService.createOauthToken({
-                access_token: accessToken,
-                refresh_token: refreshToken,
-                user_id: _id
-            });
+    const {accessToken, refreshToken} = tokenizer(UserActionEnum.AUTH);
 
-            res.json({
-                data: {
-                    accessToken,
-                    refreshToken
-                }
-            });
-        } catch (e) {
-            next(e);
-        }
-    }
+    await authService.createOauthToken({
+      access_token: accessToken,
+      refresh_token: refreshToken,
+      user_id: _id
+    });
 
-    async logoutUser(req: IRequestExtended, res: Response, next: NextFunction) {
-        try {
-            const access_token = req.get('Authorization') as string;
+    res.json({
+      data: {
+        accessToken,
+        refreshToken
+      }
+    });
+  }
 
-            await authService.deleteOauthTokenByAccessToken(access_token);
+  async logoutUser(req: IRequestExtended, res: Response, next: NextFunction) {
 
-            res.end();
-        } catch (e) {
-            next(e);
-        }
-    }
+    const access_token = req.get('Authorization') as string;
 
-    async refreshToken(req: IRequestExtended, res: Response, next: NextFunction) {
-        try {
+    await authService.deleteOauthTokenByAccessToken(access_token);
 
-            const { refresh_token , user_id } = req.user;
+    res.end();
+  }
 
-            const { accessToken, refreshToken } = tokenizer(UserActionEnum.AUTH);
+  async refreshToken(req: IRequestExtended, res: Response, next: NextFunction) {
 
-            await authService.deleteOauthTokenByRefreshToken(refresh_token);
+    const {refresh_token, user_id} = req.user;
 
-            await authService.createOauthToken({
-                access_token: accessToken,
-                refresh_token: refreshToken,
-                user_id
-            });
+    const {accessToken, refreshToken} = tokenizer(UserActionEnum.AUTH);
 
-            res.json({
-                data: {
-                    accessToken,
-                    refreshToken
-                }
-            });
-        } catch (e) {
-            next(e);
-        }
-    }
+    await authService.deleteOauthTokenByRefreshToken(refresh_token);
+
+    await authService.createOauthToken({
+      access_token: accessToken,
+      refresh_token: refreshToken,
+      user_id
+    });
+
+    res.json({
+      data: {
+        accessToken,
+        refreshToken
+      }
+    });
+  }
 }
 
 export const authController = new AuthController();

@@ -8,6 +8,7 @@ class GroupService {
 
   getAllGroups(filterParams: Partial<IGroup>, limit: number, skip: number, order: string): Promise<IGroupSubject[]> {
     const GroupModel = model<GroupType>(DatabaseTablesEnum.GROUP_COLLECTION_NAME, GroupSchema);
+
     return GroupModel
       .find(filterParams)
       .populate('course_id')
@@ -19,6 +20,7 @@ class GroupService {
 
   getAllGroupsByUserId(user_id: string): Promise<IGroupSubject[]> {
     const GroupModel = model<GroupType>(DatabaseTablesEnum.GROUP_COLLECTION_NAME, GroupSchema);
+
     return GroupModel
       .find({users_list: {$in: user_id}})
       .populate('course_id') as any;
@@ -27,6 +29,7 @@ class GroupService {
 
   getSizeOfAll(filterParams: Partial<IGroup>): Promise<number> {
     const GroupModel = model<GroupType>(DatabaseTablesEnum.GROUP_COLLECTION_NAME, GroupSchema);
+
     return GroupModel
       .countDocuments(filterParams) as any;
   }
@@ -40,6 +43,7 @@ class GroupService {
   update(group_id: string, patchObject: Partial<IGroup>): Promise<void> {
     patchObject.updated_at = new Date().toString();
     const GroupModel = model<GroupType>(DatabaseTablesEnum.GROUP_COLLECTION_NAME, GroupSchema);
+
     return GroupModel
       .findByIdAndUpdate(group_id, patchObject) as any;
   }
@@ -51,6 +55,7 @@ class GroupService {
 
   getById(group_id: string): Promise<IGroup> {
     const GroupModel = model<GroupType>(DatabaseTablesEnum.GROUP_COLLECTION_NAME, GroupSchema);
+
     return GroupModel.findById(group_id) as any;
   }
 }

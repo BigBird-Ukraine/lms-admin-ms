@@ -1,7 +1,7 @@
 import * as jwt from 'jsonwebtoken';
 
 import { config } from '../configs';
-import { ResponseStatusCodesEnum, UserActionEnum } from '../constants';
+import { ResponseStatusCodesEnum, StatusesEnum, UserActionEnum } from '../constants';
 import { ErrorHandler } from '../errors';
 
 export const tokenizer = (method: number): any => {
@@ -13,6 +13,6 @@ export const tokenizer = (method: number): any => {
 
       return {accessToken, refreshToken};
     default:
-      throw new ErrorHandler(ResponseStatusCodesEnum.SERVER_ERROR, 'Wrong action type');
+      throw new ErrorHandler(ResponseStatusCodesEnum.SERVER_ERROR, StatusesEnum.WRONG_ACTION_TYPE);
   }
 };

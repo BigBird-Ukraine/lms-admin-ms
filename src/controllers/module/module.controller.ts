@@ -1,92 +1,66 @@
 import { NextFunction, Response } from 'express';
-import * as Joi from 'joi';
 
 import { ResponseStatusCodesEnum } from '../../constants';
-import { ErrorHandler } from '../../errors';
-import { IModule, IRequestExtended } from '../../interfaces';
+import { moduleSortingAttributes, regexFilterParams } from '../../helpers';
+import { IRequestExtended } from '../../interfaces';
 import { moduleService } from '../../services';
-import { moduleFilterValitator, moduleValidator } from '../../validators';
-
-const moduleSortingAttributes: Array<keyof IModule> = ['_id', 'label', 'tags', 'courses_id', 'lessons'];
 
 class ModuleController {
 
-  async createModule(req: IRequestExtended, res: Response, next: NextFunction) {
+    async createModule(req: IRequestExtended, res: Response, next: NextFunction) {
+        const module = req.body;
 
-    const module = req.body;
-    const moduleValidity = Joi.validate(module, moduleValidator);
+        await moduleService.createModule(module);
 
-    if (moduleValidity.error) {
-      return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, moduleValidity.error.details[0].message));
+        res.status(ResponseStatusCodesEnum.CREATED).end();
     }
 
-    await moduleService.createModule(module);
+    async getModules(req: IRequestExtended, res: Response, next: NextFunction) {
+        const {
+            pageSize,
+            pageIndex,
+            offset = pageSize * pageIndex,
+            order = '_id',
+            ...filterParams
+        } = req.query;
 
-    res.status(ResponseStatusCodesEnum.CREATED).end();
-  }
+        moduleSortingAttributes(order);
+        const updatedParams = regexFilterParams(filterParams);
 
-  async getModules(req: IRequestExtended, res: Response, next: NextFunction) {
+        const modules = await moduleService.getModulesByParams(updatedParams, +pageSize, offset, order);
+        const count = await moduleService.getSizeOfAll(updatedParams) as number;
 
-    const {
-      pageSize,
-      pageIndex,
-      offset = pageSize * pageIndex,
-      order = '_id',
-      ...filterParams
-    } = req.query;
-
-    const filterValidity = Joi.validate(filterParams, moduleFilterValitator);
-
-    if (filterValidity.error) {
-      return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, filterValidity.error.details[0].message));
+        res.json({
+            data: {
+                modules,
+                count
+            }
+        });
     }
 
-    if (!moduleSortingAttributes.includes(order)) {
-      return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, 'You can\'t sort by this parameter'));
+    async getModuleById(req: IRequestExtended, res: Response, next: NextFunction) {
+        const {module_id} = req.params;
+
+        const module = await moduleService.getModuleByID(module_id);
+
+        res.json({
+            data: module
+        });
     }
 
-    for (const filterParamsKey in filterParams) {
-      if (filterParamsKey) {
-        filterParams[filterParamsKey] = {$regex: '^' + filterParams[filterParamsKey], $options: 'i'};
-      }
+    editModule(req: IRequestExtended, res: Response, next: NextFunction) {
+        const {module_id} = req.params;
+
+        res.json(`${module_id} has been edited`);
     }
 
-    const modules = await moduleService.getModulesByParams(filterParams, +pageSize, offset, order);
-    const count = await moduleService.getSizeOfAll(filterParams) as number;
-    res.json({
-      data: {
-        modules,
-        count
-      }
-    });
-  }
+    async deleteModule(req: IRequestExtended, res: Response, next: NextFunction) {
+        const {module_id} = req.params;
 
-  async getModuleById(req: IRequestExtended, res: Response, next: NextFunction) {
+        await moduleService.deleteModuleByID(module_id);
 
-    const {module_id} = req.params;
-
-    const module = await moduleService.getModuleByID(module_id);
-
-    res.json({
-      data: module
-    });
-  }
-
-  editModule(req: IRequestExtended, res: Response, next: NextFunction) {
-
-    const {module_id} = req.params;
-
-    res.json(`${module_id} has been edited`);
-  }
-
-  async deleteModule(req: IRequestExtended, res: Response, next: NextFunction) {
-
-    const {module_id} = req.params;
-
-    await moduleService.deleteModuleByID(module_id);
-
-    res.json(`module ${module_id} has been deleted`);
-  }
+        res.json(`module ${module_id} has been deleted`);
+    }
 
 }
 

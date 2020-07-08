@@ -1,4 +1,5 @@
 import { NextFunction, Response } from 'express';
+
 import { ResponseStatusCodesEnum } from '../../constants';
 import { regexFilterParams } from '../../helpers';
 import { ICourseSubject, IRequestExtended } from '../../interfaces';
@@ -15,7 +16,6 @@ class CourseController {
     }
 
     async getCourses(req: IRequestExtended, res: Response, next: NextFunction) {
-
         const {
             pageSize,
             pageIndex,
@@ -28,6 +28,7 @@ class CourseController {
 
         const courses = await courseService.getCourses(updatedFilterParams, +pageSize, offset, order);
         const count = await courseService.getSizeOfAll(updatedFilterParams) as number;
+
         res.json({
             data: {
                 courses,
@@ -37,7 +38,6 @@ class CourseController {
     }
 
     async getCourseById(req: IRequestExtended, res: Response, next: NextFunction) {
-
         const {course_id} = req.params;
 
         const course = await courseService.getCourseByID(course_id);
@@ -48,7 +48,6 @@ class CourseController {
     }
 
     async updateById(req: IRequestExtended, res: Response, next: NextFunction) {
-
         const {course_id} = req.params;
         const course = req.body as ICourseSubject;
 
@@ -58,7 +57,6 @@ class CourseController {
     }
 
     async updateModulesList(req: IRequestExtended, res: Response, next: NextFunction) {
-
         const {course_id} = req.params;
         const modules_list = req.body as Partial<ICourseSubject>;
 
@@ -68,7 +66,6 @@ class CourseController {
     }
 
     async deleteCourseById(req: IRequestExtended, res: Response, next: NextFunction) {
-
         const {course_id} = req.params;
 
         await courseService.deleteCourseByID(course_id);

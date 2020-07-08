@@ -1,5 +1,6 @@
 export enum StatusesEnum {
     // 400
+    BAD_REQUEST = 'Bad request',
     BAD_REQUEST_WRONG_PARAMS = 'Bad request, wrong params',
     USER_ALREADY_EXIST = 'User already exist',
     CANT_UPLOAD_MORE_THAN_ONE_USER_PHOTO = 'You can\'t upload more than one userPhotos',

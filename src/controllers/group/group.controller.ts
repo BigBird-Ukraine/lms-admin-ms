@@ -1,104 +1,75 @@
 import { NextFunction, Response } from 'express';
-import * as Joi from 'joi';
 
 import { ResponseStatusCodesEnum } from '../../constants';
-import { ErrorHandler } from '../../errors';
+import { regexFilterParams } from '../../helpers';
 import { IGroup, IRequestExtended } from '../../interfaces';
 import { groupService } from '../../services';
-import { groupFilterValidator, groupUpdateValidator, groupValidator } from '../../validators';
 
 class GroupController {
 
-  async getAllGroups(req: IRequestExtended, res: Response, next: NextFunction) {
+    async getAllGroups(req: IRequestExtended, res: Response, next: NextFunction) {
+        const {
+            pageSize,
+            pageIndex,
+            offset = pageSize * pageIndex,
+            order = '_id',
+            ...filterParams
+        } = req.query;
 
-    const {
-      pageSize,
-      pageIndex,
-      offset = pageSize * pageIndex,
-      order = '_id',
-      ...filterParams
-    } = req.query;
-    const filterValidity = Joi.validate(filterParams, groupFilterValidator);
+        const updatedFilterParams = regexFilterParams(filterParams);
 
-    if (filterValidity.error) {
-      return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, filterValidity.error.details[0].message));
+        const groups = await groupService.getAllGroups(updatedFilterParams, +pageSize, offset, order);
+        const count = await groupService.getSizeOfAll(updatedFilterParams) as number;
+
+        res.json({
+            data: {
+                groups,
+                count
+            }
+        });
     }
 
-    for (const filterParamsKey in filterParams) {
-      if (filterParamsKey) {
-        filterParams[filterParamsKey] = {$regex: '^' + filterParams[filterParamsKey], $options: 'i'};
-      }
-    }
-    const groups = await groupService.getAllGroups(filterParams, +pageSize, offset, order);
-    const count = await groupService.getSizeOfAll(filterParams) as number;
-    res.json({
-      data: {
-        groups,
-        count
-      }
-    });
-  }
+    getGroupById(req: IRequestExtended, res: Response, next: NextFunction) {
+        const group = req.group as IGroup;
 
-  getGroupById(req: IRequestExtended, res: Response, next: NextFunction) {
-
-    const group = req.group as IGroup;
-
-    res.json({data: group});
-  }
-
-  async createGroup(req: IRequestExtended, res: Response, next: NextFunction) {
-
-    const group = req.body;
-
-    const groupValidity = Joi.validate(group, groupValidator);
-
-    if (groupValidity.error) {
-      return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, groupValidity.error.details[0].message));
+        res.json({data: group});
     }
 
-    await groupService.createGroup(group);
+    async createGroup(req: IRequestExtended, res: Response, next: NextFunction) {
+        const group = req.body;
 
-    res.status(ResponseStatusCodesEnum.CREATED).end();
-  }
+        await groupService.createGroup(group);
 
-  async editGroupById(req: IRequestExtended, res: Response, next: NextFunction) {
-
-    const {group_id} = req.params;
-    const group = req.body as IGroup;
-
-    const groupValidity = Joi.validate(group, groupValidator);
-
-    if (groupValidity.error) {
-      return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, groupValidity.error.details[0].message));
+        res.status(ResponseStatusCodesEnum.CREATED).end();
     }
 
-    await groupService.update(group_id, group);
-    res.end();
-  }
+    async editGroupById(req: IRequestExtended, res: Response, next: NextFunction) {
+        const {group_id} = req.params;
+        const group = req.body as IGroup;
 
-  async changeUserListById(req: IRequestExtended, res: Response, next: NextFunction) {
+        await groupService.update(group_id, group);
 
-    const {_id} = req.group as IGroup;
-    const list = req.body as Partial<IGroup>;
-    const groupValidity = Joi.validate(list, groupUpdateValidator);
-
-    if (groupValidity.error) {
-      return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, groupValidity.error.details[0].message));
+        res.end();
     }
-    await groupService.update(_id, list);
 
-    res.end();
-  }
+    async changeUserListById(req: IRequestExtended, res: Response, next: NextFunction) {
+        const {_id} = req.group as IGroup;
+        const list = req.body as Partial<IGroup>;
 
-  async delete(req: IRequestExtended, res: Response, next: NextFunction) {
+        await groupService.update(_id, list);
 
-    const {_id} = req.group as Partial<IGroup>;
-
-    if (_id) {
-      await groupService.delete(_id);
+        res.end();
     }
-    res.end();
-  }
+
+    async delete(req: IRequestExtended, res: Response, next: NextFunction) {
+        const {_id} = req.group as Partial<IGroup>;
+
+        if (_id) {
+            await groupService.delete(_id);
+        }
+
+        res.end();
+    }
 }
 
 export const groupController = new GroupController();

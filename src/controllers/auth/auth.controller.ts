@@ -2,15 +2,14 @@ import { NextFunction, Response } from 'express';
 
 import { HardWordsEnum, UserActionEnum } from '../../constants';
 import { tokenizer } from '../../helpers';
-import { IRequestExtended } from '../../interfaces';
+import { IRequestExtended, IUser } from '../../interfaces';
 import { authService } from '../../services';
 
 class AuthController {
 
     // todo needs transaction here to instead token pair into DB
     async loginUser(req: IRequestExtended, res: Response, next: NextFunction) {
-
-        const {_id} = req.user;
+        const {_id} = req.user as IUser;
 
         const {accessToken, refreshToken} = tokenizer(UserActionEnum.AUTH);
 
@@ -29,7 +28,6 @@ class AuthController {
     }
 
     async logoutUser(req: IRequestExtended, res: Response, next: NextFunction) {
-
         const access_token = req.get(HardWordsEnum.AUTHORIZATION) as string;
 
         await authService.deleteOauthTokenByAccessToken(access_token);
@@ -38,17 +36,16 @@ class AuthController {
     }
 
     async refreshToken(req: IRequestExtended, res: Response, next: NextFunction) {
-
-        const {refresh_token, user_id} = req.user;
+        const {_id} = req.user as IUser;
 
         const {accessToken, refreshToken} = tokenizer(UserActionEnum.AUTH);
 
+        const {refresh_token} = await authService.getRefreshTokenByUserId(+_id);
         await authService.deleteOauthTokenByRefreshToken(refresh_token);
-
         await authService.createOauthToken({
             access_token: accessToken,
             refresh_token: refreshToken,
-            user_id
+            user_id: _id
         });
 
         res.json({

@@ -2,11 +2,12 @@ import { Router } from 'express';
 
 import { moduleController } from '../../controllers';
 import { isModulePresent } from '../../middleware';
+import { isModuleFilterValid, isModuleValid } from '../../middleware/module/validators';
 
 const router = Router();
 
-router.post('/', moduleController.createModule);
-router.get('/', moduleController.getModules);
+router.post('/', isModuleValid, moduleController.createModule);
+router.get('/', isModuleFilterValid, moduleController.getModules);
 
 router.use('/:module_id', isModulePresent);
 router.get('/:module_id', moduleController.getModuleById);

@@ -5,7 +5,7 @@ import { User, UserSchema, UserType } from '../../database';
 import { IUser, IUserSubject } from '../../interfaces';
 
 class UserService {
-  createUser(userValue: IUser): Promise<any> {
+  createUser(userValue: Partial<IUser>): Promise<any> {
     const newUser = new User(userValue);
 
     return newUser.save();

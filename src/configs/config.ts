@@ -13,11 +13,7 @@ export const config = {
         maxRequests: 10000
     },
 
-    DATABASE_NAME: 'lmsDB',
-    DATABASE_USER: 'root',
-    DATABASE_PASS: 'root',
-    DATABASE_IP: '127.0.0.1',
-    DATABASE_PORT: '27017'
+    MONGO_URL: 'mongodb+srv://lmaadmin:lmsadmin2020@cluster0.sfb2x.mongodb.net/lmsDB?retryWrites=true&w=majority',
 
     /*Mongo Collections*/
 

@@ -39,8 +39,7 @@ class App {
   }
 
   private setupDB(): void {
-    const mongoDB = `mongodb://${config.DATABASE_IP}:${config.DATABASE_PORT}/${config.DATABASE_NAME}`;
-    mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true});
+    mongoose.connect(encodeURI(config.MONGO_URL), {useNewUrlParser: true, useUnifiedTopology: true});
     const db = mongoose.connection;
     db.on('error', console.error.bind(console, 'MongoDB Connection error'));
   }

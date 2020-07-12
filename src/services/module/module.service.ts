@@ -7,6 +7,7 @@ import { IModule } from '../../interfaces';
 class ModuleService {
 
   createModule(moduleValue: IModule): Promise<any> {
+
     const newModule = new Module(moduleValue);
 
     return newModule.save();

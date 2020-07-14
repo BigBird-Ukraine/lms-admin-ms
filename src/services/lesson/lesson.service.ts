@@ -1,4 +1,5 @@
 import { model } from 'mongoose';
+
 import { DatabaseTablesEnum } from '../../constants/enums';
 import { Lesson, LessonSchema, LessonType } from '../../database';
 import { ILesson } from '../../interfaces';

@@ -6,6 +6,7 @@ import { courseRouter } from '../course';
 import { groupRouter } from '../group';
 import { lessonRouter } from '../lesson';
 import { moduleRouter } from '../module';
+import { questionRouter } from '../question';
 import { userRouter } from '../user';
 
 const router = Router();
@@ -17,5 +18,6 @@ router.use('/groups', groupRouter);
 router.use('/courses', courseRouter);
 router.use('/modules', moduleRouter);
 router.use('/lessons', lessonRouter);
+router.use('/questions', questionRouter);
 
 export const apiRouter = router;

@@ -4,3 +4,4 @@ export * from './lesson';
 export * from './group';
 export * from './auth';
 export * from './user';
+export * from './question';

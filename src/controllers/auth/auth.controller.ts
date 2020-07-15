@@ -38,9 +38,7 @@ class AuthController {
   }
 
   async refreshToken(req: IRequestExtended, res: Response, next: NextFunction) {
-
     const {refresh_token, user_id} = req.user;
-
     const {accessToken, refreshToken} = tokenizer(UserActionEnum.AUTH);
 
     await authService.deleteOauthTokenByRefreshToken(refresh_token);

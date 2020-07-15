@@ -13,7 +13,6 @@ class ModuleController {
 
   async createModule(req: IRequestExtended, res: Response, next: NextFunction) {
     const module = req.body;
-
     const moduleValidity = Joi.validate(module, moduleValidator);
 
     if (moduleValidity.error) {

@@ -29,6 +29,7 @@ export const checkRefreshTokenMiddleware = async (req: IRequestExtended, res: Re
   }
 
   req.user = user;
+  req.user.refresh_token = token;
 
   next();
 

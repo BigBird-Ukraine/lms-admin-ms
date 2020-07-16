@@ -4,7 +4,7 @@ import * as Joi from 'joi';
 import { ResponseStatusCodesEnum, UserRoleEnum, UserStatusEnum } from '../../constants';
 import { ErrorHandler } from '../../errors';
 import { HASH_PASSWORD } from '../../helpers';
-import { IRequestExtended, IUser, IUserSubject } from '../../interfaces';
+import { IRequestExtended, ITestResultModel, IUser, IUserSubject } from '../../interfaces';
 import { groupService, userService } from '../../services';
 import { adminPatchUserValidator, registerDataValidator, userFilterValidator } from '../../validators';
 
@@ -31,7 +31,7 @@ class UserController {
 
     const user = req.user as IUser;
 
-    res.json({data: user});
+    res.json(user);
   }
 
   async blockUser(req: IRequestExtended, res: Response, next: NextFunction) {
@@ -144,6 +144,16 @@ class UserController {
 
     res.end();
 
+  }
+
+  async addTestResult(req: IRequestExtended, res: Response, next: NextFunction) {
+    const {_id} = req.user as IUser;
+    const passed_test = req.passed_test as ITestResultModel;
+
+    await userService.addPassedTest(_id, passed_test);
+    const user = await userService.getByID(_id);
+
+    res.json({data: user});
   }
 }
 

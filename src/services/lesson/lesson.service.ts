@@ -31,6 +31,56 @@ class LessonService {
     return LessonModel
       .countDocuments(filterParams) as any;
   }
+
+  getQuestionsForTestByLessonId(lesson_id: string) {
+    const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
+
+    return LessonModel.findById(lesson_id)
+      .select({ questions_id: 1, _id: 0 })
+      .populate('questions_id', {'answers.correct' : 0});
+  }
+
+  getLessonByID(lesson_id: string): Promise<ILesson> {
+    const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
+
+    return LessonModel
+      .findById(lesson_id) as any;
+  }
+
+  async getMyLesson(_id: string): Promise<ILesson[]> {
+    const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
+
+    return LessonModel
+      .find({user_id: `${_id}`});
+  }
+
+  getLessonsQuestionsById(lesson_id: string): Promise<any> {
+    const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
+
+    return LessonModel
+      .findById(lesson_id).select({questions_id: 1, _id: 0}) as any;
+  }
+
+  editLessonById(lesson_id: string, updatingData: Partial<ILesson>): Promise<ILesson> {
+    const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
+
+    return LessonModel
+      .findByIdAndUpdate(lesson_id, updatingData) as any;
+  }
+
+  addQuestionsToLesson(lesson_id: string, questions_list: string): Promise<ILesson> {
+    const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
+
+    return LessonModel
+      .findByIdAndUpdate(lesson_id, {$set: {questions_id: questions_list}}, {new: true}) as any;
+  }
+
+  deleteLessonById(lesson_id: string): Promise<void> {
+    const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
+
+    return LessonModel
+      .findByIdAndDelete(lesson_id) as any;
+  }
 }
 
 export const lessonService = new LessonService();

@@ -1,3 +1,5 @@
+import { config } from '../configs';
+
 export const errors = {
   // 400
   BAD_REQUEST_WRONG_PARAMS: {
@@ -7,6 +9,11 @@ export const errors = {
   BAD_REQUEST_USER_ALREADY_EXIST: { // Error when user want register. But this user is already exists
     message: 'User already exist',
     code: 4001
+  },
+
+  BAD_REQUEST_LIMIT_QUESTION: {
+    code: 4007,
+    message: `Lesson can contain only ${config.MAX_QUESTION_LIMIT} questions`
   },
   // 401
   UNAUTHORIZED_WRONG_CREDENTIALS: {
@@ -48,5 +55,10 @@ export const errors = {
   NOT_FOUND_QUESTION_NOT_PRESENT: {
     message: 'Question is not found',
     code: 4042
+  },
+
+  NOT_FOUND_LESSON_NOT_PRESENT: {
+    message: 'Lesson not found',
+    code: 4043
   }
 };

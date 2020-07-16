@@ -3,7 +3,8 @@ import * as Joi from 'joi';
 
 import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler } from '../../errors';
-import { ILesson, IRequestExtended } from '../../interfaces';
+import { calculationPageCount } from '../../helpers';
+import { ILesson, IRequestExtended, IUser } from '../../interfaces';
 import { lessonService } from '../../services';
 import { lessonValidator } from '../../validators';
 
@@ -14,6 +15,7 @@ class LessonController {
   async createLesson(req: IRequestExtended, res: Response, next: NextFunction) {
 
     const lesson = req.body;
+    lesson.user_id = req.user._id.toString();
 
     const lessonValidity = Joi.validate(lesson, lessonValidator);
 
@@ -39,15 +41,71 @@ class LessonController {
       throw new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, 'Cant sort by this params');
     }
 
-    for (const filterParamsKey in filter) {
-      if (filterParamsKey) {
-        filter[filterParamsKey] = {$regex: '^' + filter[filterParamsKey], $options: 'i'};
-      }
-    }
-
     const lesson = await lessonService.getLessons(+limit, +offset, sort, order, filter);
+    const count = await lessonService.getSizeOfAll(filter) as number;
 
-    res.json(lesson);
+    res.json({
+      data: {
+        lesson,
+        count,
+        pageCount: calculationPageCount(count, limit)
+      }
+    });
+  }
+
+  async getLessonById(req: IRequestExtended, res: Response, next: NextFunction) {
+    const lesson = req.lesson as ILesson;
+
+    res.json({data: lesson});
+  }
+
+  async generateTestByLessonId(req: Request, res: Response, next: NextFunction) {
+    const {lesson_id} = req.params;
+
+    const questions_id = await lessonService.getQuestionsForTestByLessonId(lesson_id);
+
+    res.json({data: questions_id});
+  }
+
+  async updateMyLesson(req: Request, res: Response, next: NextFunction) {
+    const {lesson_id} = req.params;
+    const updatingData = req.body as Partial<ILesson>;
+
+    const updatedLesson = await lessonService.editLessonById(lesson_id, updatingData);
+
+    res.json({
+      data: updatedLesson
+    });
+  }
+
+  async addQuestionToLesson(req: Request, res: Response, next: NextFunction) {
+    const {lesson_id} = req.params;
+    const {NewQuestions_id} = req.body;
+
+    const updatedLesson = await lessonService.addQuestionsToLesson(lesson_id, NewQuestions_id);
+
+    res.json({
+      data: updatedLesson
+    });
+  }
+
+  async deleteMyLesson(req: IRequestExtended, res: Response, next: NextFunction) {
+    const {lesson_id} = req.params;
+
+    await lessonService.deleteLessonById(lesson_id);
+
+    res.end();
+  }
+
+  async getMyLesson(req: IRequestExtended, res: Response, next: NextFunction) {
+    const {_id} = req.user as IUser;
+    const lesson = await lessonService.getMyLesson(_id);
+
+    res.json({
+      data: {
+        lesson
+      }
+    });
   }
 }
 

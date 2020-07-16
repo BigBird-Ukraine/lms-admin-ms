@@ -13,7 +13,9 @@ export const config = {
         maxRequests: 10000
     },
 
-    MONGO_URL: 'mongodb+srv://lmaadmin:lmsadmin2020@cluster0.sfb2x.mongodb.net/lmsDB?retryWrites=true&w=majority'
+    MONGO_URL: 'mongodb+srv://lmaadmin:lmsadmin2020@cluster0.sfb2x.mongodb.net/lmsDB?retryWrites=true&w=majority',
+
+    MAX_QUESTION_LIMIT: 20
 
     /*Mongo Collections*/
 

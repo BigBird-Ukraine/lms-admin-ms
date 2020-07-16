@@ -7,3 +7,4 @@ export * from './module.model';
 export * from './oauth_token.model';
 export * from './module-from-course.model';
 export * from './userByToken.model';
+export * from './question.model';

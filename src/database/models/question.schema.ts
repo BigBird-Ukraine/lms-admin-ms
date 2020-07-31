@@ -51,7 +51,7 @@ QuestionSchema = new Schema({
 });
 
 export const Question: Model<QuestionType> = model<QuestionType>(
-    DatabaseTablesEnum.QUESTION_COLLECTION_NAME,
-    QuestionSchema,
-    DatabaseTablesEnum.QUESTION_COLLECTION_NAME
+  DatabaseTablesEnum.QUESTION_COLLECTION_NAME,
+  QuestionSchema,
+  DatabaseTablesEnum.QUESTION_COLLECTION_NAME
 );

@@ -34,7 +34,16 @@ LessonSchema = new Schema({
     type: Types.ObjectId,
     required: true,
     ref: DatabaseTablesEnum.MODULE_COLLECTION_NAME
-  }]
+  }],
+  questions_id: [{
+    type: Types.ObjectId,
+    ref: DatabaseTablesEnum.QUESTION_COLLECTION_NAME
+  }],
+  user_id: {
+    type: Types.ObjectId,
+    required: true,
+    ref: DatabaseTablesEnum.USER_COLLECTION_NAME
+  }
 });
 
 export const Lesson: Model<LessonType> = model<LessonType>

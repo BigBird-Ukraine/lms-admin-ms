@@ -6,4 +6,6 @@ export interface ILesson {
   video_path: string;
   tags: [string];
   module_id: string;
+  questions_id?: [string];
+  user_id?: string;
 }

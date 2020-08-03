@@ -19,9 +19,7 @@ class ModuleController {
       return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, moduleValidity.error.details[0].message));
     }
 
-    await moduleService.createModule(module);
-
-    res.status(ResponseStatusCodesEnum.CREATED).end();
+    res.json( await moduleService.createModule(module));
   }
 
   async getModules(req: IRequestExtended, res: Response, next: NextFunction) {
@@ -65,6 +63,14 @@ class ModuleController {
     const {module_id} = req.params;
 
     const module = await moduleService.getModuleByID(module_id);
+
+    res.json({
+      data: module
+    });
+  }
+
+  async getCroppedModules(req: IRequestExtended, res: Response, next: NextFunction) {
+    const module = await moduleService.getCroppedModules();
 
     res.json({
       data: module

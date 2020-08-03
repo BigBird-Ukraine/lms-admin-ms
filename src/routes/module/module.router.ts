@@ -7,6 +7,7 @@ const router = Router();
 
 router.post('/', moduleController.createModule);
 router.get('/', moduleController.getModules);
+router.get('/all-cropped', moduleController.getCroppedModules);
 
 router.use('/:module_id', isModulePresent);
 router.get('/:module_id', moduleController.getModuleById);

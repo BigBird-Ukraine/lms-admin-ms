@@ -5,3 +5,4 @@ export * from './course';
 export * from './group';
 export * from './lesson';
 export * from './question';
+export * from './file';

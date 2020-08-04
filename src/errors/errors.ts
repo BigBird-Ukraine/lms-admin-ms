@@ -15,6 +15,20 @@ export const errors = {
     code: 4007,
     message: `Lesson can contain only ${config.MAX_QUESTION_LIMIT} questions`
   },
+
+  BAD_REQUEST_MAX_PHOTO_SIZE: {
+    code: 4002,
+    message: `Max photo size is ${config.MAX_PHOTO_SIZE / (1024 * 1024)}mb`
+  },
+
+  BAD_REQUEST_INVALID_FILE_MIMETYPE: {
+    code: 4003
+  },
+
+  BAD_REQUEST_MAX_PHOTO_AMOUNT: {
+    code: 4004,
+    message: 'Cant upload more than one user photo'
+  },
   // 401
   UNAUTHORIZED_WRONG_CREDENTIALS: {
     code: 4011,

@@ -2,9 +2,9 @@ import { Router } from 'express';
 
 import { userController } from '../../controllers';
 import {
-  checkIsEmailPresent,
+  checkIsEmailPresent, checkNumberOfUserPhoto,
   isUserBlocked,
-  isUserPresent,
+  isUserPresent, isUserValid, photoCheckMiddleware,
   updateDate
 } from '../../middleware';
 
@@ -13,7 +13,7 @@ const router = Router();
 router.get('/', userController.getAll);
 router.get('/getInfo', userController.getUserInfoByToken);
 
-router.post('/', checkIsEmailPresent, userController.createUser);
+router.post('/', isUserValid, checkIsEmailPresent, photoCheckMiddleware, checkNumberOfUserPhoto, userController.createUser);
 
 router.use('/:user_id', isUserPresent);
 router.delete('/:user_id', userController.delete);

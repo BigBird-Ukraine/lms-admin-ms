@@ -2,11 +2,12 @@ import * as cors from 'cors';
 import * as express from 'express';
 import { NextFunction, Request, Response } from 'express';
 import * as RateLimit from 'express-rate-limit';
-import * as helmet from 'helmet';
+
 import * as mongoose from 'mongoose';
 import * as morgan from 'morgan';
 import { resolve as resolvePath } from 'path';
 
+import helmet = require('helmet');
 import { config } from './configs';
 import { ResponseStatusCodesEnum } from './constants';
 import { apiRouter, notFoundRouter } from './routes';
@@ -23,6 +24,7 @@ class App {
     (global as any).appRoot = resolvePath(__dirname, '../');
 
     this.app.use(morgan('dev'));
+    // @ts-ignore
     this.app.use(helmet());
     this.app.use(cors());
     this.app.use(serverRequestLimiter);

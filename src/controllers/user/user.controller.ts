@@ -1,28 +1,28 @@
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Response } from 'express';
 import * as Joi from 'joi';
 
+import { UploadedFile } from 'express-fileupload';
 import { ResponseStatusCodesEnum, UserRoleEnum, UserStatusEnum } from '../../constants';
 import { ErrorHandler } from '../../errors';
-import { HASH_PASSWORD } from '../../helpers';
+import { HASH_PASSWORD, userPhotoMv } from '../../helpers';
 import { IRequestExtended, ITestResultModel, IUser, IUserSubject } from '../../interfaces';
 import { groupService, userService } from '../../services';
-import { adminPatchUserValidator, registerDataValidator, userFilterValidator } from '../../validators';
+import { adminPatchUserValidator, userFilterValidator } from '../../validators';
 
 class UserController {
 
-  async createUser(req: Request, res: Response, next: NextFunction) {
-
+  async createUser(req: IRequestExtended, res: Response, next: NextFunction) {
     const user = req.body as IUser;
-    const userValidity = Joi.validate(user, registerDataValidator);
-
-    if (userValidity.error) {
-      return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, userValidity.error.details[0].message));
-    }
+    const appRoot = (global as any).appRoot;
+    const [userPhoto] = req.photos as UploadedFile[];
 
     user.password = await HASH_PASSWORD(user.password);
-    user.role_id = UserRoleEnum.STUDENT;
+    const registeredUser = await userService.createUser(user);
 
-    await userService.createUser(user);
+    if (userPhoto) {
+      const {photoDir, photoName, _id} = await userPhotoMv(registeredUser, userPhoto, appRoot);
+      await userService.updateUser(_id, {photo_path: `${photoDir}/${photoName}`});
+    }
 
     res.status(ResponseStatusCodesEnum.CREATED).end();
   }

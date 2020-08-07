@@ -63,7 +63,12 @@ UserSchema = new Schema({
     questions_id: [{
       type: Types.ObjectId,
       ref: DatabaseTablesEnum.QUESTION_COLLECTION_NAME
-    }]
+    }],
+    created_at: {
+      type: Date,
+      default: Date.now(),
+      required: true
+    }
   }]
 
 });

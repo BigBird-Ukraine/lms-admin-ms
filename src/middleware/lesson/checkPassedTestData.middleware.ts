@@ -14,7 +14,6 @@ export const checkPassedTestData = async (req: IRequestExtended, res: Response, 
     for (const {question_id, chosen_answers} of question_list) {
       const {answers} = await questionService.getAnswersByQuestionId(question_id);
 
-      const correctAnswer = answers.filter(value => value.correct);
       let chosenCorrectQuestionCount = 0;
       questions_id.push(question_id);
 
@@ -26,8 +25,13 @@ export const checkPassedTestData = async (req: IRequestExtended, res: Response, 
         });
       }
 
-      const percentageRatio = chosenCorrectQuestionCount / correctAnswer.length;
-      testResult += +percentageRatio.toFixed(1) * 10;
+      const unCorrectAnswer = chosen_answers.length - chosenCorrectQuestionCount;
+
+      const myMark = chosenCorrectQuestionCount * 10;
+      const unCorrectAnswerMark = unCorrectAnswer * 5;
+
+      const result = myMark - unCorrectAnswerMark;
+      testResult += result;
     }
 
     req.passed_test = {

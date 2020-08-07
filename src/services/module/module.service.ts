@@ -9,7 +9,6 @@ class ModuleService {
   createModule(moduleValue: IModule): Promise<any> {
 
     const newModule = new Module(moduleValue);
-    console.log(moduleValue);
 
     return newModule.save();
   }

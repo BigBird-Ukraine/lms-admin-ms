@@ -4,7 +4,9 @@ import { QuestionLevelEnum } from '../../constants';
 
 const questionLevelsLength = Object.keys(QuestionLevelEnum).length;
 
-export const insertedQuestionValidator = Joi.object().keys({
+export const inseredUpdatedQuestionValidator = Joi.object().keys({
+  _id: Joi.string().trim(),
+  user_id: Joi.string().trim(),
   question: Joi.alternatives().try([
     Joi.string().max(255).trim(),
     Joi.number()
@@ -32,5 +34,6 @@ export const insertedQuestionValidator = Joi.object().keys({
     Joi.number()
   ])).required(),
   tags: Joi.array().items(Joi.string().max(255).trim()).required(),
-  lesson_id: Joi.array().items(Joi.string().max(255).trim())
+  lesson_id: Joi.array().items(Joi.string().max(255).trim()),
+  __v: Joi.number().integer()
 });

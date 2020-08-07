@@ -44,6 +44,12 @@ class QuestionController {
     res.status(ResponseStatusCodesEnum.CREATED).end();
   }
 
+  async updateQuestion(req: IRequestExtended, res: Response, next: NextFunction) {
+    await questionService.updateQuestion(req.body);
+
+    res.status(ResponseStatusCodesEnum.CREATED).end();
+  }
+
   async getMyQuestions(req: IRequestExtended, res: Response, next: NextFunction) {
     const {_id} = req.user as IUser;
     const {limit = 20, offset = 0} = req.query;

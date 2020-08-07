@@ -15,6 +15,9 @@ export const config = {
 
     MONGO_URL: 'mongodb+srv://lmaadmin:lmsadmin2020@cluster0.sfb2x.mongodb.net/lmsDB?retryWrites=true&w=majority',
 
+    MAX_PHOTO_SIZE: 5 * 1024 * 1024,
+    PHOTO_MIMETYPES: ['image/gif', 'image/jpeg', 'image/pjpeg', 'image/png', 'image/webp'],
+
     MAX_QUESTION_LIMIT: 20
 
     /*Mongo Collections*/

@@ -35,8 +35,13 @@ class ModuleService {
 
     return ModuleModel
       .findOne({_id: module_id})
-      .populate('lesson_list')
-      .select({_id: 0}) as any;
+      .populate('lessons_list', ['_id', 'label', 'description']) as any;
+  }
+
+  getCroppedModules(): Promise<IModule[]> {
+    const ModuleModel = model<ModuleType>(DatabaseTablesEnum.MODULE_COLLECTION_NAME);
+
+    return ModuleModel.find({}, {_id: 1, label: 1, description: 1}) as any;
   }
 
   editModule(module_id: string, updating_value: Partial<IModule>): Promise<void> {

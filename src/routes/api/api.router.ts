@@ -2,6 +2,7 @@ import { Router } from 'express';
 
 import { checkAccessTokenMiddleware , checkIsAdmin } from '../../middleware';
 import { authRouter } from '../auth';
+import { cityRouter } from '../city';
 import { courseRouter } from '../course';
 import { groupRouter } from '../group';
 import { lessonRouter } from '../lesson';
@@ -19,5 +20,6 @@ router.use('/courses', courseRouter);
 router.use('/modules', moduleRouter);
 router.use('/lessons', lessonRouter);
 router.use('/questions', questionRouter);
+router.use('/cities', cityRouter);
 
 export const apiRouter = router;

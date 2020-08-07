@@ -28,6 +28,10 @@ UserSchema = new Schema({
     type: String,
     required: true
   },
+  city: {
+    type: String,
+    required: true
+  },
   status_id: {
     type: Number,
     required: true,

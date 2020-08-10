@@ -24,9 +24,9 @@ class CityService {
   }
 
   deleteCity(city_id: string): Promise<void> {
-    const UserModel = model<CityType>(DatabaseTablesEnum.CITY_COLLECTION_NAME, CityScheme);
+    const CityModel = model<CityType>(DatabaseTablesEnum.CITY_COLLECTION_NAME, CityScheme);
 
-    return UserModel.findByIdAndDelete(city_id) as any;
+    return CityModel.findByIdAndDelete(city_id) as any;
   }
 }
 

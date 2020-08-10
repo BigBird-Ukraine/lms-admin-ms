@@ -41,7 +41,20 @@ GroupSchema = new Schema({
   },
   updated_at: {
     type: Date
-  }
+  },
+  attendance: [{
+    date: {
+      type: String
+    },
+    present_students_id: [{
+      type: Types.ObjectId,
+      ref: DatabaseTablesEnum.USER_COLLECTION_NAME
+    }],
+    absent_students_id: [{
+      type: Types.ObjectId,
+      ref: DatabaseTablesEnum.USER_COLLECTION_NAME
+    }]
+  }]
 });
 
 export const Group: Model<GroupType> = model<GroupType>

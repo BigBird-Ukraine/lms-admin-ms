@@ -2,7 +2,7 @@ import { model } from 'mongoose';
 
 import { DatabaseTablesEnum } from '../../constants/enums';
 import { Group, GroupSchema, GroupType } from '../../database';
-import { IGroup, IGroupSubject } from '../../interfaces';
+import { IAttendance, IGroup, IGroupSubject } from '../../interfaces';
 
 class GroupService {
 
@@ -57,6 +57,18 @@ class GroupService {
     const GroupModel = model<GroupType>(DatabaseTablesEnum.GROUP_COLLECTION_NAME, GroupSchema);
 
     return GroupModel.findById(group_id) as any;
+  }
+
+  async addVisit_log(group_id: string, visit_log: IAttendance): Promise<void> {
+    const GroupModel = model<GroupType>(DatabaseTablesEnum.GROUP_COLLECTION_NAME, GroupSchema);
+
+    const group = await GroupModel.findById(group_id);
+    if (group && group.attendance) {
+      const index = group.attendance.findIndex(el => el.date === visit_log.date);
+      index === -1 ? group.attendance.push(visit_log) :  group.attendance[index] = visit_log;
+    }
+
+    return group && GroupModel.findByIdAndUpdate(group_id, {$set: {attendance: group.attendance}}) as any;
   }
 }
 

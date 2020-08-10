@@ -99,6 +99,15 @@ class GroupController {
     }
     res.end();
   }
+
+  async addNewVisitLog(req: IRequestExtended, res: Response, next: NextFunction) {
+    const {group_id} = req.params;
+    const visit_log = req.body;
+
+    await groupService.addVisit_log(group_id, visit_log);
+
+    res.end();
+  }
 }
 
 export const groupController = new GroupController();

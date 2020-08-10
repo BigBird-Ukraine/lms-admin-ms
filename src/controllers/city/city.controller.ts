@@ -17,7 +17,8 @@ export class CityController {
   }
 
   async deleteCity(req: Request, res: Response, next: NextFunction) {
-    const {city_id} = req.params;
+    const {city_id} = req.query;
+
     await cityService.deleteCity(city_id);
 
     res.json(`city ${city_id} has been deleted`);

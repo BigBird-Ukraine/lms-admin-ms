@@ -8,7 +8,7 @@ export interface IUser {
   email: string;
   password: string;
   status_id: number;
-  city: string;
+  population_point: string;
   role_id: number;
   photo_path?: string;
   created_at: string;
@@ -23,7 +23,7 @@ export interface IUserSubject {
   surname: string;
   phone_number: string;
   email: string;
-  city: string;
+  population_point: string;
   status_id: number;
   role_id: number;
   photo_path?: string;

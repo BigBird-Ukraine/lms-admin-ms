@@ -23,10 +23,10 @@ class CityService {
     return CityModel.find() as any;
   }
 
-  deleteCity(id: string): Promise<void> {
-    const CityModel = model<CityType>(DatabaseTablesEnum.CITY_COLLECTION_NAME, CityScheme);
+  deleteCity(city_id: string): Promise<void> {
+    const UserModel = model<CityType>(DatabaseTablesEnum.CITY_COLLECTION_NAME, CityScheme);
 
-    return CityModel.findOneAndDelete(id) as any;
+    return UserModel.findByIdAndDelete(city_id) as any;
   }
 }
 

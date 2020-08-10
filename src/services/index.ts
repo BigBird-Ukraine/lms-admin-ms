@@ -5,3 +5,4 @@ export * from './auth';
 export * from './module';
 export * from './lesson';
 export * from './question';
+export * from './city';

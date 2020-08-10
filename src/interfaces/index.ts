@@ -9,3 +9,4 @@ export * from './module-from-course.model';
 export * from './userByToken.model';
 export * from './question.model';
 export * from './test_result.model';
+export * from './city.model';

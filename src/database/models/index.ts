@@ -5,3 +5,4 @@ export * from './group.model';
 export * from './module.schema';
 export * from './lesson.schema';
 export * from './question.schema';
+export * from './city.schema';

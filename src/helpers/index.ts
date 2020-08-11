@@ -5,3 +5,4 @@ export * from './question';
 export * from './regexFilterParams.helper';
 export * from './сalculationPageCount.helper';
 export * from './user';
+export * from './group';

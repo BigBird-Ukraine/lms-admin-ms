@@ -66,6 +66,38 @@ class UserService {
 
     return UserModel.findByIdAndUpdate(user_id, {$push: {passed_tests: passed_test}}) as any;
   }
+
+  deleteGroupOfUser(users_id: string[], group_id: string): Promise<any> {
+    const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
+
+    return UserModel.bulkWrite(users_id.map(user_id => {
+      return {
+        updateOne: {
+          filter: {_id: user_id},
+          update: {
+            $pull: {groups_id: group_id}
+          },
+          upsert: true
+        }
+      };
+    }));
+  }
+
+  addGroupInUser(users_id: string[], group_id: string): Promise<any> {
+    const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
+
+    return UserModel.bulkWrite(users_id.map(user_id => {
+      return {
+        updateOne: {
+          filter: {_id: user_id},
+          update: {
+            $addToSet: {groups_id: group_id}
+          },
+          upsert: true
+        }
+      };
+    }));
+  }
 }
 
 export const userService = new UserService();

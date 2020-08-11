@@ -3,8 +3,9 @@ import * as Joi from 'joi';
 
 import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler } from '../../errors';
+import { checkDeletedUsers } from '../../helpers/group';
 import { IGroup, IRequestExtended } from '../../interfaces';
-import { groupService } from '../../services';
+import { groupService, userService } from '../../services';
 import { groupFilterValidator, groupUpdateValidator, groupValidator } from '../../validators';
 
 class GroupController {
@@ -77,14 +78,21 @@ class GroupController {
   }
 
   async changeUserListById(req: IRequestExtended, res: Response, next: NextFunction) {
-
     const {_id} = req.group as IGroup;
-    const list = req.body as Partial<IGroup>;
-    const groupValidity = Joi.validate(list, groupUpdateValidator);
+    const list = req.body;
 
+    const groupValidity = Joi.validate(list, groupUpdateValidator);
     if (groupValidity.error) {
       return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, groupValidity.error.details[0].message));
     }
+
+    const {users_list} = await groupService.getById(_id);
+
+    const {deleted, updated} = checkDeletedUsers(users_list, list.users_list);
+
+    if (updated.length) { await userService.addGroupInUser(updated, _id); }
+    if (deleted.length) { await userService.deleteGroupOfUser(deleted, _id); }
+
     await groupService.update(_id, list);
 
     res.end();

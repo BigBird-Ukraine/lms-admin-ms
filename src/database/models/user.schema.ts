@@ -28,7 +28,7 @@ UserSchema = new Schema({
     type: String,
     required: true
   },
-  city: {
+  population_point: {
     type: String,
     required: true
   },

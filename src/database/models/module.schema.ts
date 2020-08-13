@@ -21,7 +21,7 @@ ModuleSchema = new Schema({
         required: false
     }],
     courses_id: [{
-        type: String,
+        type: Types.ObjectId,
         ref: DatabaseTablesEnum.COURSE_COLLECTION_NAME
     }],
     lessons_list: [{

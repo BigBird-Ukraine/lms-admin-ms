@@ -3,8 +3,9 @@ import * as Joi from 'joi';
 
 import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler } from '../../errors';
+import { checkDeletedModules } from '../../helpers/module';
 import { ICourseSubject, IRequestExtended } from '../../interfaces';
-import { courseService } from '../../services';
+import { courseService, moduleService } from '../../services';
 import { courseValidator, filterParametresValidator, modulesListValidator } from '../../validators';
 
 class CourseController {
@@ -84,13 +85,23 @@ class CourseController {
   async updateModulesList(req: IRequestExtended, res: Response, next: NextFunction) {
 
     const {course_id} = req.params;
-    const modules_list = req.body as Partial<ICourseSubject>;
-    const filterValidity = Joi.validate(modules_list, modulesListValidator);
+    const modules = req.body as Partial<ICourseSubject>;
+    const filterValidity = Joi.validate(modules, modulesListValidator);
 
     if (filterValidity.error) {
       return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, filterValidity.error.details[0].message));
     }
-    await courseService.updateCourse(course_id, modules_list);
+
+    const {modules_list} = await courseService.getByID(course_id);
+
+    if (modules.modules_list) {
+      const { deleted , updated} = checkDeletedModules(modules_list, modules.modules_list);
+
+      if (updated.length) { await moduleService.addModuleInCourse(updated, course_id); }
+      if (deleted.length) { await moduleService.deleteModuleOfCourse(deleted, course_id); }
+    }
+
+    await courseService.updateCourse(course_id, modules);
 
     res.end();
   }

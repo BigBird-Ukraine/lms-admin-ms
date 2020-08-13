@@ -55,6 +55,38 @@ class ModuleService {
 
     return ModuleModel.deleteOne({_id: module_id}) as any;
   }
+
+  addModuleInCourse(modules_id: string[], course_id: string) {
+    const ModuleModel = model<ModuleType>(DatabaseTablesEnum.MODULE_COLLECTION_NAME);
+
+    return ModuleModel.bulkWrite(modules_id.map(module_id => {
+      return {
+        updateOne: {
+          filter: {_id: module_id},
+          update: {
+            $addToSet: {courses_id: course_id}
+          },
+          upsert: true
+        }
+      };
+    }));
+  }
+
+  deleteModuleOfCourse(modules_id: any[], course_id: string) {
+    const ModuleModel = model<ModuleType>(DatabaseTablesEnum.MODULE_COLLECTION_NAME);
+
+    return ModuleModel.bulkWrite(modules_id.map(module_id => {
+      return {
+        updateOne: {
+          filter: {_id: module_id},
+          update: {
+            $pull: {courses_id: course_id}
+          },
+          upsert: true
+        }
+      };
+    }));
+  }
 }
 
 export const moduleService = new ModuleService();

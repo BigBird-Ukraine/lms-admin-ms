@@ -13,6 +13,9 @@ const router = Router();
 router.get('/', userController.getAll);
 router.get('/getInfo', userController.getUserInfoByToken);
 
+router.get('/statics', userController.getUserStatistics);
+router.get('/by_status', userController.getUsersByStatus);
+
 router.post('/', isUserValid, checkIsEmailPresent, photoCheckMiddleware, checkNumberOfUserPhoto, userController.createUser);
 
 router.use('/:user_id', isUserPresent);

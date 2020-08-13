@@ -1,9 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
 
 import { ResponseStatusCodesEnum } from '../../constants';
-import { calculationPageCount, questionSortingAttributes, regexFilterParams } from '../../helpers';
+import {
+  calculationPageCount,
+  questionSortingAttributes,
+  regexFilterParams
+} from '../../helpers';
 import { IRequestExtended, IUser } from '../../interfaces';
-import { questionService } from '../../services';
+import { courseService, questionService } from '../../services';
 
 class QuestionController {
 
@@ -71,6 +75,24 @@ class QuestionController {
     await questionService.deleteQuestionById(question_id);
 
     res.end();
+  }
+
+  async getStatics(req: IRequestExtended, res: Response, next: NextFunction) {
+    const allSubjects = await courseService.getAllCourseLabel();
+    const statistics = [];
+
+    for await (const subject of allSubjects) {
+      const count = await questionService.getQuestionsStatistic(subject.label);
+      statistics.push({label: subject.label, count});
+    }
+
+    res.json(statistics);
+  }
+
+  async getQuestionsBySubject(req: IRequestExtended, res: Response, next: NextFunction) {
+    const questions = await questionService.getQuestionBySubject(req.query.subject);
+
+    res.json(questions);
   }
 }
 

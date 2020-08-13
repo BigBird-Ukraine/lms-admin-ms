@@ -155,6 +155,19 @@ class UserController {
 
     res.json({data: user});
   }
+
+  async getUserStatistics(req: IRequestExtended, res: Response, next: NextFunction) {
+   const userStatistics = await userService.getStatistics();
+
+   res.json(userStatistics);
+  }
+
+  async getUsersByStatus(req: IRequestExtended, res: Response, next: NextFunction) {
+    const activeUsers = await userService.getUsersByStatus(req.query.status);
+
+    res.json(activeUsers);
+  }
+
 }
 
 export const userController = new UserController();

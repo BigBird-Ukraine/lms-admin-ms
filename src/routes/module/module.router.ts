@@ -7,6 +7,10 @@ const router = Router();
 
 router.post('/', moduleController.createModule);
 router.get('/', moduleController.getModules);
+
+router.get('/statics', moduleController.getStatics);
+router.get('/by_course', moduleController.getModulesByCourseId);
+
 router.get('/all-cropped', moduleController.getCroppedModules);
 
 router.use('/:module_id', isModulePresent);

@@ -63,6 +63,13 @@ class CourseService {
     return CourseModel
       .findByIdAndUpdate(course_id, patchObject) as any;
   }
+
+  getAllCourseLabel() {
+    const CourseModel = model<CourseType>(DatabaseTablesEnum.COURSE_COLLECTION_NAME, CourseSchema);
+
+    return CourseModel.find().select({label: 1, _id: 1});
+  }
+
 }
 
 export const courseService = new CourseService();

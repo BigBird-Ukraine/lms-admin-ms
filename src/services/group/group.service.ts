@@ -70,6 +70,20 @@ class GroupService {
 
     return group && GroupModel.findByIdAndUpdate(group_id, {$set: {attendance: group.attendance}}) as any;
   }
+
+  getGroupsStatistic(course_id: string) {
+    const GroupModel = model<GroupType>(DatabaseTablesEnum.GROUP_COLLECTION_NAME, GroupSchema);
+
+    return GroupModel
+      .countDocuments({course_id}) as any;
+  }
+
+  getGroupsByCourseId(course_id: string) {
+    const GroupModel = model<GroupType>(DatabaseTablesEnum.GROUP_COLLECTION_NAME, GroupSchema);
+
+    return GroupModel.find({course_id})
+      .select({city: 1, label: 1, created_at: 1, finished_at: 1});
+  }
 }
 
 export const groupService = new GroupService();

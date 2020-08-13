@@ -4,7 +4,7 @@ import * as Joi from 'joi';
 import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler } from '../../errors';
 import { IModule, IRequestExtended } from '../../interfaces';
-import { moduleService } from '../../services';
+import { courseService, moduleService} from '../../services';
 import { moduleFilterValitator, moduleValidator } from '../../validators';
 
 const moduleSortingAttributes: Array<keyof IModule> = ['_id', 'label', 'tags', 'courses_id', 'lessons'];
@@ -93,6 +93,23 @@ class ModuleController {
     res.json(`module ${module_id} has been deleted`);
   }
 
+  async getStatics(req: IRequestExtended, res: Response, next: NextFunction) {
+    const allSubjects = await courseService.getAllCourseLabel();
+    const statistics = [];
+
+    for await (const subject of allSubjects) {
+      const count = await moduleService.getModulesStatistic(subject.label);
+      statistics.push({label: subject.label, count, _id: subject._id});
+    }
+
+    res.json(statistics);
+  }
+
+  async getModulesByCourseId(req: IRequestExtended, res: Response, next: NextFunction) {
+    const modules = await moduleService.getModulesByCourseId(req.query.course_id);
+
+    res.json(modules);
+  }
 }
 
 export const moduleController = new ModuleController();

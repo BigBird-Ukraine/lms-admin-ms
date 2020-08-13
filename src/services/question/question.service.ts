@@ -64,6 +64,20 @@ class QuestionService {
     return QuestionModel
       .countDocuments(filterParams) as any;
   }
+
+  getQuestionsStatistic(subject: string) {
+    const QuestionModel = model<QuestionType>(DatabaseTablesEnum.QUESTION_COLLECTION_NAME, QuestionSchema);
+
+    return QuestionModel
+      .countDocuments({subject}) as any;
+  }
+
+  getQuestionBySubject(subject: string) {
+    const QuestionModel = model<QuestionType>(DatabaseTablesEnum.QUESTION_COLLECTION_NAME, QuestionSchema);
+
+    return QuestionModel.find({subject})
+      .select({question: 1, description: 1, tags: 1});
+  }
 }
 
 export const questionService = new QuestionService();

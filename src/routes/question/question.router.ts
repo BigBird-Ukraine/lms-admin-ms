@@ -13,6 +13,9 @@ const router = Router();
 router.use(checkAccessTokenMiddleware);
 router.get('/', isQuestionFilterValid, questionController.getQuestions);
 
+router.get('/statics', questionController.getStatics);
+router.get('/by_subject', questionController.getQuestionsBySubject);
+
 router.use(checkIsAdmin);
 router.get('/my', questionController.getMyQuestions);
 router.post('/', isQuestionValid, isUserAdminOrTeacherMiddleware, questionController.createQuestion);

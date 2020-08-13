@@ -6,6 +6,8 @@ import { isGroupAttendanceValid, isGroupPresent } from '../../middleware/group';
 const router = Router();
 
 router.get('/', groupController.getAllGroups);
+router.get('/statics', groupController.getStatics);
+router.get('/by_course', groupController.getGroupsByCourseId);
 
 router.post('/', groupController.createGroup);
 

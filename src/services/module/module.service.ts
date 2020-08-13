@@ -55,6 +55,19 @@ class ModuleService {
 
     return ModuleModel.deleteOne({_id: module_id}) as any;
   }
+
+  getModulesStatistic(label: string) {
+    const ModuleModel = model<ModuleType>(DatabaseTablesEnum.MODULE_COLLECTION_NAME);
+
+    return ModuleModel.countDocuments({label}) as any;
+  }
+
+  getModulesByCourseId(courses_id: string) {
+    const ModuleModel = model<ModuleType>(DatabaseTablesEnum.MODULE_COLLECTION_NAME);
+
+    return ModuleModel.find({courses_id})
+      .select({label: 1, description: 1, tags: 1});
+  }
 }
 
 export const moduleService = new ModuleService();

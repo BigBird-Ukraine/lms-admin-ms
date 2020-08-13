@@ -4,7 +4,7 @@ import * as Joi from 'joi';
 import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler } from '../../errors';
 import { IModule, IRequestExtended } from '../../interfaces';
-import { courseService, moduleService} from '../../services';
+import { courseService, moduleService } from '../../services';
 import { moduleFilterValitator, moduleValidator } from '../../validators';
 
 const moduleSortingAttributes: Array<keyof IModule> = ['_id', 'label', 'tags', 'courses_id', 'lessons'];
@@ -98,8 +98,8 @@ class ModuleController {
     const statistics = [];
 
     for await (const subject of allSubjects) {
-      const count = await moduleService.getModulesStatistic(subject.label);
-      statistics.push({label: subject.label, count, _id: subject._id});
+      const count = await courseService.getModulesStatistic(subject.label, subject._id);
+      statistics.push({label: subject.label, count: count[0].modules_list, _id: subject._id});
     }
 
     res.json(statistics);

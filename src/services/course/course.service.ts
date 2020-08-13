@@ -70,6 +70,22 @@ class CourseService {
     return CourseModel.find().select({label: 1, _id: 1});
   }
 
+  getModulesStatistic(modules_list: string, _id: string) {
+    const CourseModel = model<CourseType>(DatabaseTablesEnum.COURSE_COLLECTION_NAME, CourseSchema);
+
+    return CourseModel.aggregate([
+      {
+        $match: {_id}
+      },
+      {
+        $project: {
+          modules_list: {$size: '$modules_list'}
+        }
+      }
+    ]);
+
+  }
+
 }
 
 export const courseService = new CourseService();

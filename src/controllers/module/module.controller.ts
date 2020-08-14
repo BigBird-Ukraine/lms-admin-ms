@@ -4,7 +4,7 @@ import * as Joi from 'joi';
 import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler } from '../../errors';
 import { IModule, IRequestExtended } from '../../interfaces';
-import { courseService, moduleService } from '../../services';
+import { courseService, lessonService, moduleService } from '../../services';
 import { moduleFilterValitator, moduleValidator } from '../../validators';
 
 const moduleSortingAttributes: Array<keyof IModule> = ['_id', 'label', 'tags', 'courses_id', 'lessons'];
@@ -19,7 +19,11 @@ class ModuleController {
       return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, moduleValidity.error.details[0].message));
     }
 
-    res.json( await moduleService.createModule(module));
+    const { _id } = await moduleService.createModule(module);
+
+    await lessonService.addModuleInLesson(module.lessons_list , _id);
+
+    res.json(ResponseStatusCodesEnum.CREATED);
   }
 
   async getModules(req: IRequestExtended, res: Response, next: NextFunction) {

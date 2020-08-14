@@ -3,9 +3,9 @@ import * as Joi from 'joi';
 
 import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler } from '../../errors';
-import { calculationPageCount } from '../../helpers';
+import { calculationPageCount, checkDeletedObjects } from '../../helpers';
 import { ILesson, IRequestExtended, IUser } from '../../interfaces';
-import { lessonService, moduleService } from '../../services';
+import { lessonService, moduleService, questionService } from '../../services';
 import { lessonValidator } from '../../validators';
 
 const sortingAttributes: Array<keyof ILesson> = ['number', 'label', 'tags', '_id'];
@@ -81,6 +81,14 @@ class LessonController {
   async addQuestionToLesson(req: Request, res: Response, next: NextFunction) {
     const {lesson_id} = req.params;
     const {NewQuestions_id} = req.body;
+
+    const {questions_id} = await lessonService.getLessonByID(lesson_id);
+
+    if (questions_id) {
+      const { deleted, updated } = checkDeletedObjects(questions_id, NewQuestions_id);
+      if (updated.length) { await questionService.addLessonInQuestion(updated, lesson_id); }
+      if (deleted.length) { await questionService.deleteLessonInQuestion(deleted, lesson_id); }
+      }
 
     const updatedLesson = await lessonService.addQuestionsToLesson(lesson_id, NewQuestions_id);
 

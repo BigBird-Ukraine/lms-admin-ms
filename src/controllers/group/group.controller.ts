@@ -3,7 +3,7 @@ import * as Joi from 'joi';
 
 import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler } from '../../errors';
-import { checkDeletedUsers } from '../../helpers/group';
+import { checkDeletedObjects } from '../../helpers';
 import { IGroup, IRequestExtended } from '../../interfaces';
 import { courseService, groupService, userService } from '../../services';
 import { groupFilterValidator, groupUpdateValidator, groupValidator } from '../../validators';
@@ -88,7 +88,7 @@ class GroupController {
 
     const {users_list} = await groupService.getById(_id);
 
-    const {deleted, updated} = checkDeletedUsers(users_list, list.users_list);
+    const {deleted, updated} = checkDeletedObjects(users_list, list.users_list);
 
     if (updated.length) { await userService.addGroupInUser(updated, _id); }
     if (deleted.length) { await userService.deleteGroupOfUser(deleted, _id); }

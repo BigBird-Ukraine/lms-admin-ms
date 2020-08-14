@@ -27,6 +27,12 @@ class CourseService {
       .select({_id: 0}) as any;
   }
 
+  getByID(id: string): Promise<ICourse> {
+    const CourseModel = model<CourseType>(DatabaseTablesEnum.COURSE_COLLECTION_NAME, CourseSchema);
+
+    return CourseModel.findById(id) as any;
+  }
+
   // todo think about this
   getModulesByCourseID(course_id: string): Promise<IModuleFromCourseModel> {
     const CourseModel = model<CourseType>(DatabaseTablesEnum.COURSE_COLLECTION_NAME, CourseSchema);
@@ -63,6 +69,7 @@ class CourseService {
     return CourseModel
       .findByIdAndUpdate(course_id, patchObject) as any;
   }
+
 }
 
 export const courseService = new CourseService();

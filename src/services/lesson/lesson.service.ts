@@ -81,6 +81,29 @@ class LessonService {
     return LessonModel
       .findByIdAndDelete(lesson_id) as any;
   }
+
+  getLessonsByModule(module_id: string): Promise<any> {
+    const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
+
+    return LessonModel.find({module_id: {$all: [module_id]}})
+      .select({number: 1, tags: 1, label: 1, description: 1, _id: 0}) as any;
+  }
+
+  addModuleInLesson(lessons_id: string[], module_id: string) {
+    const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
+
+    return LessonModel.bulkWrite(lessons_id.map(lesson_id => {
+      return {
+        updateOne: {
+          filter: {_id: lesson_id},
+          update: {
+            $set: {module_id}
+          },
+          upsert: true
+        }
+      };
+    }));
+  }
 }
 
 export const lessonService = new LessonService();

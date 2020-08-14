@@ -4,7 +4,7 @@ import * as Joi from 'joi';
 import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler } from '../../errors';
 import { IModule, IRequestExtended } from '../../interfaces';
-import { moduleService } from '../../services';
+import { courseService, lessonService, moduleService } from '../../services';
 import { moduleFilterValitator, moduleValidator } from '../../validators';
 
 const moduleSortingAttributes: Array<keyof IModule> = ['_id', 'label', 'tags', 'courses_id', 'lessons'];
@@ -19,7 +19,11 @@ class ModuleController {
       return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, moduleValidity.error.details[0].message));
     }
 
-    res.json( await moduleService.createModule(module));
+    const { _id } = await moduleService.createModule(module);
+
+    await lessonService.addModuleInLesson(module.lessons_list , _id);
+
+    res.json(ResponseStatusCodesEnum.CREATED);
   }
 
   async getModules(req: IRequestExtended, res: Response, next: NextFunction) {
@@ -93,6 +97,23 @@ class ModuleController {
     res.json(`module ${module_id} has been deleted`);
   }
 
+  async getStatics(req: IRequestExtended, res: Response, next: NextFunction) {
+    const allSubjects = await courseService.getAllCourseLabel();
+    const statistics = [];
+
+    for await (const subject of allSubjects) {
+      const count = await courseService.getModulesStatistic(subject.label, subject._id);
+      statistics.push({label: subject.label, count: count[0].modules_list, _id: subject._id});
+    }
+
+    res.json(statistics);
+  }
+
+  async getModulesByCourseId(req: IRequestExtended, res: Response, next: NextFunction) {
+    const modules = await moduleService.getModulesByCourseId(req.query.course_id);
+
+    res.json(modules);
+  }
 }
 
 export const moduleController = new ModuleController();

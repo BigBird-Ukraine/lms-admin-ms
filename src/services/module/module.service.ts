@@ -87,6 +87,34 @@ class ModuleService {
       };
     }));
   }
+
+  getModulesByCourseId(courses_id: string) {
+    const ModuleModel = model<ModuleType>(DatabaseTablesEnum.MODULE_COLLECTION_NAME);
+
+    return ModuleModel.find({courses_id: {$all: [courses_id]}})
+      .select({label: 1, description: 1, _id: 0});
+  }
+
+  getAllModulesLabel() {
+    const ModuleModel = model<ModuleType>(DatabaseTablesEnum.MODULE_COLLECTION_NAME);
+
+    return ModuleModel.find().select({label: 1, _id: 1});
+  }
+
+  getLessonsStatistic(_id: string) {
+    const ModuleModel = model<ModuleType>(DatabaseTablesEnum.MODULE_COLLECTION_NAME);
+
+    return ModuleModel.aggregate([
+      {
+        $match: {_id}
+      },
+      {
+        $project: {
+          lessons_list: {$size: '$lessons_list'}
+        }
+      }
+    ]);
+  }
 }
 
 export const moduleService = new ModuleService();

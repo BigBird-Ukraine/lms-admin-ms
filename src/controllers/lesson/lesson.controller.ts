@@ -5,7 +5,7 @@ import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler } from '../../errors';
 import { calculationPageCount } from '../../helpers';
 import { ILesson, IRequestExtended, IUser } from '../../interfaces';
-import { lessonService } from '../../services';
+import { lessonService, moduleService } from '../../services';
 import { lessonValidator } from '../../validators';
 
 const sortingAttributes: Array<keyof ILesson> = ['number', 'label', 'tags', '_id'];
@@ -106,6 +106,24 @@ class LessonController {
         lesson
       }
     });
+  }
+
+  async getStatics(req: IRequestExtended, res: Response, next: NextFunction) {
+    const allModules = await moduleService.getAllModulesLabel();
+    const statistics = [];
+
+    for await (const module of allModules) {
+      const count = await moduleService.getLessonsStatistic(module._id);
+      statistics.push({label: module.label, count, _id: module._id});
+    }
+
+    res.json(statistics);
+  }
+
+  async getLessonsByModule(req: IRequestExtended, res: Response, next: NextFunction) {
+    const lessons = await lessonService.getLessonsByModule(req.query.module_id);
+
+    res.json(lessons);
   }
 }
 

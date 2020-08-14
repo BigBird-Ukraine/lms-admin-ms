@@ -1,12 +1,11 @@
 import { Router } from 'express';
 
 import { lessonController, userController } from '../../controllers';
+import { checkAccessTokenMiddleware } from '../../middleware/auth';
 import {
   checkPassedTestData, checkQuestionsListLenght, isLessonFilterValid, isLessonPassedTestDataValid,
   isLessonPresentMiddleware, isLessonQuestionValid, isLessonUpdatingDataValid, isQuestionExistInLessonMiddleware
 } from '../../middleware/lesson';
-
-import { checkAccessTokenMiddleware } from '../../middleware/auth';
 
 const router = Router();
 
@@ -15,6 +14,8 @@ router.post('/', lessonController.createLesson);
 router.get('/my', lessonController.getMyLesson);
 
 router.get('/', isLessonFilterValid, lessonController.getLessons);
+router.get('/statics', lessonController.getStatics);
+router.get('/by_module', lessonController.getLessonsByModule);
 
 router.use('/:lesson_id', isLessonPresentMiddleware);
 router.get('/:lesson_id', lessonController.getLessonById);

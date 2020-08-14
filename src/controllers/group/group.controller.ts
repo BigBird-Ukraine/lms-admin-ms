@@ -5,7 +5,7 @@ import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler } from '../../errors';
 import { checkDeletedUsers } from '../../helpers/group';
 import { IGroup, IRequestExtended } from '../../interfaces';
-import { groupService, userService } from '../../services';
+import { courseService, groupService, userService } from '../../services';
 import { groupFilterValidator, groupUpdateValidator, groupValidator } from '../../validators';
 
 class GroupController {
@@ -115,6 +115,24 @@ class GroupController {
     await groupService.addVisit_log(group_id, visit_log);
 
     res.end();
+  }
+
+  async getStatics(req: IRequestExtended, res: Response, next: NextFunction) {
+    const allSubjects = await courseService.getAllCourseLabel();
+    const statistics = [];
+
+    for await (const subject of allSubjects) {
+      const count = await groupService.getGroupsStatistic(subject._id);
+      statistics.push({label: subject.label, count, _id: subject._id});
+    }
+
+    res.json(statistics);
+  }
+
+  async getGroupsByCourseId(req: IRequestExtended, res: Response, next: NextFunction) {
+    const groups = await groupService.getGroupsByCourseId(req.query.course_id);
+
+    res.json(groups);
   }
 }
 

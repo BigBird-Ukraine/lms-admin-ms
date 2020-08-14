@@ -54,7 +54,6 @@ UserSchema = new Schema({
   groups_id: [{
     type: Types.ObjectId,
     ref: DatabaseTablesEnum.GROUP_COLLECTION_NAME
-
   }],
   passed_tests: [{
     lesson_id: {

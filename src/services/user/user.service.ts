@@ -98,6 +98,30 @@ class UserService {
       };
     }));
   }
+
+  async getStatistics() {
+    const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
+
+    const activeUser = await UserModel.countDocuments({
+      status_id: 1
+    });
+
+    const blockedUser = await UserModel.countDocuments({
+      status_id: 2
+    });
+
+    return {
+      activeUser,
+      blockedUser
+    };
+  }
+
+  async getUsersByStatus(status: string) {
+    const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
+
+    return UserModel.find({status_id: status})
+      .select({name: 1, surname: 1, phone_number: 1, email: 1});
+  }
 }
 
 export const userService = new UserService();

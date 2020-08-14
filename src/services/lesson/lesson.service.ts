@@ -81,6 +81,12 @@ class LessonService {
     return LessonModel
       .findByIdAndDelete(lesson_id) as any;
   }
+
+  getLessonsByModule(module_id: string): Promise<any> {
+    const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
+
+
+  }
 }
 
 export const lessonService = new LessonService();

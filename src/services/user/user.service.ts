@@ -1,7 +1,7 @@
 import { model } from 'mongoose';
 
 import { DatabaseTablesEnum } from '../../constants/enums';
-import { User, UserSchema, UserType } from '../../database';
+import { Group, Lesson, OauthToken, User, UserSchema, UserType } from '../../database';
 import { ITestResultModel, IUser, IUserSubject } from '../../interfaces';
 
 class UserService {
@@ -32,7 +32,23 @@ class UserService {
   delete(user_id: string): Promise<void> {
     const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
 
-    return UserModel.findByIdAndDelete(user_id) as any;
+    return UserModel.findByIdAndDelete(user_id, (err) => {
+      Group.update(
+        { users_list: user_id },
+        { $pull: { users_list: user_id } },
+        { multi: true })
+        .exec();
+
+      Lesson.update(
+        { user_id },
+        { $set: { user_id: null } })
+        .exec();
+
+      OauthToken.update(
+        { user_id },
+        { $set: { user_id: null } })
+        .exec();
+    }) as any;
   }
 
   getAll(myId: string, filterParams: Partial<IUser>, limit: number, skip: number, order: string): Promise<IUserSubject[]> {

@@ -1,7 +1,7 @@
 import { model } from 'mongoose';
 
 import { DatabaseTablesEnum } from '../../constants';
-import { CourseType, Module, ModuleSchema, ModuleType } from '../../database';
+import { Course, CourseType, Lesson, Module, ModuleSchema, ModuleType } from '../../database';
 import { IModule } from '../../interfaces';
 
 class ModuleService {
@@ -53,7 +53,19 @@ class ModuleService {
   deleteModuleByID(module_id: string): Promise<void> {
     const ModuleModel = model<ModuleType>(DatabaseTablesEnum.MODULE_COLLECTION_NAME);
 
-    return ModuleModel.deleteOne({_id: module_id}) as any;
+    return ModuleModel.deleteOne({_id: module_id}, (err) => {
+      Course.update(
+        { modules_list: module_id },
+        { $pull: { modules_list: module_id } },
+        { multi: true })
+        .exec();
+
+      Lesson.update(
+        { module_id },
+        { $pull: { module_id } },
+        { multi: true })
+        .exec();
+    }) as any;
   }
 
   addModuleInCourse(modules_id: string[], course_id: string) {

@@ -1,7 +1,7 @@
 import { model } from 'mongoose';
 
 import { DatabaseTablesEnum } from '../../constants/enums';
-import { Lesson, LessonSchema, LessonType } from '../../database';
+import { Lesson, LessonSchema, LessonType, Module, Question } from '../../database';
 import { ILesson } from '../../interfaces';
 
 class LessonService {
@@ -79,7 +79,20 @@ class LessonService {
     const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
 
     return LessonModel
-      .findByIdAndDelete(lesson_id) as any;
+      .findByIdAndRemove(lesson_id, (err, post) => {
+        Module.update(
+          { lessons_list : lesson_id},
+          { $pull: { lessons_list: lesson_id } },
+          { multi: true })
+          .exec();
+
+        Question.update(
+          { lesson_id},
+          { $pull: { lesson_id } },
+          { multi: true })
+          .exec();
+
+      }) as any;
   }
 
   getLessonsByModule(module_id: string): Promise<any> {

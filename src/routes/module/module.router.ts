@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 import { moduleController } from '../../controllers';
-import { isModulePresent } from '../../middleware';
+import { isLessonListValid, isModulePresent } from '../../middleware';
 
 const router = Router();
 
@@ -14,8 +14,10 @@ router.get('/by_course', moduleController.getModulesByCourseId);
 router.get('/all-cropped', moduleController.getCroppedModules);
 
 router.use('/:module_id', isModulePresent);
-router.get('/:module_id', moduleController.getModuleById);
+router.get('/:module_id', moduleController.getModuleByIdWithLessons);
 router.patch('/:module_id', moduleController.editModule);
 router.delete('/:module_id', moduleController.deleteModule);
+
+router.patch('/:module_id/lesson', isLessonListValid, moduleController.updateLessonList);
 
 export const moduleRouter = router;

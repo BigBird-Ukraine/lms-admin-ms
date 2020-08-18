@@ -25,6 +25,12 @@ class LessonService {
       }) as any;
   }
 
+  getLessonsLabel() {
+    const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
+
+    return LessonModel.find().select({label: 1});
+  }
+
   getSizeOfAll(filterParams: Partial<ILesson>): Promise<any> {
     const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
 
@@ -110,7 +116,23 @@ class LessonService {
         updateOne: {
           filter: {_id: lesson_id},
           update: {
-            $set: {module_id}
+            $addToSet: {module_id}
+          },
+          upsert: true
+        }
+      };
+    }));
+  }
+
+  deleteModuleOfLesson(lessons_id: string[], module_id: string) {
+    const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
+
+    return LessonModel.bulkWrite(lessons_id.map(lesson_id => {
+      return {
+        updateOne: {
+          filter: {_id: lesson_id},
+          update: {
+            $pull: {module_id}
           },
           upsert: true
         }

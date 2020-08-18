@@ -3,11 +3,12 @@ import * as Joi from 'joi';
 
 import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler } from '../../errors';
+import { checkDeletedModules } from '../../helpers/module';
 import { IModule, IRequestExtended } from '../../interfaces';
 import { courseService, lessonService, moduleService } from '../../services';
 import { moduleFilterValitator, moduleValidator } from '../../validators';
 
-const moduleSortingAttributes: Array<keyof IModule> = ['_id', 'label', 'tags', 'courses_id', 'lessons'];
+const moduleSortingAttributes: Array<keyof IModule> = ['_id', 'label', 'tags', 'courses_id', 'lessons_list'];
 
 class ModuleController {
 
@@ -19,9 +20,9 @@ class ModuleController {
       return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, moduleValidity.error.details[0].message));
     }
 
-    const { _id } = await moduleService.createModule(module);
+    const {_id} = await moduleService.createModule(module);
 
-    await lessonService.addModuleInLesson(module.lessons_list , _id);
+    await lessonService.addModuleInLesson(module.lessons_list, _id);
 
     res.json(ResponseStatusCodesEnum.CREATED);
   }
@@ -62,11 +63,11 @@ class ModuleController {
     });
   }
 
-  async getModuleById(req: IRequestExtended, res: Response, next: NextFunction) {
+  async getModuleByIdWithLessons(req: IRequestExtended, res: Response, next: NextFunction) {
 
     const {module_id} = req.params;
 
-    const module = await moduleService.getModuleByID(module_id);
+    const module = await moduleService.getModuleByIDWithLessons(module_id);
 
     res.json({
       data: module
@@ -113,6 +114,24 @@ class ModuleController {
     const modules = await moduleService.getModulesByCourseId(req.query.course_id);
 
     res.json(modules);
+  }
+
+  async updateLessonList(req: IRequestExtended, res: Response, next: NextFunction) {
+    const {module_id} = req.params;
+    const {lessons_list} = req.body as Partial<IModule>;
+
+    const module = await moduleService.getModuleById(module_id);
+
+    if (lessons_list) {
+      const { deleted , updated} = checkDeletedModules(module.lessons_list, lessons_list);
+
+      if (updated.length) { await lessonService.addModuleInLesson(updated, module_id); }
+      if (deleted.length) { await lessonService.deleteModuleOfLesson(deleted, module_id); }
+    }
+
+    await moduleService.updateModule(module_id, lessons_list);
+
+    res.end();
   }
 }
 

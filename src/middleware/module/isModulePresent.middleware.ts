@@ -8,7 +8,7 @@ export const isModulePresent = async (req: Request, res: Response, next: NextFun
 
   const {module_id} = req.params;
 
-  const module = await moduleService.getModuleByID(module_id);
+  const module = await moduleService.getModuleById(module_id);
 
   if (!module) {
     return next(new ErrorHandler(

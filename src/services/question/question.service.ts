@@ -55,13 +55,13 @@ class QuestionService {
   async deleteQuestionById(questions_id: string) {
     const QuestionModel = model<QuestionType>(DatabaseTablesEnum.QUESTION_COLLECTION_NAME, QuestionSchema);
 
-    return QuestionModel.deleteOne({questions_id}, (err) => {
+    return QuestionModel.findByIdAndDelete(questions_id, (err) => {
       Lesson.update(
         { questions_id },
         { $pull: { questions_id } },
         { multi: true })
         .exec();
-    });
+    }) as any;
   }
 
   getSizeOfAll(filterParams: Partial<IQuestion>): Promise<any> {

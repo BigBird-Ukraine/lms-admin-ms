@@ -3,7 +3,7 @@ import * as Joi from 'joi';
 
 import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler } from '../../errors';
-import { checkDeletedModules } from '../../helpers/module';
+import { checkDeletedObjects } from '../../helpers';
 import { IModule, IRequestExtended } from '../../interfaces';
 import { courseService, lessonService, moduleService } from '../../services';
 import { moduleFilterValitator, moduleValidator } from '../../validators';
@@ -124,7 +124,7 @@ class ModuleController {
     const module = await moduleService.getModuleById(module_id);
 
     if (lessons_list) {
-      const { deleted , updated} = checkDeletedModules(module.lessons_list, lessons_list);
+      const { deleted , updated} = checkDeletedObjects(module.lessons_list, lessons_list);
 
       if (updated.length) { await lessonService.addModuleInLesson(updated, module_id); }
       if (deleted.length) { await lessonService.deleteModuleOfLesson(deleted, module_id); }

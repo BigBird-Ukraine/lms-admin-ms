@@ -1,7 +1,7 @@
 import { model } from 'mongoose';
 
 import { DatabaseTablesEnum } from '../../constants/enums';
-import { Group, GroupSchema, GroupType } from '../../database';
+import { Group, GroupSchema, GroupType, User } from '../../database';
 import { IAttendance, IGroup, IGroupSubject } from '../../interfaces';
 
 class GroupService {
@@ -50,7 +50,13 @@ class GroupService {
 
   delete(_id: string): Promise<void> {
     const GroupModel = model<GroupType>(DatabaseTablesEnum.GROUP_COLLECTION_NAME, GroupSchema);
-    return GroupModel.findByIdAndDelete(_id) as any;
+    return GroupModel.findByIdAndDelete(_id, (err) => {
+      User.update(
+        { groups_id: _id },
+        { $pull: { groups_id: _id } },
+        { multi: true })
+        .exec();
+    }) as any;
   }
 
   getById(group_id: string): Promise<IGroup> {

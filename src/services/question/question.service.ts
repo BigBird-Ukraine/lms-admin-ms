@@ -1,7 +1,7 @@
 import { model } from 'mongoose';
 
 import { DatabaseTablesEnum } from '../../constants';
-import { Question, QuestionSchema, QuestionType } from '../../database';
+import { Lesson, Question, QuestionSchema, QuestionType } from '../../database';
 import { IQuestion } from '../../interfaces';
 
 class QuestionService {
@@ -52,10 +52,16 @@ class QuestionService {
     return QuestionModel.findById(questionId).select({answers: 1, _id: 0}) as any;
   }
 
-  async deleteQuestionById(_id: string) {
+  async deleteQuestionById(questions_id: string) {
     const QuestionModel = model<QuestionType>(DatabaseTablesEnum.QUESTION_COLLECTION_NAME, QuestionSchema);
 
-    return QuestionModel.deleteOne({_id});
+    return QuestionModel.deleteOne({questions_id}, (err) => {
+      Lesson.update(
+        { questions_id },
+        { $pull: { questions_id } },
+        { multi: true })
+        .exec();
+    });
   }
 
   getSizeOfAll(filterParams: Partial<IQuestion>): Promise<any> {

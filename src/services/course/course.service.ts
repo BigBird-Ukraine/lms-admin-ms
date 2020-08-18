@@ -1,7 +1,7 @@
 import { model } from 'mongoose';
 
 import { DatabaseTablesEnum } from '../../constants';
-import { Course, CourseSchema, CourseType } from '../../database';
+import { Course, CourseSchema, CourseType, Group, Module } from '../../database';
 import { ICourse, ICourseSubject, IModule, IModuleFromCourseModel } from '../../interfaces';
 
 class CourseService {
@@ -15,7 +15,14 @@ class CourseService {
   deleteCourseByID(course_id: string): Promise<void> {
     const CourseModel = model<CourseType>(DatabaseTablesEnum.COURSE_COLLECTION_NAME, CourseSchema);
 
-    return CourseModel.deleteOne({_id: course_id}) as any;
+    return CourseModel.deleteOne({_id: course_id}, (err) => {
+      Module.update(
+        { courses_id: course_id },
+        { $pull: { courses_id: course_id } },
+        { multi: true })
+        .exec();
+      Group.update({course_id}, {$set: {course_id: null}}).exec();
+    }) as any;
   }
 
   getCourseByID(course_id: string): Promise<IModule> {

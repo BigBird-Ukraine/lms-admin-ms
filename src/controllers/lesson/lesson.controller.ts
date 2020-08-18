@@ -125,6 +125,11 @@ class LessonController {
 
     res.json(lessons);
   }
+
+  async getLessonsLabel(req: IRequestExtended, res: Response, next: NextFunction) {
+
+    res.json(await lessonService.getLessonsLabel());
+  }
 }
 
 export const lessonController = new LessonController();

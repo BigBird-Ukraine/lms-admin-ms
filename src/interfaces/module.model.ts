@@ -4,5 +4,5 @@ export interface IModule {
     description?: string;
     tags?: [string];
     courses_id: [string];
-    lessons: [string];
+    lessons_list: [string];
 }

@@ -13,6 +13,14 @@ class ModuleService {
     return newModule.save();
   }
 
+  updateModule(module_id: string, lessons_list: any) {
+    const ModuleModel = model<ModuleType>(DatabaseTablesEnum.MODULE_COLLECTION_NAME);
+
+    return ModuleModel.findByIdAndUpdate(module_id, {
+      $set: {lessons_list}
+    });
+  }
+
   getModulesByParams(filterParams: Partial<IModule>, limit: number, skip: number, order: string): Promise<any> {
     const ModuleModel = model<ModuleType>(DatabaseTablesEnum.MODULE_COLLECTION_NAME, ModuleSchema);
 
@@ -30,12 +38,19 @@ class ModuleService {
       .countDocuments(filterParams) as any;
   }
 
-  getModuleByID(module_id: string): Promise<IModule> {
+  getModuleByIDWithLessons(module_id: string): Promise<IModule> {
     const ModuleModel = model<ModuleType>(DatabaseTablesEnum.MODULE_COLLECTION_NAME);
 
     return ModuleModel
       .findOne({_id: module_id})
       .populate('lessons_list', ['_id', 'label', 'description']) as any;
+  }
+
+  getModuleById(module_id: string): Promise<IModule> {
+    const ModuleModel = model<ModuleType>(DatabaseTablesEnum.MODULE_COLLECTION_NAME);
+
+    return ModuleModel
+      .findOne({_id: module_id}) as any;
   }
 
   getCroppedModules(): Promise<IModule[]> {

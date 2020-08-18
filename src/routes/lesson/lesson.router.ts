@@ -14,6 +14,7 @@ router.post('/', lessonController.createLesson);
 router.get('/my', lessonController.getMyLesson);
 
 router.get('/', isLessonFilterValid, lessonController.getLessons);
+router.get('/labels', lessonController.getLessonsLabel);
 router.get('/statics', lessonController.getStatics);
 router.get('/by_module', lessonController.getLessonsByModule);
 

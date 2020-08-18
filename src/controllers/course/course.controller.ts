@@ -3,7 +3,7 @@ import * as Joi from 'joi';
 
 import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler } from '../../errors';
-import { checkDeletedModules } from '../../helpers/module';
+import { checkDeletedObjects } from '../../helpers';
 import { ICourseSubject, IRequestExtended } from '../../interfaces';
 import { courseService, moduleService } from '../../services';
 import { courseValidator, filterParametresValidator, modulesListValidator } from '../../validators';
@@ -95,7 +95,7 @@ class CourseController {
     const {modules_list} = await courseService.getByID(course_id);
 
     if (modules.modules_list) {
-      const { deleted , updated} = checkDeletedModules(modules_list, modules.modules_list);
+      const { deleted , updated} = checkDeletedObjects(modules_list, modules.modules_list);
 
       if (updated.length) { await moduleService.addModuleInCourse(updated, course_id); }
       if (deleted.length) { await moduleService.deleteModuleOfCourse(deleted, course_id); }

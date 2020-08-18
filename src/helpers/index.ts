@@ -5,5 +5,4 @@ export * from './question';
 export * from './regexFilterParams.helper';
 export * from './сalculationPageCount.helper';
 export * from './user';
-export * from './group';
-export * from './module';
+export * from './check-deleted-objects.helper';

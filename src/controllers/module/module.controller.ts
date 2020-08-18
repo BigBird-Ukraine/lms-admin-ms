@@ -82,11 +82,12 @@ class ModuleController {
     });
   }
 
-  editModule(req: IRequestExtended, res: Response, next: NextFunction) {
-
+  async editModule(req: IRequestExtended, res: Response, next: NextFunction) {
     const {module_id} = req.params;
 
-    res.json(`${module_id} has been edited`);
+    const updatedModule = await moduleService.editModule(module_id, req.body);
+
+    res.json(updatedModule);
   }
 
   async deleteModule(req: IRequestExtended, res: Response, next: NextFunction) {

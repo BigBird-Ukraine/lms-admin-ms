@@ -7,10 +7,9 @@ import { IModule } from '../../interfaces';
 class ModuleService {
 
   createModule(moduleValue: IModule): Promise<any> {
-
     const newModule = new Module(moduleValue);
 
-    return newModule.save();
+    return newModule.save() as any;
   }
 
   updateModule(module_id: string, lessons_list: any) {
@@ -62,7 +61,8 @@ class ModuleService {
   editModule(module_id: string, updating_value: Partial<IModule>): Promise<void> {
     const ModuleModel = model<ModuleType>(DatabaseTablesEnum.MODULE_COLLECTION_NAME);
 
-    return ModuleModel.updateOne({module_id}, {updating_value}) as any;
+    return ModuleModel.findByIdAndUpdate(module_id, updating_value, {new: true})
+      .populate('lessons_list') as any;
   }
 
   deleteModuleByID(module_id: string): Promise<void> {

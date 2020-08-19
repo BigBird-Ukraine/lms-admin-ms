@@ -2,7 +2,7 @@ import { model } from 'mongoose';
 
 import { DatabaseTablesEnum } from '../../constants/enums';
 import { Group, Lesson, OauthToken, User, UserSchema, UserType } from '../../database';
-import { ITestResultModel, IUser, IUserSubject } from '../../interfaces';
+import { IUser, IUserSubject } from '../../interfaces';
 
 class UserService {
   createUser(userValue: Partial<IUser>): Promise<any> {
@@ -75,12 +75,6 @@ class UserService {
     return UserModel
       .findById(user_id)
       .select({password: 0}) as any;
-  }
-
-  addPassedTest(user_id: string, passed_test: ITestResultModel): Promise<void> {
-    const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
-
-    return UserModel.findByIdAndUpdate(user_id, {$push: {passed_tests: passed_test}}) as any;
   }
 
   deleteGroupOfUser(users_id: string[], group_id: string): Promise<any> {

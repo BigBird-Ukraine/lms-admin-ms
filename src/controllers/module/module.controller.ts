@@ -124,7 +124,7 @@ class ModuleController {
     const module = await moduleService.getModuleById(module_id);
 
     if (lessons_list) {
-      const { deleted , updated} = checkDeletedObjects(module.lessons_list, lessons_list);
+      const { deleted , updated} =  checkDeletedObjects(module.lessons_list, lessons_list);
 
       if (updated.length) { await lessonService.addModuleInLesson(updated, module_id); }
       if (deleted.length) { await lessonService.deleteModuleOfLesson(deleted, module_id); }

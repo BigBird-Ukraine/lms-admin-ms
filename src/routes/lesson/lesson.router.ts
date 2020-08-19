@@ -21,7 +21,7 @@ router.get('/by_module', lessonController.getLessonsByModule);
 router.use('/:lesson_id', isLessonPresentMiddleware);
 router.get('/:lesson_id', lessonController.getLessonById);
 router.get('/:lesson_id/test', lessonController.generateTestByLessonId);
-router.post('/:lesson_id/test', isLessonPassedTestDataValid, checkPassedTestData, userController.addTestResult);
+router.post('/:lesson_id/test', isLessonPassedTestDataValid, checkPassedTestData, userController.getResultPassedTest);
 
 router.patch('/:lesson_id', isLessonUpdatingDataValid, lessonController.updateMyLesson);
 router.patch('/:lesson_id/question', isLessonQuestionValid, checkQuestionsListLenght, isQuestionExistInLessonMiddleware,

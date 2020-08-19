@@ -71,7 +71,7 @@ class LessonService {
     const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
 
     return LessonModel
-      .findByIdAndUpdate(lesson_id, updatingData) as any;
+      .findByIdAndUpdate(lesson_id, updatingData, {new: true}) as any;
   }
 
   addQuestionsToLesson(lesson_id: string, questions_list: string): Promise<ILesson> {

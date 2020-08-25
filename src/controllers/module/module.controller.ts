@@ -22,7 +22,9 @@ class ModuleController {
 
     const {_id} = await moduleService.createModule(module);
 
-    await lessonService.addModuleInLesson(module.lessons_list, _id);
+    if (module.lessons_list.length) {
+      await lessonService.addModuleInLesson(module.lessons_list, _id);
+    }
 
     res.json(ResponseStatusCodesEnum.CREATED);
   }

@@ -43,7 +43,7 @@ class LessonService {
 
     return LessonModel.findById(lesson_id)
       .select({ questions_id: 1, _id: 0 })
-      .populate('questions_id', {'answers.correct' : 0});
+      .populate('questions_id');
   }
 
   getLessonByID(lesson_id: string): Promise<ILesson> {

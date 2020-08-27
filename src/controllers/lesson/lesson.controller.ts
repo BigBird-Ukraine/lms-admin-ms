@@ -5,7 +5,7 @@ import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler } from '../../errors';
 import { calculationPageCount, checkDeletedObjects } from '../../helpers';
 import { ILesson, IRequestExtended, IUser } from '../../interfaces';
-import { lessonService, moduleService, questionService } from '../../services';
+import { commentService, lessonService, moduleService, questionService } from '../../services';
 import { lessonValidator } from '../../validators';
 
 const sortingAttributes: Array<keyof ILesson> = ['number', 'label', 'tags', '_id'];
@@ -137,6 +137,53 @@ class LessonController {
   async getLessonsLabel(req: IRequestExtended, res: Response, next: NextFunction) {
 
     res.json(await lessonService.getLessonsLabel());
+  }
+
+  async saveComment(req: IRequestExtended, res: Response, next: NextFunction) {
+    const {lesson_id} = req.params;
+    const {_id} = req.user as any;
+    const {text} = req.body;
+
+    await commentService.saveComment({lesson_id, text, user_id: _id});
+
+    res.status(ResponseStatusCodesEnum.CREATED).end();
+  }
+
+  async getCommentaries(req: IRequestExtended, res: Response, next: NextFunction) {
+    const {_id} = req.lesson as any;
+    const {
+      pageSize,
+      pageIndex,
+      offset = pageSize * pageIndex,
+      ...filterParams
+    } = req.query;
+
+    const comments = await commentService.getCommentaries(_id, +pageSize, offset);
+    const count = comments.length && await commentService.getSizeOfAll(filterParams) || 0;
+
+    res.json({
+      data: {
+        comments,
+        count
+      }
+    });
+  }
+
+  async deleteComment(req: IRequestExtended, res: Response, next: NextFunction) {
+    const {comment_id} = req.query;
+
+    await commentService.delete(comment_id);
+
+    res.end();
+  }
+
+  async editComment(req: IRequestExtended, res: Response, next: NextFunction) {
+    const {comment_id} = req.query;
+    const {text} = req.body;
+
+    await commentService.editComment(comment_id, text);
+
+    res.status(ResponseStatusCodesEnum.CREATED).end();
   }
 }
 

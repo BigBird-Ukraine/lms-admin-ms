@@ -6,3 +6,5 @@ export * from './module.schema';
 export * from './lesson.schema';
 export * from './question.schema';
 export * from './city.schema';
+export * from './passed_lesson.schema';
+export * from './passed_question.schema';

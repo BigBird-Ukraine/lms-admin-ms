@@ -8,4 +8,5 @@ export interface ILesson {
   module_id: string;
   questions_id?: [string];
   user_id?: string;
+  last_valid_version: string;
 }

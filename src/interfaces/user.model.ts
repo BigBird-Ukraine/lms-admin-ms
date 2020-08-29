@@ -1,4 +1,5 @@
 import { IGroupSubject } from './group.model';
+import { ITestResultModel } from './test_result.model';
 
 export interface IUser {
   _id: string;
@@ -14,7 +15,7 @@ export interface IUser {
   created_at: string;
   updated_at?: string;
   groups_id?: string[];
-  passed_tests_id: [string];
+  passed_tests?: [ITestResultModel];
 }
 
 export interface IUserSubject {
@@ -30,5 +31,5 @@ export interface IUserSubject {
   created_at: string;
   updated_at?: string;
   groups_id: IGroupSubject[];
-  passed_tests_id: [string];
+  passed_tests?: [ITestResultModel];
 }

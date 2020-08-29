@@ -7,7 +7,7 @@ import {
   regexFilterParams
 } from '../../helpers';
 import { IRequestExtended, IUser } from '../../interfaces';
-import { courseService, questionService } from '../../services';
+import { courseService, lessonService, questionService } from '../../services';
 
 class QuestionController {
 
@@ -50,6 +50,7 @@ class QuestionController {
 
   async updateQuestion(req: IRequestExtended, res: Response, next: NextFunction) {
     await questionService.updateQuestion(req.body);
+    await lessonService.resetLastValidLessons(req.body.lesson_id);
 
     res.status(ResponseStatusCodesEnum.CREATED).end();
   }
@@ -72,6 +73,8 @@ class QuestionController {
   async deleteQuestion(req: IRequestExtended, res: Response, next: NextFunction) {
     const {question_id} = req.params;
 
+    const { lesson_id } = await questionService.getQuestionById(question_id) as any;
+    await lessonService.resetLastValidLessons(lesson_id);
     await questionService.deleteQuestionById(question_id);
 
     res.end();

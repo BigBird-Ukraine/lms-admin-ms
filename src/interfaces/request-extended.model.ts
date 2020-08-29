@@ -3,14 +3,14 @@ import { ICourse } from './course.model';
 import { ILesson } from './lesson.model';
 import { IModule } from './module.model';
 import { IQuestion } from './question.model';
-import { ITestResultModel } from './test_result.model';
+import { IPassedTest } from './test_result.model';
 
 export interface IRequestExtended extends Request {
     user?: any;
     group?: any;
     files?: any;
     question?: IQuestion;
-    passed_test?: ITestResultModel;
+    passed_test?: IPassedTest;
     lesson?: ILesson;
     photos?: any[]; // TODO
     course?: ICourse;

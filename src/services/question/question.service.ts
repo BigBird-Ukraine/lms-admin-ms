@@ -11,7 +11,7 @@ class QuestionService {
     return newQuestion.save();
   }
 
-  updateQuestion(question: Partial<IQuestion>): Promise<any> {
+  async updateQuestion(question: Partial<IQuestion>): Promise<any> {
     const QuestionModel = model<QuestionType>(DatabaseTablesEnum.QUESTION_COLLECTION_NAME, QuestionSchema);
 
     return QuestionModel

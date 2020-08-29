@@ -30,6 +30,10 @@ LessonSchema = new Schema({
       required: false
     }
   ],
+  last_valid_version: {
+    type: String,
+    required: false
+  },
   module_id: [{
     type: Types.ObjectId,
     required: true,

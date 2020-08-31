@@ -66,6 +66,11 @@ export const errors = {
     code: 4043
   },
 
+  NOT_FOUND_COMMENT_NOT_PRESENT: {
+    message: 'Comment is not found',
+    code: 4043
+  },
+
   NOT_FOUND_QUESTION_NOT_PRESENT: {
     message: 'Question is not found',
     code: 4042

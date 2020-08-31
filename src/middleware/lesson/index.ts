@@ -7,3 +7,5 @@ export * from './isLessonQuestionValid.middleware';
 export * from './isLessonUpdatingDataValid.middleware';
 export * from './isLessonQuestionValid.middleware';
 export * from './isQuestionExistInLesson.middleware';
+export * from './isCommentPresent.middleware';
+export * from './isLessonCommentariesDataValid.middleware';

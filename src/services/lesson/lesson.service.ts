@@ -70,14 +70,14 @@ class LessonService {
   editLessonById(lesson_id: string, updatingData: Partial<ILesson>): Promise<ILesson> {
     const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
 
-    return LessonModel.findByIdAndUpdate(lesson_id, updatingData, {new: true}) as any;
+    return LessonModel.findByIdAndUpdate(lesson_id, {...updatingData, last_valid_version: ''}, {new: true}) as any;
   }
 
   addQuestionsToLesson(lesson_id: string, questions_list: string): Promise<ILesson> {
     const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
 
-    return LessonModel
-      .findByIdAndUpdate(lesson_id, {$set: {questions_id: questions_list}}, {new: true}) as any;
+    return LessonModel.findByIdAndUpdate(lesson_id, {$set: {questions_id: questions_list},
+      last_valid_version: ''}, {new: true}) as any;
   }
 
   deleteLessonById(lesson_id: string): Promise<void> {
@@ -132,6 +132,22 @@ class LessonService {
           filter: {_id: lesson_id},
           update: {
             $pull: {module_id}
+          },
+          upsert: true
+        }
+      };
+    }));
+  }
+
+  resetLastValidLessons(lessons_id: string[]) {
+    const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
+
+    return LessonModel.bulkWrite(lessons_id.map(lesson_id => {
+      return {
+        updateOne: {
+          filter: {_id: lesson_id},
+          update: {
+            $set: {last_valid_version: ''}
           },
           upsert: true
         }

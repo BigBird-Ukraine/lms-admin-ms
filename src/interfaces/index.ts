@@ -10,4 +10,6 @@ export * from './userByToken.model';
 export * from './question.model';
 export * from './test_result.model';
 export * from './city.model';
+export * from './passed_lesson.model';
+export * from './passed_question.model';
 export * from './comment.model';

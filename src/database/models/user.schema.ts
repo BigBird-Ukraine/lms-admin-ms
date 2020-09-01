@@ -21,12 +21,21 @@ UserSchema = new Schema({
   },
   password: {
     type: String,
-    required: true,
-    select: false
+    required: true
   },
   email: {
     type: String,
     required: true
+  },
+  status_id: {
+    type: Number,
+    required: true,
+    default: UserStatusEnum.ACTIVE
+  },
+  role_id: {
+    type: Number,
+    required: true,
+    default: UserRoleEnum.STUDENT
   },
   population_point: {
     type: String,
@@ -53,16 +62,6 @@ UserSchema = new Schema({
       required: true
     }
   }],
-  status_id: {
-    type: Number,
-    required: true,
-    default: UserStatusEnum.ACTIVE
-  },
-  role_id: {
-    type: Number,
-    required: true,
-    default: UserRoleEnum.STUDENT
-  },
   photo_path: String,
   created_at: {
     type: Date,

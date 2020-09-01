@@ -2,6 +2,7 @@ import { Router } from 'express';
 
 import { userController } from '../../controllers';
 import {
+  checkAccessTokenMiddleware,
   checkIsEmailPresent, checkNumberOfUserPhoto,
   isUserBlocked,
   isUserPresent, isUserValid, photoCheckMiddleware,
@@ -10,11 +11,14 @@ import {
 
 const router = Router();
 
+router.use(checkAccessTokenMiddleware);
 router.get('/', userController.getAll);
 router.get('/getInfo', userController.getUserInfoByToken);
 
 router.get('/statics', userController.getUserStatistics);
 router.get('/by_status', userController.getUsersByStatus);
+
+router.get('/passed_tests', userController.getUserPassedTests);
 
 router.post('/', isUserValid, checkIsEmailPresent, photoCheckMiddleware, checkNumberOfUserPhoto, userController.createUser);
 

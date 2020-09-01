@@ -90,6 +90,27 @@ class GroupService {
     return GroupModel.find({course_id})
       .select({city: 1, label: 1, created_at: 1, finished_at: 1});
   }
+
+  async deleteVisitLog(group_id: string, attendance_id: string) {
+    const GroupModel = model<GroupType>(DatabaseTablesEnum.GROUP_COLLECTION_NAME, GroupSchema);
+
+    await GroupModel.update(
+      {_id: group_id},
+      {
+        $pull: {
+          attendance: {
+            _id: attendance_id
+          }
+        }
+      }
+    );
+  }
+
+  async editVisitLog(group_id: string, attendance: IAttendance[]) {
+    const GroupModel = model<GroupType>(DatabaseTablesEnum.GROUP_COLLECTION_NAME, GroupSchema);
+
+    return GroupModel.findByIdAndUpdate(group_id, {attendance});
+  }
 }
 
 export const groupService = new GroupService();

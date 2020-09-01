@@ -6,3 +6,4 @@ export * from './regexFilterParams.helper';
 export * from './сalculationPageCount.helper';
 export * from './user';
 export * from './check-deleted-objects.helper';
+export * from './group';

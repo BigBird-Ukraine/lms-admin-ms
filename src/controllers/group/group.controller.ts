@@ -3,8 +3,8 @@ import * as Joi from 'joi';
 
 import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler } from '../../errors';
-import { checkDeletedObjects } from '../../helpers';
-import { IGroup, IRequestExtended } from '../../interfaces';
+import { checkDeletedObjects, editVisitLog } from '../../helpers';
+import { IAttendance, IGroup, IRequestExtended } from '../../interfaces';
 import { courseService, groupService, userService } from '../../services';
 import { groupFilterValidator, groupUpdateValidator, groupValidator } from '../../validators';
 
@@ -133,6 +133,26 @@ class GroupController {
     const groups = await groupService.getGroupsByCourseId(req.query.course_id);
 
     res.json(groups);
+  }
+
+  async deleteVisitLog(req: IRequestExtended, res: Response, next: NextFunction) {
+    const group = req.group as IGroup;
+    const {visitId} = req.query;
+
+    await groupService.deleteVisitLog(group._id, visitId);
+
+    res.end();
+  }
+
+  async editVisitLog(req: IRequestExtended, res: Response, next: NextFunction) {
+    const group = req.group as IGroup;
+    const {visitId, studentId} = req.query;
+
+    const attendances = editVisitLog(group, visitId, studentId) as IAttendance[];
+
+    await groupService.editVisitLog(group._id, attendances);
+
+    res.json(attendances);
   }
 }
 

@@ -10,11 +10,7 @@ export interface IGroup {
   users_list: string[];
   created_at: string;
   updated_at: string;
-  attendance?: [{
-    date: string;
-    present_students_id: IUserSubject[];
-    absent_students_id: IUserSubject[];
-  }];
+  attendance?: IAttendance[];
 }
 
 export interface IGroupSubject {
@@ -25,17 +21,14 @@ export interface IGroupSubject {
   started_at: string;
   finished_at: string;
   users_list: IUserSubject[];
-  attendance: [{
-    date: string;
-    present_students_id: IUserSubject[];
-    absent_students_id: IUserSubject[];
-  }];
+  attendance: IAttendance[];
   created_at: string;
   updated_at: string;
 }
 
 export interface IAttendance {
+  _id?: string;
   date: string;
-  present_students_id: IUserSubject[];
-  absent_students_id: IUserSubject[];
+  present_students_id: string[];
+  absent_students_id: string[];
 }

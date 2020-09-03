@@ -84,5 +84,10 @@ export const errors = {
   NOT_FOUND_CITY_NOT_PRESENT: {
     message: 'City not found',
     code: 4043
+  },
+
+  NOT_FOUND_VISIT_LOG_NOT_PRESENT:  {
+    message: 'Visit log nog found',
+    code: 4047
   }
 };

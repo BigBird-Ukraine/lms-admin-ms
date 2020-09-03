@@ -8,3 +8,4 @@ export * from './user';
 export * from './check-deleted-objects.helper';
 export * from './google-deleter.helper';
 export * from './google-uploader.helper';
+export * from './group';

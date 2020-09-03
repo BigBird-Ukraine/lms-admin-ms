@@ -9,3 +9,4 @@ export * from './isLessonQuestionValid.middleware';
 export * from './isQuestionExistInLesson.middleware';
 export * from './isCommentPresent.middleware';
 export * from './isLessonCommentariesDataValid.middleware';
+export * from './isLessonValid.middleware';

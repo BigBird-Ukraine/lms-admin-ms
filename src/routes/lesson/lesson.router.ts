@@ -11,14 +11,14 @@ import {
   isLessonPassedTestDataValid,
   isLessonPresentMiddleware,
   isLessonQuestionValid,
-  isLessonUpdatingDataValid,
+  isLessonUpdatingDataValid, isLessonValid,
   isQuestionExistInLessonMiddleware
 } from '../../middleware/lesson';
 
 const router = Router();
 
 router.use(checkAccessTokenMiddleware);
-router.post('/', lessonController.createLesson);
+router.post('/', isLessonValid , lessonController.createLesson);
 router.get('/my', lessonController.getMyLesson);
 
 router.get('/', isLessonFilterValid, lessonController.getLessons);
@@ -40,6 +40,7 @@ router.get('/:lesson_id/comment', lessonController.getCommentaries);
 router.patch('/:lesson_id', isLessonUpdatingDataValid, lessonController.updateMyLesson);
 router.patch('/:lesson_id/question', isLessonQuestionValid, checkQuestionsListLenght, isQuestionExistInLessonMiddleware,
   lessonController.addQuestionToLesson);
+router.patch('/:lesson_id/video', lessonController.changeVideo);
 router.delete('/:lesson_id', lessonController.deleteMyLesson);
 
 export const lessonRouter = router;

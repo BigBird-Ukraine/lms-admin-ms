@@ -6,7 +6,7 @@ import { ILesson } from '../../interfaces';
 
 class LessonService {
 
-  createLesson(lessonValue: ILesson): Promise<void> {
+  createLesson(lessonValue: ILesson): Promise<ILesson> {
     const newLesson = new Lesson(lessonValue);
 
     return newLesson.save() as any;

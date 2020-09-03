@@ -1,29 +1,28 @@
 import { NextFunction, Request, Response } from 'express';
-import * as Joi from 'joi';
 
-import { ResponseStatusCodesEnum } from '../../constants';
+import { GoogleConfigEnum, ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler } from '../../errors';
-import { calculationPageCount, checkDeletedObjects } from '../../helpers';
+import { calculationPageCount, checkDeletedObjects, googleDeleter, googleUploader } from '../../helpers';
 import { ILesson, IRequestExtended, IUser } from '../../interfaces';
 import { commentService, lessonService, moduleService, questionService } from '../../services';
-import { lessonValidator } from '../../validators';
 
 const sortingAttributes: Array<keyof ILesson> = ['number', 'label', 'tags', '_id'];
 
 class LessonController {
 
   async createLesson(req: IRequestExtended, res: Response, next: NextFunction) {
+    const lessonValue = req.body;
+    const {_id} = req.user as IUser;
 
-    const lesson = req.body;
-    lesson.user_id = req.user._id.toString();
+    const lesson = await lessonService.createLesson({...lessonValue, user_id: _id}) as any;
 
-    const lessonValidity = Joi.validate(lesson, lessonValidator);
+    if (req.files) {
+      const {files} = req.files;
+      const video_path = await googleUploader(files, GoogleConfigEnum.GOOGLE_VIDEO_KEYS,
+        GoogleConfigEnum.VIDEO_GOOGLE_PROJECT_ID, GoogleConfigEnum.VIDEO_GOOGLE_BUCKET_NAME, lesson._id.toString());
 
-    if (lessonValidity.error) {
-      return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, lessonValidity.error.details[0].message));
+      await lessonService.editLessonById(lesson._id, {video_path});
     }
-
-    await lessonService.createLesson(lesson);
 
     res.status(ResponseStatusCodesEnum.CREATED).end();
   }
@@ -101,6 +100,8 @@ class LessonController {
     const {lesson_id} = req.params;
 
     await lessonService.deleteLessonById(lesson_id);
+    await googleDeleter(GoogleConfigEnum.GOOGLE_VIDEO_KEYS,
+      GoogleConfigEnum.VIDEO_GOOGLE_PROJECT_ID, GoogleConfigEnum.VIDEO_GOOGLE_BUCKET_NAME, lesson_id.toString());
 
     res.end();
   }
@@ -182,6 +183,25 @@ class LessonController {
     const {text} = req.body;
 
     await commentService.editComment(comment_id, text);
+
+    res.status(ResponseStatusCodesEnum.CREATED).end();
+  }
+
+  async changeVideo(req: IRequestExtended, res: Response, next: NextFunction) {
+    const {_id, video_path} = req.lesson as ILesson;
+    const {files} = req.files;
+
+    if (_id) {
+      await googleDeleter(GoogleConfigEnum.GOOGLE_VIDEO_KEYS,
+        GoogleConfigEnum.VIDEO_GOOGLE_PROJECT_ID, GoogleConfigEnum.VIDEO_GOOGLE_BUCKET_NAME, _id.toString());
+
+      const uploaded_video_path = await googleUploader(files, GoogleConfigEnum.GOOGLE_VIDEO_KEYS,
+        GoogleConfigEnum.VIDEO_GOOGLE_PROJECT_ID, GoogleConfigEnum.VIDEO_GOOGLE_BUCKET_NAME, _id.toString());
+
+      if (!video_path) {
+        await lessonService.editLessonById(_id, {video_path: uploaded_video_path});
+      }
+    }
 
     res.status(ResponseStatusCodesEnum.CREATED).end();
   }

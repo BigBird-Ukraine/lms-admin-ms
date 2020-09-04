@@ -1,4 +1,5 @@
 import * as cors from 'cors';
+import * as dotEnv from 'dotenv';
 import * as express from 'express';
 import { NextFunction, Request, Response } from 'express';
 import * as fileUpload from 'express-fileupload';
@@ -17,6 +18,8 @@ const serverRequestLimiter = new RateLimit({
   windowMs: config.serverRateLimits.period,
   max: config.serverRateLimits.maxRequests
 });
+
+dotEnv.config();
 
 class App {
   public readonly app: express.Application = express();

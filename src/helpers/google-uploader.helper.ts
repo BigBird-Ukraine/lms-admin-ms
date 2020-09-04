@@ -1,13 +1,14 @@
-
 import { Storage } from '@google-cloud/storage';
+
 import { UploadedFile } from 'express-fileupload';
 import * as path from 'path';
 import { format } from 'util';
+import { v4 as uuidv4 } from 'uuid';
 
 export const googleUploader = async (files: UploadedFile, fileName: string,
-                                     projectId: string, bucketName: string,
-                                     id: string) => {
+                                     projectId: string, bucketName: string) => {
   const serviceKey = path.join(process.cwd(), fileName);
+  const id = uuidv4();
 
   const gc = new Storage({
     keyFilename: serviceKey,

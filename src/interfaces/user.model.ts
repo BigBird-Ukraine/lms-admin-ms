@@ -18,6 +18,8 @@ export interface IUser {
   passed_tests?: [ITestResultModel];
   confirm_token?: string;
   reset_token?: string;
+  change_token?: string;
+  new_password?: string;
 }
 
 export interface IUserSubject {
@@ -36,6 +38,8 @@ export interface IUserSubject {
   passed_tests?: [ITestResultModel];
   confirm_token?: string;
   reset_token?: string;
+  change_token?: string;
+  new_password?: string;
 }
 
 export interface IFullUserTest {
@@ -55,4 +59,6 @@ export interface IFullUserTest {
   passed_tests?: [ITestResultFullModel];
   confirm_token?: string;
   reset_token?: string;
+  change_token?: string;
+  new_password?: string;
 }

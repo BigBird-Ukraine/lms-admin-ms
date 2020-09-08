@@ -74,7 +74,15 @@ UserSchema = new Schema({
   groups_id: [{
     type: Types.ObjectId,
     ref: DatabaseTablesEnum.GROUP_COLLECTION_NAME
-  }]
+  }],
+  confirm_token: {
+    type: String,
+    required: false
+  },
+  reset_token: {
+    type: String,
+    required: false
+  }
 });
 
 export const User: Model<UserType> = model<UserType>(

@@ -16,6 +16,8 @@ export interface IUser {
   updated_at?: string;
   groups_id?: string[];
   passed_tests?: [ITestResultModel];
+  confirm_token?: string;
+  reset_token?: string;
 }
 
 export interface IUserSubject {
@@ -32,6 +34,8 @@ export interface IUserSubject {
   updated_at?: string;
   groups_id: IGroupSubject[];
   passed_tests?: [ITestResultModel];
+  confirm_token?: string;
+  reset_token?: string;
 }
 
 export interface IFullUserTest {
@@ -49,4 +53,6 @@ export interface IFullUserTest {
   updated_at?: string;
   groups_id?: [string];
   passed_tests?: [ITestResultFullModel];
+  confirm_token?: string;
+  reset_token?: string;
 }

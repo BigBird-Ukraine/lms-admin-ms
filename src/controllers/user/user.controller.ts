@@ -1,10 +1,9 @@
 import { NextFunction, Response } from 'express';
 import * as Joi from 'joi';
 
-import { UploadedFile } from 'express-fileupload';
-import { ResponseStatusCodesEnum, UserRoleEnum, UserStatusEnum } from '../../constants';
+import { GoogleConfigEnum, ResponseStatusCodesEnum, UserRoleEnum, UserStatusEnum } from '../../constants';
 import { ErrorHandler } from '../../errors';
-import { HASH_PASSWORD, userPhotoMv } from '../../helpers';
+import { googleDeleter, googleUploader, HASH_PASSWORD } from '../../helpers';
 import { IRequestExtended, ITestResultModel, IUser, IUserSubject } from '../../interfaces';
 import { groupService, userService } from '../../services';
 import { adminPatchUserValidator, userFilterValidator } from '../../validators';
@@ -13,15 +12,16 @@ class UserController {
 
   async createUser(req: IRequestExtended, res: Response, next: NextFunction) {
     const user = req.body as IUser;
-    const appRoot = (global as any).appRoot;
-    const [userPhoto] = req.photos as UploadedFile[];
 
     user.password = await HASH_PASSWORD(user.password);
-    const registeredUser = await userService.createUser(user);
+    const id = await userService.createUser(user);
 
-    if (userPhoto) {
-      const {photoDir, photoName, _id} = await userPhotoMv(registeredUser, userPhoto, appRoot);
-      await userService.updateUser(_id, {photo_path: `${photoDir}/${photoName}`});
+    if (req.files) {
+      const {files} = req.files;
+
+      const video_path = await googleUploader(files, GoogleConfigEnum.GOOGLE_VIDEO_KEYS,
+        GoogleConfigEnum.VIDEO_GOOGLE_PROJECT_ID, GoogleConfigEnum.PHOTO_GOOGLE_BUCKET_NAME);
+      await userService.updateUser(id, {photo_path: `${video_path}`});
     }
 
     res.status(ResponseStatusCodesEnum.CREATED).end();
@@ -67,9 +67,15 @@ class UserController {
   }
 
   async delete(req: IRequestExtended, res: Response, next: NextFunction) {
-
     const {user_id} = req.params;
+    const {photo_path} = req.user as IUser;
+
     await userService.delete(user_id);
+    await googleDeleter(
+      GoogleConfigEnum.GOOGLE_VIDEO_KEYS,
+      GoogleConfigEnum.VIDEO_GOOGLE_PROJECT_ID,
+      GoogleConfigEnum.PHOTO_GOOGLE_BUCKET_NAME, photo_path as string
+    );
 
     res.end();
   }

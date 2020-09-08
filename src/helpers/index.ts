@@ -4,7 +4,6 @@ export * from './tokenizer';
 export * from './question';
 export * from './regexFilterParams.helper';
 export * from './сalculationPageCount.helper';
-export * from './user';
 export * from './check-deleted-objects.helper';
 export * from './google-deleter.helper';
 export * from './google-uploader.helper';

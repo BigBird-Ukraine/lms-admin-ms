@@ -120,9 +120,14 @@ class UserService {
       status_id: 2
     });
 
+    const notActivatedUser = await UserModel.countDocuments({
+      status_id: 3
+    });
+
     return {
       activeUser,
-      blockedUser
+      blockedUser,
+      notActivatedUser
     };
   }
 

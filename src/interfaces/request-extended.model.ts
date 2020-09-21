@@ -3,6 +3,7 @@ import { ICourse } from './course.model';
 import { ILesson } from './lesson.model';
 import { IModule } from './module.model';
 import { IQuestion } from './question.model';
+import { IRoom } from './room.model';
 import { IPassedTest } from './test_result.model';
 
 export interface IRequestExtended extends Request {
@@ -16,4 +17,5 @@ export interface IRequestExtended extends Request {
     course?: ICourse;
     module?: IModule;
     refresh_token?: any;
+    room?: IRoom;
 }

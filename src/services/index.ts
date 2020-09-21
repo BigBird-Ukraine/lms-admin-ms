@@ -7,3 +7,4 @@ export * from './lesson';
 export * from './question';
 export * from './city';
 export * from './comment';
+export * from './room';

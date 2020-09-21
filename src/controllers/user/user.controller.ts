@@ -152,16 +152,16 @@ class UserController {
 
   }
 
-  async getResultPassedTest(req: IRequestExtended, res: Response, next: NextFunction) {
+  getResultPassedTest(req: IRequestExtended, res: Response, next: NextFunction) {
     const passed_test = req.passed_test as ITestResultModel;
 
     res.json(passed_test.result);
   }
 
   async getUserStatistics(req: IRequestExtended, res: Response, next: NextFunction) {
-   const userStatistics = await userService.getStatistics();
+    const userStatistics = await userService.getStatistics();
 
-   res.json(userStatistics);
+    res.json(userStatistics);
   }
 
   async getUsersByStatus(req: IRequestExtended, res: Response, next: NextFunction) {

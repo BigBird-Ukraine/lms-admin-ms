@@ -29,6 +29,16 @@ export const errors = {
     code: 4004,
     message: 'Cant upload more than one user photo'
   },
+
+  BAD_REQUEST_ROOM_ALREADY_EXIST: {
+    code: 4008,
+    message: 'This room already exist'
+  },
+
+  BAD_REQUEST_INVALID_DATE: {
+    code: 4009,
+    message: 'Invalid date'
+  },
   // 401
   UNAUTHORIZED_WRONG_CREDENTIALS: {
     code: 4011,
@@ -43,6 +53,11 @@ export const errors = {
   FORBIDDEN_NOT_YOUR_QUESTION: {
     message: 'Not your question',
     code: 4033
+  },
+
+  FORBIDDEN_ROOM_HAS_USERS: {
+    message: 'This room has users, you cant update date',
+    code: 4036
   },
 
   // 404
@@ -89,5 +104,10 @@ export const errors = {
   NOT_FOUND_VISIT_LOG_NOT_PRESENT:  {
     message: 'Visit log nog found',
     code: 4047
+  },
+
+  NOT_FOUND_ROOM_NOT_PRESENT: {
+    message: 'Room not found',
+    code: 4048
   }
 };

@@ -26,6 +26,7 @@ export interface ISettingRoom {
   close_at: ITime;
   count_places: number;
   period_time_to_sign_up: number; // h
+  cities: string[];
 }
 
 export interface ITime {

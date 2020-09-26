@@ -1,7 +1,7 @@
 import { model } from 'mongoose';
 
 import { DatabaseTablesEnum } from '../../constants/enums';
-import {Room, RoomSchema, RoomType, SettingRoom, SettingRoomScheme, SettingRoomType} from '../../database/models';
+import { Room, RoomSchema, RoomType, SettingRoom, SettingRoomScheme, SettingRoomType } from '../../database/models';
 import { IRoom, ISettingRoom } from '../../interfaces';
 
 class RoomService {
@@ -40,10 +40,10 @@ class RoomService {
     return newSettingRoom.save();
   }
 
-  findSettingRooms(filter?: any): Promise<ISettingRoom[]> {
+  findSettingRooms(filter?: any, select?: any): Promise<ISettingRoom[]> {
     const SettingRoomModel = model<SettingRoomType>(DatabaseTablesEnum.SETTING_ROOM_COLLECTION_NAME, SettingRoomScheme);
 
-    return SettingRoomModel.find(filter) as any;
+    return SettingRoomModel.find(filter).select(select)as any;
   }
 }
 

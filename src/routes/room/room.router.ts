@@ -6,7 +6,7 @@ import {
   isDateValid,
   isRoomOccupiedMiddleware,
   isRoomPresentMiddleware, isRoomUpdatedDataValid,
-  isRoomValid, isSettingDateValid, isSettingRoomValid
+  isRoomValid, isSettingDateValid, isSettingRoomExist, isSettingRoomValid
 } from '../../middleware';
 
 const router = Router();
@@ -15,9 +15,7 @@ router.use(checkAccessTokenMiddleware);
 router.get('/', roomController.getRooms);
 router.post('/', isRoomValid, isDateValid, isRoomOccupiedMiddleware, roomController.createRoom);
 
-router.get('/my', roomController.getMyRooms);
-
-router.post('/setting', isSettingRoomValid, isSettingDateValid, roomController.createSettingRoom);
+router.post('/setting', isSettingRoomValid, isSettingDateValid, isSettingRoomExist, roomController.createSettingRoom);
 router.get('/setting', roomController.getSettingRooms);
 
 router.use('/:room_id', isRoomPresentMiddleware);

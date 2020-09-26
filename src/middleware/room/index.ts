@@ -4,3 +4,4 @@ export * from './checkDateAndUsersPresentMiddleware';
 export * from './isRoomOccupiedMiddleware';
 export * from './isDateValid.middleware';
 export * from './isSettingDateValid.middleware';
+export * from './isSettingRoomExist';

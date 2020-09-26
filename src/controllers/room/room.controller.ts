@@ -1,7 +1,7 @@
 import { NextFunction, Response } from 'express';
 
 import { ResponseStatusCodesEnum } from '../../constants';
-import {IRequestExtended, IRoom, ISettingRoom, IUser} from '../../interfaces';
+import { IRequestExtended, IRoom, ISettingRoom, IUser } from '../../interfaces';
 import { roomService } from '../../services';
 
 class RoomController {
@@ -63,9 +63,9 @@ class RoomController {
   }
 
   async getSettingRooms(req: IRequestExtended, res: Response, next: NextFunction) {
-    const {...filter} = req.query;
+    const {select, ...filter} = req.query;
 
-    const rooms = await roomService.findSettingRooms(filter);
+    const rooms = await roomService.findSettingRooms(filter, select && JSON.parse(select));
 
     res.json(rooms);
   }

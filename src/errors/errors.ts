@@ -39,6 +39,11 @@ export const errors = {
     code: 4009,
     message: 'Invalid date'
   },
+
+  BAD_REQUEST_API_ALREADY_EXIST: {
+    code: 4010,
+    message: 'This API already exist'
+  },
   // 401
   UNAUTHORIZED_WRONG_CREDENTIALS: {
     code: 4011,
@@ -109,5 +114,10 @@ export const errors = {
   NOT_FOUND_ROOM_NOT_PRESENT: {
     message: 'Room not found',
     code: 4048
+  },
+
+  NOT_FOUND_API_NOT_PRESENT: {
+    message: 'API not found',
+    code: 4049
   }
 };

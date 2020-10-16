@@ -1,6 +1,7 @@
 import { Router } from 'express';
 
 import { checkAccessTokenMiddleware , checkIsAdmin } from '../../middleware';
+import { apisRouter } from '../api-address';
 import { authRouter } from '../auth';
 import { cityRouter } from '../city';
 import { courseRouter } from '../course';
@@ -23,5 +24,6 @@ router.use('/lessons', lessonRouter);
 router.use('/questions', questionRouter);
 router.use('/cities', cityRouter);
 router.use('/rooms', roomRouter);
+router.use('/apis', apisRouter);
 
 export const apiRouter = router;

@@ -14,3 +14,4 @@ export * from './passed_lesson.model';
 export * from './passed_question.model';
 export * from './comment.model';
 export * from './room.model';
+export * from './api.model';

@@ -3,13 +3,13 @@ import * as Joi from 'joi';
 
 import { ResponseStatusCodesEnum } from '../../constants/enums';
 import { ErrorHandler } from '../../errors';
-import { IApi } from '../../interfaces';
-import { apiValidator } from '../../validators';
+import { IIP } from '../../interfaces';
+import { ipValidator } from '../../validators';
 
-export const isApiValidMiddleware = (req: Request, res: Response, next: NextFunction) => {
-  const api = req.body as IApi;
+export const isIpValidMiddleware = (req: Request, res: Response, next: NextFunction) => {
+  const ip = req.body as IIP;
 
-  const {error} = Joi.validate(api, apiValidator);
+  const {error} = Joi.validate(ip, ipValidator);
 
   if (error) {
     return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, error.details[0].message));

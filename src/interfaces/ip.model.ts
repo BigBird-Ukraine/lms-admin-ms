@@ -1,6 +1,6 @@
-export interface IApi {
+export interface IIP {
     _id?: string;
     title: string;
     address: string;
-    api: string;
+    ip: string;
 }

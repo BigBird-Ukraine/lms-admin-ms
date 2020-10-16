@@ -7,4 +7,4 @@ export * from './user';
 export * from './question';
 export * from './city';
 export * from './room';
-export * from './apis';
+export * from './ip';

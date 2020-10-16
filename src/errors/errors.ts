@@ -40,9 +40,9 @@ export const errors = {
     message: 'Invalid date'
   },
 
-  BAD_REQUEST_API_ALREADY_EXIST: {
+  BAD_REQUEST_IP_ALREADY_EXIST: {
     code: 4010,
-    message: 'This API already exist'
+    message: 'This IP already exist'
   },
   // 401
   UNAUTHORIZED_WRONG_CREDENTIALS: {
@@ -116,8 +116,8 @@ export const errors = {
     code: 4048
   },
 
-  NOT_FOUND_API_NOT_PRESENT: {
-    message: 'API not found',
+  NOT_FOUND_IP_NOT_PRESENT: {
+    message: 'IP not found',
     code: 4049
   }
 };

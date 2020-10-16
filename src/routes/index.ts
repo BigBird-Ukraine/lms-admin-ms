@@ -9,4 +9,4 @@ export * from './lesson';
 export * from './question';
 export * from './city';
 export * from './room';
-export * from './api-address';
+export * from './ip-address';

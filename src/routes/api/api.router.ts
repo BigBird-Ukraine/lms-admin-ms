@@ -1,11 +1,11 @@
 import { Router } from 'express';
 
 import { checkAccessTokenMiddleware , checkIsAdmin } from '../../middleware';
-import { apisRouter } from '../api-address';
 import { authRouter } from '../auth';
 import { cityRouter } from '../city';
 import { courseRouter } from '../course';
 import { groupRouter } from '../group';
+import { ipRouter } from '../ip-address';
 import { lessonRouter } from '../lesson';
 import { moduleRouter } from '../module';
 import { questionRouter } from '../question';
@@ -24,6 +24,6 @@ router.use('/lessons', lessonRouter);
 router.use('/questions', questionRouter);
 router.use('/cities', cityRouter);
 router.use('/rooms', roomRouter);
-router.use('/apis', apisRouter);
+router.use('/ips', ipRouter);
 
 export const apiRouter = router;

@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from 'express';
-import * as Joi from 'joi';
 
 import { ResponseStatusCodesEnum } from '../../constants/enums';
 import { ErrorHandler } from '../../errors';
@@ -9,7 +8,7 @@ import { ipValidator } from '../../validators';
 export const isIpValidMiddleware = (req: Request, res: Response, next: NextFunction) => {
   const ip = req.body as IIP;
 
-  const {error} = Joi.validate(ip, ipValidator);
+  const {error} = ipValidator.validate(ip);
 
   if (error) {
     return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, error.details[0].message));

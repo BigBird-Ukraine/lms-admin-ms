@@ -11,11 +11,27 @@ IPScheme = new Schema({
   title: {
     type: String
   },
-  address: {
-    type: String
+  fullAddress: {
+    latitude: {
+      type: Number,
+      required: true
+    },
+    longitude: {
+      type: Number,
+      required: true
+    },
+    address: {
+      type: String,
+      required: true
+    }
   },
   ip: {
-    type: String
+    type: String,
+    required: true
+  },
+  city: {
+    type: String,
+    required: true
   }
 });
 

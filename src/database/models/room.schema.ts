@@ -52,19 +52,19 @@ RoomSchema = new Schema({
       default: 0
     }
   }],
-  address: {
-    latitude: {
-      type: Number,
-      required: true
-    },
-    longitude: {
-      type: Number,
-      required: true
-    }
-  },
-  ip: {
-    type: String
-  },
+  // address: {
+  //   latitude: {
+  //     type: Number,
+  //     required: true
+  //   },
+  //   longitude: {
+  //     type: Number,
+  //     required: true
+  //   }
+  // },
+  // ip: {
+  //   type: String
+  // },
   created_at: {
     type: Date,
     default: Date.now(),

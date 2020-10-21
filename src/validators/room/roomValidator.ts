@@ -13,5 +13,6 @@ export const roomValidator = Joi.object().keys({
     id: Joi.string().trim().required(),
     rent_start: Joi.date().required(),
     rent_end: Joi.date().required()
-  })
+  }),
+  ip_address: Joi.string().max(255).trim().required()
 });

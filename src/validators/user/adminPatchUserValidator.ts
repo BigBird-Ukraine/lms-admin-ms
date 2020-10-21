@@ -9,5 +9,9 @@ export const adminPatchUserValidator = Joi.object().keys({
   email: Joi.string().email().max(255).trim(),
   groups_id: Joi.string().max(255).trim(),
   photo_path: Joi.string().max(255).trim(),
-  population_point: Joi.string().max(255).min(2).trim()
+  population_point: Joi.string().max(255).min(2).trim(),
+  booking_ban_status: Joi.object().keys({
+    status: Joi.number(),
+    date: Joi.date()
+  })
 }).min(1);

@@ -35,8 +35,8 @@ class UserController {
   }
 
   async blockUser(req: IRequestExtended, res: Response, next: NextFunction) {
-
     const {user_id} = req.params;
+
     await userService.changeStatus(user_id, UserStatusEnum.BLOCKED);
 
     res.end();
@@ -53,9 +53,9 @@ class UserController {
   }
 
   async updateUserByID(req: IRequestExtended, res: Response, next: NextFunction) {
-
     const {user_id} = req.params;
     const updateInfo = req.body as IUser;
+
     const updateValidity = Joi.validate(updateInfo, adminPatchUserValidator);
 
     if (updateValidity.error) {
@@ -176,6 +176,23 @@ class UserController {
     const data = await userService.getPassedTests(userId);
 
     res.json(data);
+  }
+
+  async blockUserBooking(req: IRequestExtended, res: Response, next: NextFunction) {
+    const {user_id} = req.params;
+
+    await userService.updateUser(user_id, {booking_ban_status : {status : 5, date: null}});
+
+    res.end();
+
+  }
+
+  async unBlockUserBooking(req: IRequestExtended, res: Response, next: NextFunction) {
+    const {user_id} = req.params;
+
+    await userService.updateUser(user_id, {booking_ban_status : {status : 1}});
+
+    res.end();
   }
 }
 

@@ -119,5 +119,10 @@ export const errors = {
   NOT_FOUND_IP_NOT_PRESENT: {
     message: 'IP not found',
     code: 4049
+  },
+
+  NOT_FOUND_SETTING_ROOM_NOT_PRESENT: {
+    message: 'Setting room not found',
+    code: 4050
   }
 };

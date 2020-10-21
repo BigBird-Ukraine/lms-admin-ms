@@ -6,3 +6,5 @@ export * from './user-action.enum';
 export * from './dataBaseTable.enum';
 export * from './question-level.enum';
 export * from './google_config.enum';
+export * from './hard-words.enum';
+export * from './router-actions.enum';

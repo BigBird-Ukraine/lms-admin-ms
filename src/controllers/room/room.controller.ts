@@ -1,7 +1,8 @@
 import { NextFunction, Response } from 'express';
 
 import { ResponseStatusCodesEnum } from '../../constants';
-import { IRequestExtended, IRoom, ISettingRoom, IUser } from '../../interfaces';
+import { countFreePlaces, getBookTables } from '../../helpers';
+import { ICutRoom, IRequestExtended, IRoom, ISettingRoom, IUser } from '../../interfaces';
 import { roomService } from '../../services';
 
 class RoomController {
@@ -25,7 +26,9 @@ class RoomController {
   getSingleRoom(req: IRequestExtended, res: Response, next: NextFunction) {
     const room: IRoom = req.room as IRoom;
 
-    res.json(room);
+    const cutRoom: ICutRoom = countFreePlaces(room);
+
+    res.json(cutRoom);
   }
 
   async createRoom(req: IRequestExtended, res: Response, next: NextFunction) {
@@ -54,6 +57,15 @@ class RoomController {
     res.json(updatedRoom);
   }
 
+  getBookTable(req: IRequestExtended, res: Response, next: NextFunction) {
+    const room = req.room as IRoom;
+    const {table_number} = req.params;
+
+    const bookTables = getBookTables(room, table_number);
+
+    res.json(bookTables);
+  }
+
   async createSettingRoom(req: IRequestExtended, res: Response, next: NextFunction) {
     const room = req.body as ISettingRoom;
 
@@ -68,6 +80,24 @@ class RoomController {
     const rooms = await roomService.findSettingRooms(filter, select && JSON.parse(select));
 
     res.json(rooms);
+  }
+
+  async deleteSettingRoom(req: IRequestExtended, res: Response, next: NextFunction) {
+    const {id} = req.params;
+
+    await roomService.deleteSettingRoom(id);
+
+    res.json(ResponseStatusCodesEnum.NO_CONTENT);
+  }
+
+  async deleteBooking(req: IRequestExtended, res: Response, next: NextFunction) {
+    const {table_id, room_id} = req.params;
+    const {rentStart} = req.query;
+
+    await roomService.deleteBooking(room_id, table_id, rentStart);
+
+    res.json(ResponseStatusCodesEnum.NO_CONTENT);
+
   }
 }
 

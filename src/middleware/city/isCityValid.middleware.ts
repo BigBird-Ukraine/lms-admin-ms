@@ -6,7 +6,7 @@ import { ErrorHandler } from '../../errors';
 import { ICityModel } from '../../interfaces';
 import { cityValidator } from '../../validators/city';
 
-export const isCityValidMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+export const isCityValidMiddleware = (req: Request, res: Response, next: NextFunction) => {
   const city: ICityModel = req.body;
 
   const {error} = Joi.validate(city, cityValidator);

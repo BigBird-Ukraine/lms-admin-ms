@@ -7,7 +7,7 @@ import { cityService } from '../../services/city';
 export const isCityPresent = async (req: Request, res: Response, next: NextFunction) => {
   const {city_id} = req.params;
 
-  const city = cityService.getCityById(city_id);
+  const city = await cityService.getCityById(city_id);
 
   if (!city) {
     return next(new ErrorHandler(

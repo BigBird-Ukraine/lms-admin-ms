@@ -34,19 +34,19 @@ class UserService {
 
     return UserModel.findByIdAndDelete(user_id, (err) => {
       Group.update(
-        { users_list: user_id },
-        { $pull: { users_list: user_id } },
-        { multi: true })
+        {users_list: user_id},
+        {$pull: {users_list: user_id}},
+        {multi: true})
         .exec();
 
       Lesson.update(
-        { user_id },
-        { $set: { user_id: null } })
+        {user_id},
+        {$set: {user_id: null}})
         .exec();
 
       OauthToken.update(
-        { user_id },
-        { $set: { user_id: null } })
+        {user_id},
+        {$set: {user_id: null}})
         .exec();
     }) as any;
   }
@@ -119,14 +119,18 @@ class UserService {
     const blockedUser = await UserModel.countDocuments({
       status_id: 2
     });
+    const notActivatedUser = await UserModel.countDocuments({
+      status_id: 3
+    });
 
     return {
       activeUser,
-      blockedUser
+      blockedUser,
+      notActivatedUser
     };
   }
 
-  async getUsersByStatus(status: string) {
+  getUsersByStatus(status: string) {
     const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
 
     return UserModel.find({status_id: status})

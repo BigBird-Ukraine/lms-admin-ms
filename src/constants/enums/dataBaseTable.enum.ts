@@ -9,5 +9,8 @@ export enum DatabaseTablesEnum {
   CITY_COLLECTION_NAME = 'City',
   PASSED_LESSON_COLLECTION_NAME = 'Passed_lesson',
   PASSED_QUESTION_COLLECTION_NAME = 'Passed_question',
-  COMMENT_COLLECTION_NAME = 'Comment'
+  COMMENT_COLLECTION_NAME = 'Comment',
+  ROOM_COLLECTION_NAME = 'Room',
+  SETTING_ROOM_COLLECTION_NAME = 'Setting_room',
+  IP_COLLECTION_NAME = 'Ip'
 }

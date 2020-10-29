@@ -30,6 +30,8 @@ router.get('/:user_id', userController.getByID);
 router.use(updateDate);
 router.post('/:user_id/block', userController.blockUser);
 router.post('/:user_id/unblock', userController.unBlockUser);
+router.post('/:user_id/blockBooking', userController.blockUserBooking);
+router.post('/:user_id/unblockBooking', userController.unBlockUserBooking);
 router.post('/:user_id/teacher', isUserBlocked, userController.makeUserTeacher);
 router.post('/:user_id/admin', isUserBlocked, userController.makeUserAdmin);
 router.post('/:user_id/student', isUserBlocked, userController.makeUserStudent);

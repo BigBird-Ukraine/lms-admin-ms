@@ -52,6 +52,10 @@ UserSchema = new Schema({
       required: false,
       ref: DatabaseTablesEnum.PASSED_QUESTION_COLLECTION_NAME
     }],
+    max_mark: {
+      type: Number,
+      required: true
+    },
     result: {
       type: Number,
       required: true
@@ -75,6 +79,14 @@ UserSchema = new Schema({
     type: Types.ObjectId,
     ref: DatabaseTablesEnum.GROUP_COLLECTION_NAME
   }],
+  booking_ban_status: {
+    status: {
+      type: Number,
+      required: true,
+      default: UserStatusEnum.ACTIVE
+    },
+    date: Date
+  },
   new_password: {
     type: String,
     required: false

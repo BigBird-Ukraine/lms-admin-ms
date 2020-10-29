@@ -9,8 +9,8 @@ const router = Router();
 router.use(checkAccessTokenMiddleware);
 router.use(checkIsAdmin);
 
-router.post('/', isCityValidMiddleware,  cityController.createCity);
+router.post('/', isCityValidMiddleware, cityController.createCity);
 router.get('/', cityController.getCities);
-router.delete('/', isCityPresent,  cityController.deleteCity);
+router.delete('/', isCityPresent, cityController.deleteCity);
 
 export const cityRouter = router;

@@ -5,9 +5,11 @@ import { authRouter } from '../auth';
 import { cityRouter } from '../city';
 import { courseRouter } from '../course';
 import { groupRouter } from '../group';
+import { ipRouter } from '../ip-address';
 import { lessonRouter } from '../lesson';
 import { moduleRouter } from '../module';
 import { questionRouter } from '../question';
+import { roomRouter } from '../room';
 import { userRouter } from '../user';
 
 const router = Router();
@@ -21,5 +23,7 @@ router.use('/modules', moduleRouter);
 router.use('/lessons', lessonRouter);
 router.use('/questions', questionRouter);
 router.use('/cities', cityRouter);
+router.use('/rooms', roomRouter);
+router.use('/ips', ipRouter);
 
 export const apiRouter = router;

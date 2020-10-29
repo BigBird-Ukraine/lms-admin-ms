@@ -9,17 +9,21 @@ export interface IUser {
   email: string;
   password: string;
   status_id: number;
-  population_point: string;
   role_id: number;
+  population_point: string;
   photo_path?: string;
   created_at: string;
   updated_at?: string;
-  groups_id?: string[];
-  passed_tests?: [ITestResultModel];
-  confirm_token?: string;
+  groups_id?: [string];
+  confirm_token: string;
   reset_token?: string;
   change_token?: string;
   new_password?: string;
+  passed_tests?: [ITestResultModel];
+  booking_ban_status: {
+    status: number;
+    date?: Date | null;
+  };
 }
 
 export interface IUserSubject {
@@ -40,6 +44,10 @@ export interface IUserSubject {
   reset_token?: string;
   change_token?: string;
   new_password?: string;
+  booking_ban_status: {
+    status: number;
+    date: Date | null;
+  };
 }
 
 export interface IFullUserTest {
@@ -61,4 +69,8 @@ export interface IFullUserTest {
   reset_token?: string;
   change_token?: string;
   new_password?: string;
+  booking_ban_status: {
+    status: number;
+    date: Date | null;
+  };
 }
